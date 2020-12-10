@@ -1,4 +1,14 @@
 src/cmake-build-debug
+src/CMakeFiles
+src/cmake_install.cmake
+src/Makefile
+
+src/stud-game.cbp
+src/stud-game
+
+src/_deps
+src/Testing
+
 CMakeCache.txt
 
 .idea

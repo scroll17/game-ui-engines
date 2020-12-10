@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <nlohmann/json.hpp>
 #include "iostream"
+#include "pugixml.hpp"
 
 using json = nlohmann::json;
 using namespace std;
