@@ -37,7 +37,18 @@ if(NOT pugixml_POPULATED)
 endif()
 # </pugixml>
 
-add_executable(stud-game main.cpp classes/Object/Object.cpp classes/Object/Object.h)
+add_executable(stud-game
+        main.cpp
+
+        Game/Game.cpp
+        Game/Game.h
+
+        File/FileReader/FileReader.cpp
+        File/FileReader/FileReader.h
+
+        Exception/Exception.cpp
+        Exception/Exception.h
+        Constants/Constants.cpp Constants/Constants.h File/File.cpp File/File.h File/FileWriter/FileWriter.cpp File/FileWriter/FileWriter.h)
 
 target_link_libraries(stud-game
             sfml-graphics
@@ -46,4 +57,6 @@ target_link_libraries(stud-game
             sfml-system
             nlohmann_json::nlohmann_json
             pugixml
+
+            stdc++fs
 )
