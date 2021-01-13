@@ -3,6 +3,7 @@
 //
 
 #include "File.h"
+#include "../utils/string.h"
 
 File::File(string file_path) {
     m_file_path = File::resolve_path(Constants::directory_path, std::move(file_path));
@@ -28,15 +29,19 @@ const string& File::get_file_path() const {
 }
 
 string File::resolve_path(string left, string right) {
-    if(right.at(0) == '/') {
+    const char slash_sym[] = "/";
+    const char curr_slash_sym[] = "./";
+    const char out_slash_sym[] = "../";
+
+    if(right.at(0) == *slash_sym) {
         return right;
     }
 
     int pos = 0;
     while (pos != -1) {
-        pos = right.find("../");
+        pos = find(right.c_str(), out_slash_sym);
         if(pos != -1) {
-            int remove_to = left.rfind('/');
+            int remove_to = rfind(left.c_str(), slash_sym);
             if(remove_to != 0) {
                 left = left.substr(0, remove_to);
             }
@@ -46,7 +51,7 @@ string File::resolve_path(string left, string right) {
             continue;
         }
 
-        pos = right.find("./");
+        pos = find(right.c_str(), curr_slash_sym);
         if(pos != -1) {
             right = right.substr(pos + 2);
 
