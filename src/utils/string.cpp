@@ -2,10 +2,7 @@
 // Created by user on 11.01.2021.
 //
 
-#include <cstring>  // strlen
 #include "string.h"
-
-using namespace std;
 
 static int find_stop_symbol_pos(const char *str, const int str_len, int curr_pos, const char sym) {
     for(; curr_pos < str_len; curr_pos++) {
@@ -123,4 +120,11 @@ extern int rfind(const char *str, const char* sub_str) {
     }
 
     return -1;
+}
+
+std::wstring convert_s_to_ws(const string& str) {
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    std::wstring wide = converter.from_bytes(str);
+
+    return wide;
 }

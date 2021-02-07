@@ -7,25 +7,32 @@
 
 #include "iostream"
 #include <map>
+#include <SFML/Graphics.hpp>
+
+#include "../Game/Game.h"
 
 using namespace std;
 
-enum class ExceptionType {
-    FileRead,
-    FileNotExist
-};
-
-class Exception {
-    private:
-        ExceptionType m_error_type;
-        const string &m_custom_error_message;
-
+class Exception: public std::exception {
     public:
-        explicit Exception(ExceptionType type, const string &message = "");
+        enum Type {
+            FileRead,
+            FileNotExist
+        };
+
+        explicit Exception(Type type, string message = "");
         ~Exception() = default;
 
-        const ExceptionType& get_error_type();
-        const string& get_error_message();
+        const Type& get_error_type() const;
+        const string& get_error_message() const;
+
+        void draw_error() const;
+
+        virtual const char* what() const noexcept override final;
+
+    private:
+        Type m_error_type;
+        const string m_custom_error_message;
 };
 
 #endif //STUD_GAME_EXCEPTION_H
