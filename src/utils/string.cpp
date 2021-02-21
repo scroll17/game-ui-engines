@@ -122,7 +122,7 @@ extern int rfind(const char *str, const char* sub_str) {
     return -1;
 }
 
-std::wstring convert_s_to_ws(const string& str) {
+std::wstring convert_to_ws(const string& str) {
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
     std::wstring wide = converter.from_bytes(str);
 
