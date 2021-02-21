@@ -74,8 +74,8 @@ add_executable(stud-game
         Game/User/User.cpp
         Game/User/User.h
 
-        Game/Interface/Templates/ProgressBar/ProgressBar.cpp
-        Game/Interface/Templates/ProgressBar/ProgressBar.h
+        Game/Interface/Types/ProgressBar/ProgressBar.cpp
+        Game/Interface/Types/ProgressBar/ProgressBar.h
 
         Game/Interface/Types/Element/Element.cpp
         Game/Interface/Types/Element/Element.h
