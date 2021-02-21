@@ -8,7 +8,11 @@
 
 static map<Exception::Type, string> EXCEPTION_DETAILS {
   { Exception::Type::FileRead, "Error with read file." },
-  { Exception::Type::FileNotExist, "File not found." }
+  { Exception::Type::FileOpen, "Cannot open file." },
+  { Exception::Type::FileNotExist, "File not found." },
+  { Exception::Type::FileNotOpen, "File not open." },
+  { Exception::Type::ElementNotBuild, "Element not built yet." },
+  { Exception::Type::NonExistentPosition, "Position in the array does not exist." },
 };
 
 Exception::Exception(Exception::Type type, string message): m_error_type(type), m_custom_error_message(std::move(message)) {}

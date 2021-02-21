@@ -13,11 +13,17 @@
 
 using namespace std;
 
-class Exception: public std::exception {
+// TODO >= 10 species
+
+class Exception final: public std::exception {
     public:
         enum Type {
             FileRead,
-            FileNotExist
+            FileOpen,
+            FileNotExist,
+            FileNotOpen,
+            ElementNotBuild,
+            NonExistentPosition
         };
 
         explicit Exception(Type type, string message = "");
