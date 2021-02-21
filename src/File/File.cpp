@@ -3,10 +3,9 @@
 //
 
 #include "File.h"
-#include "../utils/string.h"
 
-File::File(string file_path) {
-    m_file_path = File::resolve_path(Constants::directory_path, std::move(file_path));
+File::File(const string& file_path) {
+    m_file_path = File::resolve_path(Constants::directory_path, file_path);
 }
 
 bool File::check_file_exists() const {
@@ -60,12 +59,4 @@ string File::resolve_path(string left, string right) {
     }
 
     return (left + "/" + right);
-}
-
-json File::to_json() const {
-    return json();
-}
-
-xml File::to_xml() const {
-    return xml();
 }

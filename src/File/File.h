@@ -5,30 +5,22 @@
 #ifndef STUD_GAME_FILE_H
 #define STUD_GAME_FILE_H
 
-#include <fstream>
+#include <fstream> // ifstream
 #include <utility>
-
-#include "pugixml.hpp"
-#include <nlohmann/json.hpp>
 
 #include "../Constants/Constants.h"
 #include "../Exception/Exception.h"
+#include "../utils/string.h"
 
 using namespace std;
-
-using json = nlohmann::json;
-using xml = pugi::xml_document;
 
 class File {
     protected:
         string m_file_path;
 
-        virtual json to_json() const;
-        virtual xml to_xml() const;
-
     public:
-        explicit File(string file_path);
-        ~File() = default;
+        explicit File(const string& file_path);
+        virtual ~File() = default;
 
         bool check_file_exists() const;
         const string& get_file_path() const;
