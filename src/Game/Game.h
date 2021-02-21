@@ -5,16 +5,19 @@
 #ifndef STUD_GAME_GAME_H
 #define STUD_GAME_GAME_H
 
+#include <SFML/Graphics.hpp>
+
+#include "../File/File.h"
+#include "../Constants/Constants.h"
+
 class Game {
-
-
-
     public:
         void start();
 
-    private:
-        void checkExceptions();
+        static sf::Font& get_game_font();
 
+    private:
+        static sf::Font GameFont;
 };
 
 #endif //STUD_GAME_GAME_H
