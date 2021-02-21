@@ -5,5 +5,6 @@
 #include "../Exception/Exception.h"
 
 namespace Constants {
-    extern const string directory_path { "/home/user/Code/stud-game" };
+//    extern const string directory_path { "/home/user/Code/stud-game" };
+    extern const string directory_path { "/home/denis/Рабочий стол/stud-game" };
 }
