@@ -6,62 +6,38 @@
 #define STUD_GAME_INTERFACEFORM_H
 
 #include <functional> // function
+#include <string>
+
+#include "./Types/Button/Button.h"
 
 // TODO _Abstract class
 // TODO _need 5 forms of interface
 
-namespace GameInterface {
+using namespace std;
 
-}
-
-class InterfaceForm {
+class FormInterface {
     public:
-        InterfaceForm() = default;
-        ~InterfaceForm() = default;
+//        InterfaceForm() = default;
+//        virtual ~InterfaceForm() = default;
+//
+//        virtual void show() = 0;
+//        virtual void hide() = 0;
+//
+//        virtual void onClose() = 0;
+//
+//        virtual void render(int frequency) {
+//            // ...
+//            this->draw();
+//        }
 
-        virtual void show() = 0;
+        static bool mouse_in(const Element& el, const sf::RenderWindow& window);
+        static bool mouse_in(const Element& el, const sf::Vector2i& mouse_pos);
 
-    protected:
-        struct Button {
-            int width;
-            int height;
+        static float get_center(const sf::RenderWindow& window);
 
-            string text;
-            function<void()> onClick = nullptr;
-        };
-
-        struct Text {
-            int width;
-            int height;
-
-            string text;
-        };
-
-        struct Image {
-            int width;
-            int height;
-
-            function<void()> onClick = nullptr;
-            function<void()> onHover = nullptr;
-        };
-
-        enum class ElementType {
-            BUTTON,
-            TEXT,
-            IMAGE
-        };
-
-        struct Element {
-            Text text;
-            Button button;
-            Image image;
-        };
-
-        // pure virtual functions
-        virtual void onShow() = 0;
-        virtual void onClose() = 0;
-
-        virtual void addElement(ElementType type, Element el) = 0;
+//    protected:
+//        virtual void draw() = 0;
 };
+
 
 #endif //STUD_GAME_INTERFACEFORM_H
