@@ -1,6 +1,6 @@
 src/cmake-build-debug
-src/CMakeFiles
 src/cmake_install.cmake
+src/CMakeFiles
 src/Makefile
 
 src/stud-game.cbp
