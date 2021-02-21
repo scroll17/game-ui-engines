@@ -6,7 +6,7 @@
 #define STUD_GAME_PROGRESSBAR_H
 
 
-class ProgressBar {
+class ProgressBar final {
     private:
         int m_step;
 
