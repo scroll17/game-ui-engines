@@ -43,12 +43,50 @@ add_executable(stud-game
         Game/Game.cpp
         Game/Game.h
 
+        Exception/Exception.cpp
+        Exception/Exception.h
+
+        Constants/Constants.cpp
+        Constants/Constants.h
+
+        File/File.cpp
+        File/File.h
+
+        File/FileWriter/FileWriter.cpp
+        File/FileWriter/FileWriter.h
+
         File/FileReader/FileReader.cpp
         File/FileReader/FileReader.h
 
-        Exception/Exception.cpp
-        Exception/Exception.h
-        Constants/Constants.cpp Constants/Constants.h File/File.cpp File/File.h File/FileWriter/FileWriter.cpp File/FileWriter/FileWriter.h)
+        utils/string.cpp
+        utils/string.h
+        utils/array.cpp
+        utils/array.h
+
+        Time/Time.cpp
+        Time/Time.h
+
+        algorithm_tests/find.cpp
+
+        Game/Interface/Interface.h
+        Game/Interface/Interface.cpp
+
+        Game/User/User.cpp
+        Game/User/User.h
+
+        Game/Interface/Templates/ProgressBar/ProgressBar.cpp
+        Game/Interface/Templates/ProgressBar/ProgressBar.h
+
+        Game/Interface/Types/Element/Element.cpp
+        Game/Interface/Types/Element/Element.h
+        Game/Interface/Types/Button/Button.cpp
+        Game/Interface/Types/Button/Button.h
+        Game/Interface/Types/Text/Text.cpp
+        Game/Interface/Types/Text/Text.h
+
+        Game/Forms/Error/ErrorForm.cpp
+        Game/Forms/Error/ErrorForm.h
+  )
 
 target_link_libraries(stud-game
             sfml-graphics
