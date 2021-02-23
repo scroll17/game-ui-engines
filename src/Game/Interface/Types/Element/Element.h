@@ -9,13 +9,13 @@
 
 class Element {
     public:
-        enum Axis {
+        enum Axis: int8_t {
             X = 1,
             Y = 2,
             XY = 3
         };
 
-        enum Angle {
+        enum Angle: int8_t {
             Top = 1,
             Down = 2,
             Left = 3,
