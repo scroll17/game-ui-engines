@@ -7,9 +7,8 @@
 
 #include "iostream"
 #include <map>
+#include <utility>
 #include <SFML/Graphics.hpp>
-
-#include "../Game/Game.h"
 
 using namespace std;
 
