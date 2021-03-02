@@ -12,9 +12,13 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
+//#include "../../../Exception/Exception.h"
+
+#include "../../../Game.h"
+#include "../../Form.h"
 #include "../Element/Element.h"
-#include "../../Interface.h"
-#include "../../../Exception/Exception.h"
+
+using namespace std;
 
 class Button: public Element {
     using t_callback = function<void(Button&)>;
@@ -60,6 +64,7 @@ class Button: public Element {
         Button& set_text(const string& text);
         Button& set_text_size(int size);
         Button& set_text_color(const sf::Color& color);
+        Button& set_bg_color(const sf::Color& color);
 
         int on_click(const t_callback& cb, const t_callback& after_cb);
         int on_hover(const t_callback& cb, const t_callback& after_cb);

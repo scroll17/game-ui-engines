@@ -33,7 +33,7 @@ void Button::draw(sf::RenderWindow& window) {
 
 void Button::perform_button_actions(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos) {
     if(event.type == sf::Event::MouseButtonPressed) {
-        bool on_button = FormInterface::mouse_in(button, window);
+        bool on_button = Form::mouse_in(button, window);
 
         if(on_button) {
             button.click();
@@ -41,7 +41,7 @@ void Button::perform_button_actions(Button& button, const sf::RenderWindow& wind
     }
 
     if(event.type == sf::Event::MouseButtonReleased) {
-        bool on_button = FormInterface::mouse_in(button, window);
+        bool on_button = Form::mouse_in(button, window);
 
         if(on_button) {
             button.after_click();
@@ -49,8 +49,8 @@ void Button::perform_button_actions(Button& button, const sf::RenderWindow& wind
     }
 
     if(event.type == sf::Event::MouseMoved) {
-        bool prev_pos_on_button = FormInterface::mouse_in(button, prev_pos);
-        bool curr_pos_on_button = FormInterface::mouse_in(button, window);
+        bool prev_pos_on_button = Form::mouse_in(button, prev_pos);
+        bool curr_pos_on_button = Form::mouse_in(button, window);
 
         if(curr_pos_on_button && !prev_pos_on_button) {
             button.hover();
@@ -105,6 +105,13 @@ Button& Button::set_text_size(int size) {
 
 Button& Button::set_text_color(const sf::Color& color) {
     m_text_color = color;
+
+    turn_off_building();
+    return (*this);
+}
+
+Button& Button::set_bg_color(const sf::Color &color) {
+    m_bg_color = color;
 
     turn_off_building();
     return (*this);
