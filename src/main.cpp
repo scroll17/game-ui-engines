@@ -3,18 +3,12 @@
 #include "iostream"
 #include "pugixml.hpp"
 
-#include "./Game/Game.h"
 #include "./Exception/Exception.h"
 #include "./File/File.h"
 #include "./File/FileReader/FileReader.h"
 #include "./File/FileWriter/FileWriter.h"
 
 #include "./utils/array.h"
-
-#include "./Game/Interface/Types/Element/Element.h"
-
-#include "./Game/Interface/Types/Button/Button.h"
-#include "./Game/Interface/Types/Text/Text.h"
 
 using json = nlohmann::json;
 using namespace std;
@@ -64,114 +58,11 @@ using namespace sf;
 
 int main()
 {
-
-    // Объект, который, собственно, является главным окном приложения
-    RenderWindow window(VideoMode(500, 200), "SFML Works!");
-
-    ::Text text { "чтобы вызывался соответствующий деструктор" };
-    text
-      .correct_position(true)
-      .border_with_position(true)
-      .set_window_size(window.getSize())
-      .to_center(Element::XY)
-      .move(Element::Y, -20)
-      .build();
-
-    Button button { {100, 50}, "Click" };
-    button
-        .correct_position(true)
-        .border_with_position(true)
-        .set_window_size(window.getSize())
-        .set_border_width(2)
-        .to_center(Element::X)
-        .set_after(Element::Y, text)
-        .move(Element::Y, 20)
-        .build();
-
-    button.on_click([](Button& button) {
-        cout << "button click" << endl;
-
-        button.set_text_color(sf::Color::Green);
-        button.build();
-    }, [&window](Button& button) {
-        cout << "after button click" << endl;
-
-        button.set_text_color(sf::Color::Black);
-        button.build();
-
-//        window.close();
-    });
-
-    button.on_hover([](Button& button){
-        cout << "button hover" << endl;
-
-        button.set_border_width(2);
-        button.build();
-    }, [](Button& button) {
-        cout << "after button hover" << endl;
-
-        button.set_border_width(0);
-        button.build();
-    });
-
-//    Element el { {2, 50} };
-//    el
-//        .border_with_position(true)
-//        .correct_position(true)
-//        .set_window_size(window.getSize())
-//        .to_center(Element::X)
-//        //.set_border_width(2)
-//        .set_border_color(sf::Color::Black);
-
-//    Element el2 { {50, 50} };
-//    el2
-//      .border_with_position(true)
-//      .correct_position(true)
-//      .set_window_size(window.getSize())
-//      .set_border_width(2)
-//      .to_center()
-//      .to(Element::Right)
-//      .to(Element::Down)
-//      .set_border_color(sf::Color::Blue);
-
-    auto prev_pos(sf::Mouse::getPosition(window));
-    auto curr_pos(sf::Mouse::getPosition(window));
-
-    // Главный цикл приложения: выполняется, пока открыто окно
-    while (window.isOpen())
-    {
-        // Обрабатываем очередь событий в цикле
-        Event event;
-        while (window.pollEvent(event))
-        {
-
-            if(event.type == sf::Event::MouseMoved) {
-                prev_pos = curr_pos;
-                curr_pos = sf::Mouse::getPosition(window);
-            }
-
-            Button::perform_button_actions(button, window, event, prev_pos);
-
-            //button.perform_button_actions(window, event, prev_pos);
-
-            // Пользователь нажал на «крестик» и хочет закрыть окно?
-            if (event.type == Event::Closed)
-                window.close(); // тогда закрываем его
-        }
-        // Установка цвета фона
-        window.clear(Color(250, 220, 100, 0));
-
-
-        text.draw(window);
-        button.draw(window);
-
-        //window.draw(m_text);
-
-        // Отрисовка окна
-        window.display();
+    try {
+        throw Exception(Exception::FileRead, "Testing standart error");
+    } catch (Exception& ex) {
+        ex.draw_error();
     }
-
-//    button.remove_click(0);
 
     return 0;
 }
