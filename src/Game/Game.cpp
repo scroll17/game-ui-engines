@@ -13,11 +13,11 @@ sf::Font Game::GameFont = sf::Font();
 sf::Font& Game::get_game_font() {
     auto info = Game::GameFont.getInfo();
     if(info.family.empty()) {
-        string path = File::resolve_path(Constants::directory_path, "./data/fonts/times-new-roman.ttf");
+        string path = File::resolve_path(Constants::directory_path, Constants::game_font_path);
 
         bool res = Game::GameFont.loadFromFile(path);
         if (!res) {
-            std::cerr << "Failed load GameFont " << endl;
+            std::cerr << "Failed load GameFont" << endl;
         }
     }
 

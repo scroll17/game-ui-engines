@@ -10,6 +10,8 @@
 #include "../File/File.h"
 #include "../Constants/Constants.h"
 
+using namespace std;
+
 class Game {
     public:
         void start();
