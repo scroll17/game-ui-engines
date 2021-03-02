@@ -11,6 +11,8 @@
 #include "../Element/Element.h"
 #include "../../../Game.h"
 
+using namespace std;
+
 class Text: public Element {
     private:
         using Element::set_size;
