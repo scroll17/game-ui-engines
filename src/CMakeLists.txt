@@ -40,9 +40,6 @@ endif()
 add_executable(stud-game
         main.cpp
 
-        Game/Game.cpp
-        Game/Game.h
-
         Exception/Exception.cpp
         Exception/Exception.h
 
@@ -68,25 +65,27 @@ add_executable(stud-game
 
         algorithm_tests/find.cpp
 
-        Game/Interface/Interface.h
-        Game/Interface/Interface.cpp
-
         Game/User/User.cpp
         Game/User/User.h
 
-        Game/Interface/Types/ProgressBar/ProgressBar.cpp
-        Game/Interface/Types/ProgressBar/ProgressBar.h
+        Game/Form/Types/Element/Element.cpp
+        Game/Form/Types/Element/Element.h
+        Game/Form/Types/ProgressBar/ProgressBar.cpp
+        Game/Form/Types/ProgressBar/ProgressBar.h
+        Game/Form/Types/Button/Button.cpp
+        Game/Form/Types/Button/Button.h
+        Game/Form/Types/Text/Text.cpp
+        Game/Form/Types/Text/Text.h
 
-        Game/Interface/Types/Element/Element.cpp
-        Game/Interface/Types/Element/Element.h
-        Game/Interface/Types/Button/Button.cpp
-        Game/Interface/Types/Button/Button.h
-        Game/Interface/Types/Text/Text.cpp
-        Game/Interface/Types/Text/Text.h
+        Game/Form/Templates/ErrorForm/ErrorForm.cpp
+        Game/Form/Templates/ErrorForm/ErrorForm.h
 
-        Game/Forms/Error/ErrorForm.cpp
-        Game/Forms/Error/ErrorForm.h
-  )
+        Game/Form/Form.cpp
+        Game/Form/Form.h
+
+        Game/Game.cpp
+        Game/Game.h
+)
 
 target_link_libraries(stud-game
             sfml-graphics
