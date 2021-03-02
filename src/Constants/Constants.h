@@ -5,11 +5,13 @@
 #ifndef STUD_GAME_CONSTANTS_H
 #define STUD_GAME_CONSTANTS_H
 
-#include <map>
-#include "../Exception/Exception.h"
+#include <string>
+
+using namespace std;
 
 namespace Constants {
-    extern const std::string directory_path;
+    extern const string directory_path;
+    extern const string game_font_path;
 }
 
 #endif //STUD_GAME_CONSTANTS_H
