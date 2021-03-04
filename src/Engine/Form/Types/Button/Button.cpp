@@ -83,37 +83,37 @@ Button& Button::build() {
     m_text->setCharacterSize(m_text_size);
     m_text->setFillColor(m_text_color);
 
-    button_text_to_center();
+    this->button_text_to_center();
+    this->turn_on_building();
 
-    turn_on_building();
     return (*this);
 }
 
 Button& Button::set_text(const string& text) {
     m_str = text;
 
-    turn_off_building();
+    this->turn_off_building();
     return (*this);
 }
 
 Button& Button::set_text_size(int size) {
     m_text_size = size;
 
-    turn_off_building();
+    this->turn_off_building();
     return (*this);
 }
 
 Button& Button::set_text_color(const sf::Color& color) {
     m_text_color = color;
 
-    turn_off_building();
+    this->turn_off_building();
     return (*this);
 }
 
 Button& Button::set_bg_color(const sf::Color& color) {
     m_bg_color = color;
 
-    turn_off_building();
+    this->turn_off_building();
     return (*this);
 }
 
@@ -136,22 +136,22 @@ int Button::on_hover(const Button::t_callback& cb, const Button::t_callback& aft
 }
 
 Button& Button::click() {
-    call_callbacks(Action::Click);
+    this->call_callbacks(Action::Click);
     return (*this);
 }
 
 Button& Button::after_click() {
-    call_after_callbacks(Action::Click);
+    this->call_after_callbacks(Action::Click);
     return (*this);
 }
 
 Button& Button::hover() {
-    call_callbacks(Action::Hover);
+    this->call_callbacks(Action::Hover);
     return (*this);
 }
 
 Button& Button::after_hover() {
-    call_after_callbacks(Action::Hover);
+    this->call_after_callbacks(Action::Hover);
     return (*this);
 }
 

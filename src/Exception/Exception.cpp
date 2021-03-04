@@ -29,7 +29,7 @@ const string& Exception::get_error_message() const {
 }
 
 void Exception::draw_error() const {
-    auto form = new ErrorForm { get_error_message() };
+    auto form = new ErrorForm { this->get_error_message() };
 
     form->render(120, ErrorForm::empty_frame_cb);
 
@@ -37,5 +37,5 @@ void Exception::draw_error() const {
 }
 
 const char* Exception::what() const noexcept {
-    return get_error_message().c_str();
+    return this->get_error_message().c_str();
 }

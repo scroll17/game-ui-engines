@@ -5,11 +5,11 @@
 #include "Text.h"
 
 Text::Text(const string& value): Element({ 0, 0 }, { 0, 0 }) {
-    init(value);
+    this->init(value);
 }
 
 Text::Text(const string& value, sf::Font& font, sf::Color& color): Element({ 0, 0 }, { 0, 0 }), m_font(font), m_color(color) {
-    init(value);
+    this->init(value);
 }
 
 Text::~Text() {
@@ -39,36 +39,36 @@ Text& Text::build() {
     m_value->setOrigin(this->get_origin());
 
     this->actualize_size();
+    this->turn_on_building();
 
-    turn_on_building();
     return (*this);
 }
 
 Text& Text::set_text(const string& str) {
     m_value->setString(sf::String::fromUtf8(str.begin(), str.end()));
-    actualize_size();
 
+    this->actualize_size();
     return (*this);
 }
 
 Text& Text::set_text_size(int size) {
     m_text_size = size;
 
-    turn_off_building();
+    this->turn_off_building();
     return (*this);
 }
 
 Text& Text::set_font(const sf::Font& font) {
     m_font = font;
 
-    turn_off_building();
+    this->turn_off_building();
     return (*this);
 }
 
 Text& Text::set_color(const sf::Color& color) {
     m_color = color;
 
-    turn_off_building();
+    this->turn_off_building();
     return (*this);
 }
 

@@ -8,7 +8,7 @@ ErrorForm::ErrorForm(string message): m_message(std::move(message)) {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
 
-    this->m_window = new sf::RenderWindow(
+    m_window = new sf::RenderWindow(
       sf::VideoMode(450, 150),
       "Error",
       sf::Style::Default,
@@ -17,7 +17,7 @@ ErrorForm::ErrorForm(string message): m_message(std::move(message)) {
 }
 
 ErrorForm::ErrorForm(string message, const sf::ContextSettings& settings): m_message(std::move(message)) {
-    this->m_window = new sf::RenderWindow(
+    m_window = new sf::RenderWindow(
       sf::VideoMode(450, 150),
       "Error",
       sf::Style::Default,
@@ -33,7 +33,7 @@ ErrorForm::~ErrorForm() {
 
 // PROTECTED SET
 void ErrorForm::build() {
-    this->m_text = new Text { m_message };
+    m_text = new Text { m_message };
     (*m_text)
         .correct_position(true)
         .border_with_position(true)
@@ -42,7 +42,7 @@ void ErrorForm::build() {
         .move(Element::Y, -30)
         .build();
 
-    this->m_button = new Button { {100, 50}, "Ok" };
+    m_button = new Button { {100, 50}, "Ok" };
     (*m_button)
         .correct_position(true)
         .border_with_position(true)
@@ -100,5 +100,5 @@ void ErrorForm::render(float fps, frame_cb_t& frame_cb) {
     m_prev_pos = sf::Mouse::getPosition(*m_window);
     m_curr_pos = sf::Mouse::getPosition(*m_window);
 
-    Form::render(fps, frame_cb);
+    this->Form::render(fps, frame_cb);
 }
