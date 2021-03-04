@@ -2,24 +2,24 @@
 // Created by user on 10.12.2020.
 //
 
-#include "Game.h"
+#include "Engine.h"
 
-void Game::start() {
+void Engine::start() {
 
 }
 
-sf::Font Game::GameFont = sf::Font();
+sf::Font Engine::GameFont = sf::Font();
 
-sf::Font& Game::get_game_font() {
-    auto info = Game::GameFont.getInfo();
+sf::Font& Engine::get_game_font() {
+    auto info = Engine::GameFont.getInfo();
     if(info.family.empty()) {
         string path = File::resolve_path(Constants::directory_path, Constants::game_font_path);
 
-        bool res = Game::GameFont.loadFromFile(path);
+        bool res = Engine::GameFont.loadFromFile(path);
         if (!res) {
             std::cerr << "Failed load GameFont" << endl;
         }
     }
 
-    return Game::GameFont;
+    return Engine::GameFont;
 }

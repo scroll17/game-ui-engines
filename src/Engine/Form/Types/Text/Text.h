@@ -9,7 +9,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../Element/Element.h"
-#include "../../../Game.h"
+#include "../../../Engine.h"
 
 using namespace std;
 
@@ -22,7 +22,7 @@ class Text: public Element {
     protected:
         int m_text_size { 18 };
 
-        sf::Font& m_font { Game::get_game_font() };
+        sf::Font& m_font {Engine::get_game_font() };
         sf::Color m_color { sf::Color::Black };
 
         sf::Text *m_value { nullptr };

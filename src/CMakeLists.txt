@@ -65,26 +65,26 @@ add_executable(stud-game
 
         algorithm_tests/find.cpp
 
-        Game/User/User.cpp
-        Game/User/User.h
+        Engine/User/User.cpp
+        Engine/User/User.h
 
-        Game/Form/Types/Element/Element.cpp
-        Game/Form/Types/Element/Element.h
-        Game/Form/Types/ProgressBar/ProgressBar.cpp
-        Game/Form/Types/ProgressBar/ProgressBar.h
-        Game/Form/Types/Button/Button.cpp
-        Game/Form/Types/Button/Button.h
-        Game/Form/Types/Text/Text.cpp
-        Game/Form/Types/Text/Text.h
+        Engine/Form/Types/Element/Element.cpp
+        Engine/Form/Types/Element/Element.h
+        Engine/Form/Types/ProgressBar/ProgressBar.cpp
+        Engine/Form/Types/ProgressBar/ProgressBar.h
+        Engine/Form/Types/Button/Button.cpp
+        Engine/Form/Types/Button/Button.h
+        Engine/Form/Types/Text/Text.cpp
+        Engine/Form/Types/Text/Text.h
 
-        Game/Form/Templates/ErrorForm/ErrorForm.cpp
-        Game/Form/Templates/ErrorForm/ErrorForm.h
+        Engine/Form/Templates/ErrorForm/ErrorForm.cpp
+        Engine/Form/Templates/ErrorForm/ErrorForm.h
 
-        Game/Form/Form.cpp
-        Game/Form/Form.h
+        Engine/Form/Form.cpp
+        Engine/Form/Form.h
 
-        Game/Game.cpp
-        Game/Game.h
+        Engine/Engine.cpp
+        Engine/Engine.h
 )
 
 target_link_libraries(stud-game

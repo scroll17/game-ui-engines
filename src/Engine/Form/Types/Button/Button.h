@@ -14,7 +14,7 @@
 
 //#include "../../../Exception/Exception.h"
 
-#include "../../../Game.h"
+#include "../../../Engine.h"
 #include "../../Form.h"
 #include "../Element/Element.h"
 
@@ -78,7 +78,7 @@ class Button: public Element {
         Button& remove_click(int pos);
         Button& remove_hover(int pos);
 
-        static void perform_button_actions(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos);
+        static void input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos);
 };
 
 #endif //STUD_GAME_BUTTON_H

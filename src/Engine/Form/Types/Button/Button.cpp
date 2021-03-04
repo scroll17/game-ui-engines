@@ -31,7 +31,7 @@ void Button::draw(sf::RenderWindow& window) {
     window.draw(*m_text);
 }
 
-void Button::perform_button_actions(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos) {
+void Button::input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos) {
     if(event.type == sf::Event::MouseButtonPressed) {
         bool on_button = Form::mouse_in(button, window);
 
@@ -77,7 +77,7 @@ Button& Button::build() {
     m_button->setOrigin(this->get_origin());
 
     /// TEXT
-    m_text->setFont(Game::get_game_font());
+    m_text->setFont(Engine::get_game_font());
     m_text->setString(sf::String::fromUtf8(m_str.begin(), m_str.end()));
 
     m_text->setCharacterSize(m_text_size);

@@ -2,8 +2,8 @@
 // Created by user on 10.12.2020.
 //
 
-#ifndef STUD_GAME_GAME_H
-#define STUD_GAME_GAME_H
+#ifndef STUD_GAME_ENGINE_H
+#define STUD_GAME_ENGINE_H
 
 #include <SFML/Graphics.hpp>
 
@@ -12,14 +12,14 @@
 
 using namespace std;
 
-class Game {
+class Engine {
+    private:
+        static sf::Font GameFont;
+
     public:
         void start();
 
         static sf::Font& get_game_font();
-
-    private:
-        static sf::Font GameFont;
 };
 
-#endif //STUD_GAME_GAME_H
+#endif //STUD_GAME_ENGINE_H
