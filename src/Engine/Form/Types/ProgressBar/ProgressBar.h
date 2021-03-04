@@ -5,10 +5,14 @@
 #ifndef STUD_GAME_PROGRESSBAR_H
 #define STUD_GAME_PROGRESSBAR_H
 
+#include <functional> // function
+
 #include "../../../Exception/Exception.h"
 #include "../Element/Element.h"
 
 class ProgressBar: public Element {
+   using t_callback = function<void()>;
+
     protected:
         using Element::set_size;
 
@@ -19,7 +23,11 @@ class ProgressBar: public Element {
         sf::Color m_color { sf::Color::Blue };
         sf::RectangleShape *m_rectangle { nullptr };
 
+        bool m_callback_was_called { false };
+        t_callback m_callback {};
+
         bool is_end() const;
+        void call_callback();
 
         virtual ProgressBar& build() override;
 
@@ -36,6 +44,7 @@ class ProgressBar: public Element {
         bool next(float step);
 
         void ready();
+        void after_ready(const t_callback& after_cb);
 
 //        static void auto_progress(ProgressBar& bar, long seconds);
 };

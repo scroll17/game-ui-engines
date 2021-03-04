@@ -96,7 +96,7 @@ void ErrorForm::pollEvent(const sf::Event& event) {
 }
 
 // PUBLIC SET
-void ErrorForm::render(float fps, frame_cb_t& frame_cb) {
+void ErrorForm::render(float fps, t_frame_cb& frame_cb) {
     m_prev_pos = sf::Mouse::getPosition(*m_window);
     m_curr_pos = sf::Mouse::getPosition(*m_window);
 

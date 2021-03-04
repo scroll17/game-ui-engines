@@ -42,12 +42,12 @@ class Form {
         bool is_need_build() const;
 
     public:
-        using frame_cb_t = const function<bool(sf::RenderWindow&)>;
+        using t_frame_cb = const function<bool(sf::RenderWindow&)>;
 
         Form() = default;
         virtual ~Form() = default;
 
-        virtual void render(float fps, frame_cb_t& frame_cb);
+        virtual void render(float fps, t_frame_cb& frame_cb);
 
         static bool mouse_in(const Element& el, const sf::RenderWindow& window);
         static bool mouse_in(const Element& el, const sf::Vector2i& mouse_pos);

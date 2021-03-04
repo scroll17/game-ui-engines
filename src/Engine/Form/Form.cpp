@@ -42,7 +42,7 @@ bool Form::empty_frame_cb(sf::RenderWindow& w) {
 }
 
 // PUBLIC GET
-void Form::render(float fps, frame_cb_t& frame_cb) {
+void Form::render(float fps, t_frame_cb& frame_cb) {
     if(m_window == nullptr) throw std::runtime_error("Cannot render empty window");
     if(this->is_need_build()) this->build();
 

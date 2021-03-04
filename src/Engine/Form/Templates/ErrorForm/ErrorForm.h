@@ -37,7 +37,7 @@ class ErrorForm final: public Form {
         ErrorForm(string message, const sf::ContextSettings& settings);
         ~ErrorForm() override;
 
-        virtual void render(float fps, frame_cb_t& frame_cb) override;
+        virtual void render(float fps, t_frame_cb& frame_cb) override;
 };
 
 #endif //STUD_GAME_ERRORFORM_H

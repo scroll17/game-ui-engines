@@ -50,6 +50,13 @@ ProgressBar& ProgressBar::build() {
     return (*this);
 }
 
+void ProgressBar::call_callback() {
+    if(m_callback_was_called) return;
+
+    m_callback_was_called = true;
+    m_callback();
+}
+
 /// PUBLIC VOID
 void ProgressBar::draw(sf::RenderWindow& window) const {
     window.draw(*m_rectangle);
@@ -64,7 +71,10 @@ ProgressBar& ProgressBar::set_color(const sf::Color& color) {
 }
 
 bool ProgressBar::next() {
-    if(this->is_end()) return false;
+    if(this->is_end()) {
+        this->call_callback();
+        return false;
+    }
 
     if((m_curr_step + 1) > m_step_count) {
         float diff = m_step_count - m_curr_step;
@@ -81,7 +91,10 @@ bool ProgressBar::next() {
 }
 
 bool ProgressBar::next(float step) {
-    if(this->is_end()) return false;
+    if(this->is_end()) {
+        this->call_callback();
+        return false;
+    }
 
     float next_step = m_curr_step + step;
     float diff = (next_step > m_step_count ? m_step_count : next_step) - m_curr_step;
@@ -94,8 +107,12 @@ bool ProgressBar::next(float step) {
 }
 
 void ProgressBar::ready() {
-    if(this->is_end()) return;
+    if(this->is_end()) return this->call_callback();
 
     this->next(m_step_count - m_curr_step);
+}
+
+void ProgressBar::after_ready(const ProgressBar::t_callback& after_cb) {
+    m_callback = after_cb;
 }
 
