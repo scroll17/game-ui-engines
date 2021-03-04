@@ -12,7 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
-//#include "../../../Exception/Exception.h"
+#include "../../../Exception/Exception.h"
 
 #include "../../../Engine.h"
 #include "../../Form.h"
@@ -42,7 +42,7 @@ class Button: public Element {
         t_callbacks m_on_click_callbacks {};
         t_callbacks m_on_hover_callbacks {};
 
-        sf::RectangleShape *m_button { nullptr };
+        sf::RectangleShape *m_rectangle { nullptr };
         sf::Text *m_text { nullptr };
 
         void button_text_to_center();
@@ -59,7 +59,7 @@ class Button: public Element {
         ~Button() override;
 
         virtual Button& build() override;
-        virtual void draw(sf::RenderWindow& window) override;
+        virtual void draw(sf::RenderWindow& window) const override;
 
         Button& set_text(const string& text);
         Button& set_text_size(int size);

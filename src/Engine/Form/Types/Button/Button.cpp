@@ -7,27 +7,27 @@
 Button::Button(const sf::Vector2f& size, const string& str): Element(size), m_str(str) {
     m_border_color = sf::Color::Black;
 
-    m_button = new sf::RectangleShape();
+    m_rectangle = new sf::RectangleShape();
     m_text = new sf::Text();
 }
 
 Button::Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): Element(size, pos), m_str(str) {
     m_border_color = sf::Color::Black;
 
-    m_button = new sf::RectangleShape();
+    m_rectangle = new sf::RectangleShape();
     m_text = new sf::Text();
 }
 
 Button::~Button() {
-    delete m_button;
+    delete m_rectangle;
     delete m_text;
 }
 
 // PUBLIC VOID
-void Button::draw(sf::RenderWindow& window) {
+void Button::draw(sf::RenderWindow& window) const {
     if(m_need_build) throw Exception(Exception::ElementNotBuild);
 
-    window.draw(*m_button);
+    window.draw(*m_rectangle);
     window.draw(*m_text);
 }
 
@@ -67,14 +67,14 @@ Button& Button::build() {
     if(!m_need_build) return (*this);
 
     /// RECTANGLE SHAPE
-    m_button->setSize(this->get_size());
-    m_button->setFillColor(m_bg_color);
+    m_rectangle->setSize(this->get_size());
+    m_rectangle->setFillColor(m_bg_color);
 
-    m_button->setOutlineThickness(m_border_width);
-    m_button->setOutlineColor(m_border_color);
+    m_rectangle->setOutlineThickness(m_border_width);
+    m_rectangle->setOutlineColor(m_border_color);
 
-    m_button->setPosition(this->get_position());
-    m_button->setOrigin(this->get_origin());
+    m_rectangle->setPosition(this->get_position());
+    m_rectangle->setOrigin(this->get_origin());
 
     /// TEXT
     m_text->setFont(Engine::get_game_font());
@@ -110,7 +110,7 @@ Button& Button::set_text_color(const sf::Color& color) {
     return (*this);
 }
 
-Button& Button::set_bg_color(const sf::Color &color) {
+Button& Button::set_bg_color(const sf::Color& color) {
     m_bg_color = color;
 
     turn_off_building();
@@ -215,7 +215,7 @@ void Button::remove_callback(const Action& action, int pos) {
 }
 
 void Button::button_text_to_center() {
-    if(m_button == nullptr || m_text == nullptr) {
+    if(m_rectangle == nullptr || m_text == nullptr) {
         throw std::runtime_error("Required vars no inited");
     }
 
@@ -225,7 +225,7 @@ void Button::button_text_to_center() {
         (text_locals.height / 2.f) + text_locals.top
     });
 
-    auto locals = m_button->getGlobalBounds();
+    auto locals = m_rectangle->getGlobalBounds();
     m_text->setPosition({
         (locals.width / 2.f) + locals.left,
         (locals.height / 2.f) + locals.top
