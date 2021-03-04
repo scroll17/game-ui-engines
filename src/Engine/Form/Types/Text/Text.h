@@ -36,7 +36,7 @@ class Text: public Element {
         ~Text() override;
 
         virtual Text& build() override;
-        virtual void draw(sf::RenderWindow& window) override;
+        virtual void draw(sf::RenderWindow& window) const override;
 
         Text& set_text(const string& str);
         Text& set_text_size(int size);

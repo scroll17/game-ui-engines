@@ -51,7 +51,7 @@ class Element {
         virtual ~Element() = default;
 
         virtual Element& build() = 0;
-        virtual void draw(sf::RenderWindow&) = 0;
+        virtual void draw(sf::RenderWindow&) const = 0;
 
         Element& set_size(const sf::Vector2f& size);
         Element& set_width(const float& size);

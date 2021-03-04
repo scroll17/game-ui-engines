@@ -17,7 +17,7 @@ Text::~Text() {
 }
 
 // PUBLIC VOID
-void Text::draw(sf::RenderWindow& window) {
+void Text::draw(sf::RenderWindow& window) const {
     if(m_need_build) throw Exception(Exception::ElementNotBuild);
 
     window.draw(*m_value);
