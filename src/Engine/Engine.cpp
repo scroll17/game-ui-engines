@@ -11,7 +11,7 @@ void Engine::start() {
 sf::Font Engine::GameFont = sf::Font();
 
 sf::Font& Engine::get_game_font() {
-    auto info = Engine::GameFont.getInfo();
+    auto& info = Engine::GameFont.getInfo();
     if(info.family.empty()) {
         string path = File::resolve_path(Constants::directory_path, Constants::game_font_path);
 

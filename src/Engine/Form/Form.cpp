@@ -12,7 +12,7 @@ void Form::turn_build_on() {
 void Form::generate_loop_timer() {
     if(m_loop_timer != nullptr) return;
 
-    this->m_loop_timer = new sf::Clock();
+    m_loop_timer = new sf::Clock();
 }
 
 void Form::correct_fps() {
@@ -76,8 +76,8 @@ bool Form::mouse_in(const Element& el, const sf::RenderWindow& window) {
 }
 
 bool Form::mouse_in(const Element& el, const sf::Vector2i& mouse_pos) {
-    auto bounds = el.get_bounds();
-    auto origin = el.get_origin();
+    auto& bounds = el.get_bounds();
+    auto& origin = el.get_origin();
 
     bool x_in = (mouse_pos.x >= (bounds.left - origin.x)) && (mouse_pos.x <= (bounds.left + origin.x));
     bool y_in = (mouse_pos.y >= (bounds.top - origin.y)) && (mouse_pos.y <= (bounds.top + origin.y));
