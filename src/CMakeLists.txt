@@ -65,6 +65,9 @@ add_executable(stud-game
 
         algorithm_tests/find.cpp
 
+        Engine/DataUtils/MousePosition/MousePosition.cpp
+        Engine/DataUtils/MousePosition/MousePosition.h
+
         Engine/User/User.cpp
         Engine/User/User.h
 
@@ -76,6 +79,14 @@ add_executable(stud-game
         Engine/Form/Types/Button/Button.h
         Engine/Form/Types/Text/Text.cpp
         Engine/Form/Types/Text/Text.h
+
+        Engine/Form/ExtendedTypes/FocusElement/FocusElement.h
+
+        Engine/Form/Objects/FocusObject/FocusObject.cpp
+        Engine/Form/Objects/FocusObject/FocusObject.h
+
+        Engine/Form/Controllers/FocusController/FocusController.cpp
+        Engine/Form/Controllers/FocusController/FocusController.h
 
         Engine/Form/Templates/ErrorForm/ErrorForm.cpp
         Engine/Form/Templates/ErrorForm/ErrorForm.h
