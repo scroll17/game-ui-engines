@@ -4,9 +4,10 @@
 
 #include "MousePosition.h"
 
+MousePosition::t_instances MousePosition::s_m_instances = {};
+
 MousePosition::MousePosition(): m_prev_pos(0, 0), m_curr_pos(0, 0) {
 }
-
 
 MousePosition::MousePosition(const sf::RenderWindow& w): m_prev_pos(sf::Mouse::getPosition(w)), m_curr_pos(sf::Mouse::getPosition(w)) {
 }
@@ -17,6 +18,46 @@ void MousePosition::input(MousePosition& mouse_pos, const sf::RenderWindow& w, c
         mouse_pos.update_pos(w);
     }
 }
+
+MousePosition& MousePosition::get_instance(const sf::RenderWindow *window) {
+    auto it = s_m_instances.find(window);
+    if(it != std::end(s_m_instances)) {
+        return *(it->second);
+    } else {
+        return *(s_m_instances[window] = new MousePosition());
+    }
+}
+
+void MousePosition::remove_instance(const sf::RenderWindow *window) {
+    auto it = s_m_instances.find(window);
+    if(it != std::end(s_m_instances)) {
+        delete it->second;
+        s_m_instances.erase(it);
+    }
+}
+
+void MousePosition::remove_instance(const MousePosition *m_p) {
+    auto it = std::find_if(
+      std::begin(s_m_instances),
+      std::end(s_m_instances),
+      [m_p](MousePosition::t_instance& el) {
+          return el.second == m_p;
+      }
+    );
+
+    if(it != std::end(s_m_instances)) {
+        delete it->second;
+    }
+}
+
+void MousePosition::clear_all() {
+    for(auto el: s_m_instances) {
+        delete el.second;
+    }
+
+    s_m_instances.clear();
+}
+
 
 MousePosition& MousePosition::update_pos(const sf::RenderWindow& w) {
     m_prev_pos = m_curr_pos;

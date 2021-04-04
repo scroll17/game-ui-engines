@@ -6,16 +6,26 @@
 #define STUD_GAME_MOUSEPOSITION_H
 
 #include "SFML/Graphics.hpp"
+#include <map>
 
 class MousePosition {
+    public:
+        using t_instance = std::pair<const sf::RenderWindow*, MousePosition*>;
+        using t_instances = std::map<const sf::RenderWindow*, MousePosition*>;
+
     protected:
+        static t_instances s_m_instances;
+
         sf::Vector2i m_prev_pos {};
         sf::Vector2i m_curr_pos {};
 
-    public:
         explicit MousePosition();
         explicit MousePosition(const sf::RenderWindow& w);
         ~MousePosition() = default;
+
+    public:
+        MousePosition(MousePosition& other) = delete;
+        void operator=(const MousePosition&) = delete;
 
         MousePosition& update_pos(const sf::RenderWindow& w);
 
@@ -23,6 +33,11 @@ class MousePosition {
         const sf::Vector2i& get_curr_pos() const;
 
         static void input(MousePosition& mouse_pos, const sf::RenderWindow& w, const sf::Event& event);
+
+        static MousePosition& get_instance(const sf::RenderWindow* window);
+        static void remove_instance(const sf::RenderWindow* window);
+        static void remove_instance(const MousePosition* m_p);
+        static void clear_all();
 };
 
 
