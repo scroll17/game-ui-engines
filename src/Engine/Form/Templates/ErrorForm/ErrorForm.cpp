@@ -14,6 +14,7 @@ ErrorForm::ErrorForm(string message): m_message(std::move(message)) {
       sf::Style::Default,
       settings
     );
+    m_mouse_position = &MousePosition::get_instance(m_window);
 }
 
 ErrorForm::ErrorForm(string message, const sf::ContextSettings& settings): m_message(std::move(message)) {
@@ -23,9 +24,12 @@ ErrorForm::ErrorForm(string message, const sf::ContextSettings& settings): m_mes
       sf::Style::Default,
       settings
     );
+    m_mouse_position = &MousePosition::get_instance(m_window);
 }
 
 ErrorForm::~ErrorForm() {
+    MousePosition::remove_instance(m_mouse_position);
+
     delete m_window;
     delete m_text;
     delete m_button;
@@ -89,13 +93,13 @@ void ErrorForm::draw() {
 }
 
 void ErrorForm::pollEvent(const sf::Event& event) {
-    MousePosition::input(m_mouse_position, *m_window, event);
-    Button::input(*m_button, *m_window, event, m_mouse_position.get_prev_pos());
+    MousePosition::input(*m_mouse_position, *m_window, event);
+    Button::input(*m_button, *m_window, event, m_mouse_position->get_prev_pos());
 }
 
 // PUBLIC SET
 void ErrorForm::render(float fps, t_frame_cb& frame_cb) {
-    m_mouse_position.update_pos(*m_window);
+    m_mouse_position->update_pos(*m_window);
 
     this->Form::render(fps, frame_cb);
 }

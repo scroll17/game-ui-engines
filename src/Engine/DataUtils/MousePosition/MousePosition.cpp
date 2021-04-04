@@ -54,6 +54,7 @@ void MousePosition::remove_instance(const MousePosition *m_p) {
 
     if(it != std::end(s_m_instances)) {
         delete it->second;
+        s_m_instances.erase(it);
     }
 }
 

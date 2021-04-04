@@ -22,7 +22,7 @@ class ErrorForm final: public Form {
         Text *m_text { nullptr };
         Button *m_button { nullptr };
 
-        MousePosition m_mouse_position {};
+        MousePosition *m_mouse_position { nullptr };
 
     protected:
         virtual void build() override;
