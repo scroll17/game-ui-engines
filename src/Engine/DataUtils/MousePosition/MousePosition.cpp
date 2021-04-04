@@ -47,7 +47,7 @@ void MousePosition::remove_instance(const MousePosition *m_p) {
     auto it = std::find_if(
       std::begin(s_m_instances),
       std::end(s_m_instances),
-      [m_p](MousePosition::t_instance& el) {
+      [m_p](const MousePosition::t_instance& el) {
           return el.second == m_p;
       }
     );
