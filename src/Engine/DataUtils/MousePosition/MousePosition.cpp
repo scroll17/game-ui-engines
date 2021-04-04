@@ -13,6 +13,13 @@ MousePosition::MousePosition(const sf::RenderWindow& w): m_prev_pos(sf::Mouse::g
 }
 
 // PUBLIC SET
+MousePosition& MousePosition::update_pos(const sf::RenderWindow& w) {
+    m_prev_pos = m_curr_pos;
+    m_curr_pos = sf::Mouse::getPosition(w);
+
+    return (*this);
+}
+
 void MousePosition::input(MousePosition& mouse_pos, const sf::RenderWindow& w, const sf::Event& event) {
     if(event.type == sf::Event::MouseMoved) {
         mouse_pos.update_pos(w);
@@ -51,19 +58,11 @@ void MousePosition::remove_instance(const MousePosition *m_p) {
 }
 
 void MousePosition::clear_all() {
-    for(auto el: s_m_instances) {
+    for(auto& el: s_m_instances) {
         delete el.second;
     }
 
     s_m_instances.clear();
-}
-
-
-MousePosition& MousePosition::update_pos(const sf::RenderWindow& w) {
-    m_prev_pos = m_curr_pos;
-    m_curr_pos = sf::Mouse::getPosition(w);
-
-    return (*this);
 }
 
 // PUBLIC GET
