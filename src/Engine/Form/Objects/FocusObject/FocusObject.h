@@ -13,8 +13,8 @@ class FocusObject {
         FocusObject() = default;
         virtual ~FocusObject() = default;
 
-        virtual void set_focus ();
-        virtual void delete_focus ();
+        virtual void set_focus();
+        virtual void delete_focus();
         virtual bool is_focused() const;
 };
 
