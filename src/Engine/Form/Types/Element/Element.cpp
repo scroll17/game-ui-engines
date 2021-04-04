@@ -106,7 +106,7 @@ Element& Element::set_position(const sf::Vector2f& position) {
 }
 
 Element& Element::set_after(const Element::Axis& axis, const Element& el) {
-    auto bounds = el.get_bounds();
+    auto& bounds = el.get_bounds();
     auto border_shift = el.m_border_with_position ? el.m_border_width : 0;
 
     if(axis == X || axis == XY) {
@@ -128,7 +128,7 @@ Element& Element::set_after(const Element::Axis& axis, const Element& el) {
 }
 
 Element& Element::set_before(const Element::Axis& axis, const Element& el) {
-    auto bounds = el.get_bounds();
+    auto& bounds = el.get_bounds();
 
     auto border_shift = el.m_border_with_position ? el.m_border_width : 0;
     auto local_border_shift = m_border_with_position ? m_border_width : 0;

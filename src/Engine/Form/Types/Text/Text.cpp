@@ -85,6 +85,6 @@ void Text::init(const string& str) {
 }
 
 void Text::actualize_size() {
-    auto bounds = m_value->getLocalBounds();
+    const auto& bounds = m_value->getLocalBounds();
     this->set_size({ bounds.width, bounds.height });
 }

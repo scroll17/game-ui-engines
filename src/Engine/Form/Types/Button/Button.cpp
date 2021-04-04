@@ -167,7 +167,7 @@ void Button::call_callbacks(const Action& action) {
 
     const int size = callbacks.size();
     for(int i = 0; i < size; i += 2) {
-        auto callback = callbacks.at(i);
+        auto& callback = callbacks.at(i);
         callback(*this);
     }
 }
@@ -179,7 +179,7 @@ void Button::call_after_callbacks(const Button::Action& action) {
 
     const int size = callbacks.size();
     for(int i = 1; i < size; i += 2) {
-        auto callback = callbacks.at(i);
+        auto& callback = callbacks.at(i);
         callback(*this);
     }
 }
@@ -202,13 +202,13 @@ void Button::button_text_to_center() {
         throw std::runtime_error("Required vars no inited");
     }
 
-    auto text_locals = m_text->getLocalBounds();
+    const auto& text_locals = m_text->getLocalBounds();
     m_text->setOrigin({
         (text_locals.width / 2.f) + text_locals.left,
         (text_locals.height / 2.f) + text_locals.top
     });
 
-    auto locals = m_rectangle->getGlobalBounds();
+    const auto& locals = m_rectangle->getGlobalBounds();
     m_text->setPosition({
         (locals.width / 2.f) + locals.left,
         (locals.height / 2.f) + locals.top
