@@ -79,6 +79,8 @@ void ErrorForm::build() {
              .build();
        }
     );
+
+    this->turn_build_on();
 }
 
 void ErrorForm::draw() {
