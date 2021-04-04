@@ -89,18 +89,13 @@ void ErrorForm::draw() {
 }
 
 void ErrorForm::pollEvent(const sf::Event& event) {
-    if(event.type == sf::Event::MouseMoved) {
-        m_prev_pos = m_curr_pos;
-        m_curr_pos = sf::Mouse::getPosition(*m_window);
-    }
-
-    Button::input(*m_button, *m_window, event, m_prev_pos);
+    MousePosition::input(m_mouse_position, *m_window, event);
+    Button::input(*m_button, *m_window, event, m_mouse_position.get_prev_pos());
 }
 
 // PUBLIC SET
 void ErrorForm::render(float fps, t_frame_cb& frame_cb) {
-    m_prev_pos = sf::Mouse::getPosition(*m_window);
-    m_curr_pos = sf::Mouse::getPosition(*m_window);
+    m_mouse_position.update_pos(*m_window);
 
     this->Form::render(fps, frame_cb);
 }

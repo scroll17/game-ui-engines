@@ -11,6 +11,7 @@
 #include "../../Form.h"
 #include "../../Types/Text/Text.h"
 #include "../../Types/Button/Button.h"
+#include "../../../DataUtils/MousePosition/MousePosition.h"
 
 using namespace std;
 
@@ -21,12 +22,9 @@ class ErrorForm final: public Form {
         Text *m_text { nullptr };
         Button *m_button { nullptr };
 
-        sf::Vector2i m_prev_pos {};
-        sf::Vector2i m_curr_pos {};
+        MousePosition m_mouse_position {};
 
     protected:
-        using Form::render;
-
         virtual void build() override;
 
         virtual void draw() override;
