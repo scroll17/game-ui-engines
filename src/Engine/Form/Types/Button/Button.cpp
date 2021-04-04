@@ -33,32 +33,15 @@ void Button::draw(sf::RenderWindow& window) const {
 
 void Button::input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos) {
     if(event.type == sf::Event::MouseButtonPressed) {
-        bool on_button = Form::mouse_in(button, window);
-
-        if(on_button) {
-            button.click();
-        }
+        Button::handle_mouse_button_pressed_e(button, window);
     }
 
     if(event.type == sf::Event::MouseButtonReleased) {
-        bool on_button = Form::mouse_in(button, window);
-
-        if(on_button) {
-            button.after_click();
-        }
+        Button::handle_mouse_button_released_e(button, window);
     }
 
     if(event.type == sf::Event::MouseMoved) {
-        bool prev_pos_on_button = Form::mouse_in(button, prev_pos);
-        bool curr_pos_on_button = Form::mouse_in(button, window);
-
-        if(curr_pos_on_button && !prev_pos_on_button) {
-            button.hover();
-        }
-
-        if(prev_pos_on_button && !curr_pos_on_button) {
-            button.after_hover();
-        }
+        Button::handle_mouse_moved_e(button, window, prev_pos);
     }
 }
 
@@ -230,4 +213,33 @@ void Button::button_text_to_center() {
         (locals.width / 2.f) + locals.left,
         (locals.height / 2.f) + locals.top
     });
+}
+
+void Button::handle_mouse_button_pressed_e(Button& button, const sf::RenderWindow& window) {
+    bool on_button = Form::mouse_in(button, window);
+
+    if(on_button) {
+        button.click();
+    }
+}
+
+void Button::handle_mouse_button_released_e(Button& button, const sf::RenderWindow& window) {
+    bool on_button = Form::mouse_in(button, window);
+
+    if(on_button) {
+        button.after_click();
+    }
+}
+
+void Button::handle_mouse_moved_e(Button& button, const sf::RenderWindow& window, const sf::Vector2i& prev_pos) {
+    bool prev_pos_on_button = Form::mouse_in(button, prev_pos);
+    bool curr_pos_on_button = Form::mouse_in(button, window);
+
+    if(curr_pos_on_button && !prev_pos_on_button) {
+        button.hover();
+    }
+
+    if(prev_pos_on_button && !curr_pos_on_button) {
+        button.after_hover();
+    }
 }

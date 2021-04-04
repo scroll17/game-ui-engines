@@ -53,6 +53,10 @@ class Button: public Element {
 
         t_callbacks& get_callbacks_by_action(const Action& action);
 
+        static void handle_mouse_button_pressed_e(Button& button, const sf::RenderWindow& window);
+        static void handle_mouse_button_released_e(Button& button, const sf::RenderWindow& window);
+        static void handle_mouse_moved_e(Button& button, const sf::RenderWindow& window, const sf::Vector2i& prev_pos);
+
     public:
         explicit Button(const sf::Vector2f& size, const string& str);
         explicit Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str);
