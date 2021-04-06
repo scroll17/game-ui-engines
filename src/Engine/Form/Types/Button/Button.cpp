@@ -4,14 +4,15 @@
 
 #include "Button.h"
 
-Button::Button(const sf::Vector2f& size, const string& str): Element(size), m_str(str) {
+
+Button::Button(const sf::Vector2f& size, const string& str): ActionElement<Button>(size), m_str(str) {
     m_border_color = sf::Color::Black;
 
     m_rectangle = new sf::RectangleShape();
     m_text = new sf::Text();
 }
 
-Button::Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): Element(size, pos), m_str(str) {
+Button::Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): ActionElement<Button>(size, pos), m_str(str) {
     m_border_color = sf::Color::Black;
 
     m_rectangle = new sf::RectangleShape();
@@ -100,103 +101,7 @@ Button& Button::set_bg_color(const sf::Color& color) {
     return (*this);
 }
 
-int Button::on_click(const Button::t_callback& cb, const Button::t_callback& after_cb) {
-    m_on_click_callbacks.push_back(cb);
-    int pos = static_cast<int>(m_on_click_callbacks.size()) - 1;
-
-    m_on_click_callbacks.push_back(after_cb);
-
-    return pos / 2;
-}
-
-int Button::on_hover(const Button::t_callback& cb, const Button::t_callback& after_cb) {
-    m_on_hover_callbacks.push_back(cb);
-    int pos = static_cast<int>(m_on_hover_callbacks.size()) - 1;
-
-    m_on_hover_callbacks.push_back(after_cb);
-
-    return pos / 2;
-}
-
-Button& Button::click() {
-    this->call_callbacks(Action::Click);
-    return (*this);
-}
-
-Button& Button::after_click() {
-    this->call_after_callbacks(Action::Click);
-    return (*this);
-}
-
-Button& Button::hover() {
-    this->call_callbacks(Action::Hover);
-    return (*this);
-}
-
-Button& Button::after_hover() {
-    this->call_after_callbacks(Action::Hover);
-    return (*this);
-}
-
-Button& Button::remove_click(int pos) {
-    remove_callback(Action::Click, pos * 2);
-    return (*this);
-}
-
-Button& Button::remove_hover(int pos) {
-    remove_callback(Action::Hover, pos * 2);
-    return (*this);
-}
-
-// PROTECTED GET
-Button::t_callbacks& Button::get_callbacks_by_action(const Action& action) {
-    if(action == Click) {
-        return m_on_click_callbacks;
-    } else if(action == Hover) {
-        return m_on_hover_callbacks;
-    } else {
-        throw std::runtime_error("Invalid argument");
-    }
-}
-
 // PROTECTED SET
-void Button::call_callbacks(const Action& action) {
-    t_callbacks& callbacks(get_callbacks_by_action(action));
-
-    if(callbacks.empty()) return;
-
-    const int size = callbacks.size();
-    for(int i = 0; i < size; i += 2) {
-        auto& callback = callbacks.at(i);
-        callback(*this);
-    }
-}
-
-void Button::call_after_callbacks(const Button::Action& action) {
-    t_callbacks& callbacks(get_callbacks_by_action(action));
-
-    if(callbacks.empty()) return;
-
-    const int size = callbacks.size();
-    for(int i = 1; i < size; i += 2) {
-        auto& callback = callbacks.at(i);
-        callback(*this);
-    }
-}
-
-void Button::remove_callback(const Action& action, int pos) {
-    if(pos % 2 != 0) throw std::runtime_error("Invalid argument");
-
-    t_callbacks& callbacks(get_callbacks_by_action(action));
-
-    if(pos > (callbacks.size() - 2)) {
-        throw Exception(Exception::NonExistentPosition);
-    }
-
-    callbacks.erase(callbacks.begin() + pos);               /// on callback
-    callbacks.erase(callbacks.begin() + pos + 1);   /// after callback
-}
-
 void Button::button_text_to_center() {
     if(m_rectangle == nullptr || m_text == nullptr) {
         throw std::runtime_error("Required vars no inited");

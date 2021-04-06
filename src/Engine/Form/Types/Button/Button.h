@@ -16,22 +16,12 @@
 
 #include "../../../Engine.h"
 #include "../../Form.h"
-#include "../Element/Element.h"
+
+#include "../../ExtendedTypes/ActionElement/ActionElement.h"
 
 using namespace std;
 
-class Button: public Element {
-    using t_callback = function<void(Button&)>;
-    using t_callbacks = vector<t_callback>;
-
-    public:
-        enum Action {
-            Click,
-            Hover,
-            ClickReleased,
-            HoverReleased
-        };
-
+class Button: public ActionElement<Button> {
     protected:
         string m_str;
         sf::Color m_bg_color { sf::Color::White };
@@ -39,19 +29,10 @@ class Button: public Element {
         int m_text_size { 18 };
         sf::Color m_text_color { sf::Color::Black };
 
-        t_callbacks m_on_click_callbacks {};
-        t_callbacks m_on_hover_callbacks {};
-
         sf::RectangleShape *m_rectangle { nullptr };
         sf::Text *m_text { nullptr };
 
         void button_text_to_center();
-
-        void call_callbacks(const Action& action);
-        void call_after_callbacks(const Action& action);
-        void remove_callback(const Action& action, int pos);
-
-        t_callbacks& get_callbacks_by_action(const Action& action);
 
         static void handle_mouse_button_pressed_e(Button& button, const sf::RenderWindow& window);
         static void handle_mouse_button_released_e(Button& button, const sf::RenderWindow& window);
@@ -69,18 +50,6 @@ class Button: public Element {
         Button& set_text_size(int size);
         Button& set_text_color(const sf::Color& color);
         Button& set_bg_color(const sf::Color& color);
-
-        int on_click(const t_callback& cb, const t_callback& after_cb);
-        int on_hover(const t_callback& cb, const t_callback& after_cb);
-
-        Button& click();
-        Button& after_click();
-
-        Button& hover();
-        Button& after_hover();
-
-        Button& remove_click(int pos);
-        Button& remove_hover(int pos);
 
         static void input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos);
 };
