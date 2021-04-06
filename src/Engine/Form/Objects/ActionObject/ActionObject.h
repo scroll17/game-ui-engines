@@ -10,8 +10,9 @@
 
 #include "../../../Exception/Exception.h"
 
+template <class T>
 class ActionObject {
-    using t_callback = std::function<void(ActionObject&)>;
+    using t_callback = std::function<void(T&)>;
     using t_callbacks = std::vector<t_callback>;
 
     public:
