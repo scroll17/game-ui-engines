@@ -9,14 +9,14 @@
 #include <functional> // function
 
 #include "../../../Exception/Exception.h"
+#include "../../Types/Element/Element.h"
 
-template <class T>
 class ActionObject {
-    using t_callback = std::function<void(T&)>;
-    using t_callbacks = std::vector<t_callback>;
-
     public:
-        enum Action {
+        using t_callback = std::function<void(Element&)>;
+        using t_callbacks = std::vector<t_callback>;
+
+        enum Action: int8_t {
             Click,
             Hover,
             Focus
@@ -32,30 +32,31 @@ class ActionObject {
         size_t set_callbacks_by_action(const Action& action, const t_callback& cb, const t_callback& after_cb);
         t_callbacks& get_callbacks_by_action(const Action& action);
 
-        void call_callbacks(const Action& action);
-        void call_after_callbacks(const Action& action);
-        void remove_callback(const Action& action, size_t pos);
+        virtual void call_callbacks(const Action& action) = 0;
+        virtual void call_after_callbacks(const Action& action) = 0;
+
+        virtual void remove_callback(const Action& action, size_t pos);
 
     public:
         ActionObject() = default;
         virtual ~ActionObject() = default;
 
-        size_t on_click(const t_callback& cb, const t_callback& after_cb);
-        size_t on_hover(const t_callback& cb, const t_callback& after_cb);
-        size_t on_focus(const t_callback& cb, const t_callback& after_cb);
+        virtual size_t on_click(const t_callback& cb, const t_callback& after_cb);
+        virtual size_t on_hover(const t_callback& cb, const t_callback& after_cb);
+        virtual size_t on_focus(const t_callback& cb, const t_callback& after_cb);
 
-        ActionObject& set_focus();
-        ActionObject& delete_focus();
+        virtual ActionObject& set_focus();
+        virtual ActionObject& delete_focus();
 
-        ActionObject& click();
-        ActionObject& after_click();
+        virtual ActionObject& click();
+        virtual ActionObject& after_click();
 
-        ActionObject& hover();
-        ActionObject& after_hover();
+        virtual ActionObject& hover();
+        virtual ActionObject& after_hover();
 
-        ActionObject& remove_click(size_t pos);
-        ActionObject& remove_hover(size_t pos);
-        ActionObject& remove_focus(size_t pos);
+        virtual ActionObject& remove_click(size_t pos);
+        virtual ActionObject& remove_hover(size_t pos);
+        virtual ActionObject& remove_focus(size_t pos);
 
         bool is_focused() const;
 };
