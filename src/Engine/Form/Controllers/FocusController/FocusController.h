@@ -12,12 +12,13 @@
 #include "SFML/Graphics.hpp"
 
 #include "../../Form.h"
-#include "../../ExtendedTypes/FocusElement/FocusElement.h"
 #include "../../../DataUtils/MousePosition/MousePosition.h"
+
+#include "../../ExtendedTypes/ActionElement/ActionElement.h"
 
 class FocusController final {
     public:
-        using t_elements = std::set<FocusElement*>;
+        using t_elements = std::set<ActionElement*>;
         using t_window_elements = std::map<const sf::RenderWindow*, t_elements*>;
 
     protected:
@@ -35,13 +36,13 @@ class FocusController final {
         FocusController(FocusController& other) = delete;
         void operator=(const FocusController&) = delete;
 
-        FocusController& register_element(FocusElement *el);
-        FocusController& remove_registration(FocusElement *el);
+        FocusController& register_element(ActionElement *el);
+        FocusController& remove_registration(ActionElement *el);
 
         FocusController& set_window(sf::RenderWindow *w);
         FocusController& input(const sf::Event& event);
 
-        FocusElement *get_focused_el() const;
+        ActionElement *get_focused_el() const;
         sf::RenderWindow *get_focused_window() const;
 
         static FocusController& get_instance();

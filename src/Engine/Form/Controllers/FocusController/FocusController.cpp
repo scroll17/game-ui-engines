@@ -31,20 +31,16 @@ void FocusController::remove_instance() {
     delete s_m_instance;
 }
 
-FocusController& FocusController::register_element(FocusElement *el) {
-    if(m_curr_window == nullptr) {
-        throw std::runtime_error("Need set window before");
-    }
+FocusController& FocusController::register_element(ActionElement *el) {
+    if(m_curr_window == nullptr) throw std::runtime_error("Need set window before");
 
     m_elements->insert(el);
 
     return (*this);
 }
 
-FocusController& FocusController::remove_registration(FocusElement *el) {
-    if(m_curr_window == nullptr) {
-        throw std::runtime_error("Need set window before");
-    }
+FocusController& FocusController::remove_registration(ActionElement *el) {
+    if(m_curr_window == nullptr) throw std::runtime_error("Need set window before");
 
     auto pos = m_elements->find(el);
     if(pos != std::end(*m_elements)) {
@@ -70,9 +66,7 @@ FocusController& FocusController::set_window(sf::RenderWindow *w) {
 }
 
 FocusController& FocusController::input(const sf::Event& event) {
-    if(m_curr_window == nullptr) {
-        throw std::runtime_error("Need set window before");
-    }
+    if(m_curr_window == nullptr) throw std::runtime_error("Need set window before");
 
     if(m_elements->empty()) return (*this);
 
@@ -96,12 +90,9 @@ FocusController& FocusController::input(const sf::Event& event) {
     return (*this);
 }
 
-
 // PUBLIC GET
-FocusElement *FocusController::get_focused_el() const {
-    if(m_curr_window == nullptr) {
-        throw std::runtime_error("Need set window before");
-    }
+ActionElement *FocusController::get_focused_el() const {
+    if(m_curr_window == nullptr) throw std::runtime_error("Need set window before");
 
     auto it = std::begin(*m_elements);
     while (it != std::end(*m_elements)) {
