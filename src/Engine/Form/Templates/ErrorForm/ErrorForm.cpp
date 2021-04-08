@@ -49,7 +49,7 @@ void ErrorForm::build() {
     m_button = new Button { {100, 50}, "Ok" };
     (*m_button)
         .correct_position(true)
-        .border_with_position(true)
+        .border_with_position(false)
         .set_window_size(m_window->getSize())
         .to_center(Element::X)
         .set_after(Element::Y, *m_text)
@@ -59,26 +59,28 @@ void ErrorForm::build() {
     auto p_window = m_window;
 
     m_button->on_click(
-      [](Button& button) {
-        button
+      [](Element& el) {
+        auto button = dynamic_cast<Button*>(&el);
+
+        (*button)
             .set_bg_color(sf::Color::Black)
             .set_text_color(sf::Color::White)
             .set_border_color(sf::Color::Red)
             .build();
       },
-      [p_window](Button& button) {
+      [p_window](Element& el) {
           p_window->close();
       }
     );
 
     m_button->on_hover(
-       [](Button& button) {
-           button
+       [](Element& el) {
+           el
              .set_border_width(2)
              .build();
        },
-       [](Button& button) {
-           button
+       [](Element& el) {
+           el
              .set_border_width(0)
              .build();
        }
