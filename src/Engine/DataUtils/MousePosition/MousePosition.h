@@ -35,8 +35,8 @@ class MousePosition {
         static void input(MousePosition& mouse_pos, const sf::RenderWindow& w, const sf::Event& event);
 
         static MousePosition& get_instance(const sf::RenderWindow* window);
-        static void remove_instance(const sf::RenderWindow* window);
-        static void remove_instance(const MousePosition* m_p);
+        static bool remove_instance(const sf::RenderWindow* window);
+        static bool remove_instance(const MousePosition* m_p);
         static void clear_all();
 };
 

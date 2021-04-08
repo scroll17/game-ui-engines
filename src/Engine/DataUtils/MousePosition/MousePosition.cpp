@@ -35,27 +35,35 @@ MousePosition& MousePosition::get_instance(const sf::RenderWindow *window) {
     }
 }
 
-void MousePosition::remove_instance(const sf::RenderWindow *window) {
+bool MousePosition::remove_instance(const sf::RenderWindow *window) {
     auto it = s_m_instances.find(window);
     if(it != std::end(s_m_instances)) {
         delete it->second;
         s_m_instances.erase(it);
+
+        return true;
     }
+
+    return false;
 }
 
-void MousePosition::remove_instance(const MousePosition *m_p) {
+bool MousePosition::remove_instance(const MousePosition *m_p) {
     auto it = std::find_if(
-      std::begin(s_m_instances),
-      std::end(s_m_instances),
-      [m_p](const MousePosition::t_instance& el) {
-          return el.second == m_p;
-      }
+            std::begin(s_m_instances),
+            std::end(s_m_instances),
+            [m_p](const MousePosition::t_instance& el) {
+                return el.second == m_p;
+            }
     );
 
     if(it != std::end(s_m_instances)) {
         delete it->second;
         s_m_instances.erase(it);
+
+        return true;
     }
+
+    return false;
 }
 
 void MousePosition::clear_all() {
