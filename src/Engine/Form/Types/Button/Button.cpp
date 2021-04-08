@@ -4,15 +4,14 @@
 
 #include "Button.h"
 
-
-Button::Button(const sf::Vector2f& size, const string& str): ActionElement<Button>(size), m_str(str) {
+Button::Button(const sf::Vector2f& size, const string& str): ActionElement(size), m_str(str) {
     m_border_color = sf::Color::Black;
 
     m_rectangle = new sf::RectangleShape();
     m_text = new sf::Text();
 }
 
-Button::Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): ActionElement<Button>(size, pos), m_str(str) {
+Button::Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): ActionElement(size, pos), m_str(str) {
     m_border_color = sf::Color::Black;
 
     m_rectangle = new sf::RectangleShape();

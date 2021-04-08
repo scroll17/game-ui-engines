@@ -14,14 +14,14 @@
 
 #include "../../../Exception/Exception.h"
 
+#include "../../ExtendedTypes/ActionElement/ActionElement.h"
+
 #include "../../../Engine.h"
 #include "../../Form.h"
 
-#include "../../ExtendedTypes/ActionElement/ActionElement.h"
-
 using namespace std;
 
-class Button: public ActionElement<Button> {
+class Button: public ActionElement {
     protected:
         string m_str;
         sf::Color m_bg_color { sf::Color::White };
