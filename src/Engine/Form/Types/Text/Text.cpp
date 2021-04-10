@@ -23,9 +23,26 @@ void Text::draw(sf::RenderWindow& window) const {
     window.draw(*m_value);
 }
 
+// PUBLIC GET
+string Text::get_value() const {
+    return m_value->getString();
+}
+
+size_t Text::get_size() const {
+    return m_value->getString().getSize();
+}
+
+bool Text::is_empty() const {
+    return m_value->getString().isEmpty();
+}
+
+char32_t Text::operator[](const size_t index) {
+    return m_value->getString()[index];
+}
+
 // PUBLIC SET
 Text& Text::build() {
-    if(!m_need_build) return (*this);;
+    if(!m_need_build) return (*this);
 
     m_value->setFont(m_font);
     m_value->setFillColor(m_color);
@@ -44,13 +61,75 @@ Text& Text::build() {
     return (*this);
 }
 
-Text& Text::add_text(const string& str) {
-    m_value->setString(m_value->getString() + sf::String::fromUtf8(str.begin(), str.end()));
+Text& Text::add_char(char ch, const ActionPosition& action, size_t pos) {
+    auto curr_str = string(m_value->getString());
+
+    switch (action) {
+        case Current: {
+            curr_str.append(&ch);
+            break;
+        }
+        case Before: {
+            curr_str.insert(pos, &ch);
+            break;
+        }
+        case After: {
+            curr_str.insert(pos + 1, &ch);
+            break;
+        }
+    }
+
+    m_value->setString(curr_str);
 
     return (*this);
 }
 
-Text &Text::remove_chars(size_t start_count, size_t end_count) {
+Text& Text::add_text(const string& str, const Text::ActionPosition& action, size_t pos) {
+    auto curr_str = string(m_value->getString());
+
+    switch (action) {
+        case Current: {
+            curr_str.append(str);
+            break;
+        }
+        case Before: {
+            curr_str.insert(pos, str);
+            break;
+        }
+        case After: {
+            curr_str.insert(pos + 1, str);
+            break;
+        }
+    }
+
+    m_value->setString(curr_str);
+
+    return (*this);
+}
+
+Text& Text::remove_char(size_t pos) {
+    auto curr_str = string(m_value->getString());
+    curr_str.erase(pos, 1);
+
+    m_value->setString(curr_str);
+
+    return (*this);
+}
+
+Text& Text::remove_chars(size_t pos, size_t count) {
+    auto curr_str = string(m_value->getString());
+
+    auto start = curr_str.at(pos);
+    auto end = start + count;
+
+    curr_str.erase(start, end);
+
+    m_value->setString(curr_str);
+
+    return (*this);
+}
+
+Text& Text::narrow_text(size_t start_count, size_t end_count) {
     const auto& str = m_value->getString();
     const auto& size = str.getSize();
 
