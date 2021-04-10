@@ -4,18 +4,18 @@
 
 #include "Button.h"
 
-Button::Button(const sf::Vector2f& size, const string& str): ActionElement(size), m_str(str) {
+Button::Button(const sf::Vector2f& size, const string& str): ActionElement(size) {
     m_border_color = sf::Color::Black;
 
     m_rectangle = new sf::RectangleShape();
-    m_text = new sf::Text();
+    m_text = new Text(str);
 }
 
-Button::Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): ActionElement(size, pos), m_str(str) {
+Button::Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): ActionElement(size, pos) {
     m_border_color = sf::Color::Black;
 
     m_rectangle = new sf::RectangleShape();
-    m_text = new sf::Text();
+    m_text = new Text(str);
 }
 
 Button::~Button() {
@@ -28,7 +28,7 @@ void Button::draw(sf::RenderWindow& window) const {
     if(m_need_build) throw Exception(Exception::ElementNotBuild);
 
     window.draw(*m_rectangle);
-    window.draw(*m_text);
+    m_text->draw(window);
 }
 
 void Button::input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos) {
@@ -47,6 +47,9 @@ void Button::input(Button& button, const sf::RenderWindow& window, const sf::Eve
 
 // PUBLIC SET
 Button& Button::build() {
+    /// TEXT
+    m_text->build();
+
     if(!m_need_build) return (*this);
 
     /// RECTANGLE SHAPE
@@ -59,13 +62,6 @@ Button& Button::build() {
     m_rectangle->setPosition(this->get_position());
     m_rectangle->setOrigin(this->get_origin());
 
-    /// TEXT
-    m_text->setFont(Engine::get_game_font());
-    m_text->setString(sf::String::fromUtf8(m_str.begin(), m_str.end()));
-
-    m_text->setCharacterSize(m_text_size);
-    m_text->setFillColor(m_text_color);
-
     this->button_text_to_center();
     this->turn_on_building();
 
@@ -73,23 +69,28 @@ Button& Button::build() {
 }
 
 Button& Button::set_text(const string& text) {
-    m_str = text;
-
-    this->turn_off_building();
+    m_text->set_text(text);
     return (*this);
 }
 
 Button& Button::set_text_size(int size) {
-    m_text_size = size;
+    m_text->set_text_size(size);
+    return (*this);
+}
 
-    this->turn_off_building();
+Button& Button::add_text(const string& text) {
+    m_text->add_text(text);
+    return (*this);
+}
+
+Button& Button::remove_chars(size_t start_count, size_t end_count) {
+    m_text->remove_chars(start_count, end_count);
+
     return (*this);
 }
 
 Button& Button::set_text_color(const sf::Color& color) {
-    m_text_color = color;
-
-    this->turn_off_building();
+    m_text->set_color(color);
     return (*this);
 }
 
@@ -106,14 +107,14 @@ void Button::button_text_to_center() {
         throw std::runtime_error("Required vars no inited");
     }
 
-    const auto& text_locals = m_text->getLocalBounds();
-    m_text->setOrigin({
+    const auto& text_locals = m_text->m_value->getLocalBounds();
+    m_text->m_value->setOrigin({
         (text_locals.width / 2.f) + text_locals.left,
         (text_locals.height / 2.f) + text_locals.top
     });
 
     const auto& locals = m_rectangle->getGlobalBounds();
-    m_text->setPosition({
+    m_text->m_value->setPosition({
         (locals.width / 2.f) + locals.left,
         (locals.height / 2.f) + locals.top
     });

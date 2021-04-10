@@ -15,6 +15,7 @@
 #include "../../../Exception/Exception.h"
 
 #include "../../ExtendedTypes/ActionElement/ActionElement.h"
+#include "../../Types/Text/Text.h"
 
 #include "../../../Engine.h"
 #include "../../Form.h"
@@ -23,14 +24,10 @@ using namespace std;
 
 class Button: public ActionElement {
     protected:
-        string m_str;
         sf::Color m_bg_color { sf::Color::White };
 
-        int m_text_size { 18 };
-        sf::Color m_text_color { sf::Color::Black };
-
+        Text *m_text { nullptr };
         sf::RectangleShape *m_rectangle { nullptr };
-        sf::Text *m_text { nullptr };
 
         void button_text_to_center();
 
@@ -46,9 +43,13 @@ class Button: public ActionElement {
         virtual Button& build() override;
         virtual void draw(sf::RenderWindow& window) const override;
 
+        Button& add_text(const string& text);
+        Button& remove_chars(size_t start_count, size_t end_count = 0);
+
         Button& set_text(const string& text);
         Button& set_text_size(int size);
         Button& set_text_color(const sf::Color& color);
+
         Button& set_bg_color(const sf::Color& color);
 
         static void input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos);
