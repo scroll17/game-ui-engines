@@ -23,6 +23,8 @@ class Element {
         };
 
     protected:
+        int m_build_count = 0;
+
         bool m_need_build { true };
         bool m_need_correct_pos { false };
         bool m_border_with_position { false };
@@ -56,7 +58,7 @@ class Element {
         Element& set_size(const sf::Vector2f& size);
         Element& set_width(const float& size);
         Element& set_height(const float& size);
-        Element& set_window_size(const sf::Vector2u& size, bool correct_pos = false);
+        virtual Element& set_window_size(const sf::Vector2u& size, bool correct_pos = false);
 
         Element& set_border_width(const float& w);
         Element& set_border_color(const sf::Color& color);

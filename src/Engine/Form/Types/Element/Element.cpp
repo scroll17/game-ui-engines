@@ -280,6 +280,7 @@ const float& Element::get_height() const {
 // PROTECTED SET
 void Element::turn_on_building() {
     m_need_build = false;
+    m_build_count++;
 }
 
 void Element::turn_off_building() {
