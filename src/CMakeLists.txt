@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 FetchContent_Declare(json
         GIT_REPOSITORY "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent"
         GIT_TAG "v3.7.3"
-)
+        )
 FetchContent_GetProperties(json)
 
 if(NOT json_POPULATED)
@@ -77,13 +77,19 @@ add_executable(stud-game
         Engine/Form/Types/ProgressBar/ProgressBar.h
         Engine/Form/Types/Button/Button.cpp
         Engine/Form/Types/Button/Button.h
+        Engine/Form/Types/TextBox/TextBox.cpp
+        Engine/Form/Types/TextBox/TextBox.h
         Engine/Form/Types/Text/Text.cpp
         Engine/Form/Types/Text/Text.h
 
         Engine/Form/ExtendedTypes/FocusElement/FocusElement.h
+        Engine/Form/ExtendedTypes/ActionElement/ActionElement.h
+        Engine/Form/ExtendedTypes/ActionElement/ActionElement.cpp
 
         Engine/Form/Objects/FocusObject/FocusObject.cpp
         Engine/Form/Objects/FocusObject/FocusObject.h
+        Engine/Form/Objects/ActionObject/ActionObject.cpp
+        Engine/Form/Objects/ActionObject/ActionObject.h
 
         Engine/Form/Controllers/FocusController/FocusController.cpp
         Engine/Form/Controllers/FocusController/FocusController.h
@@ -98,13 +104,14 @@ add_executable(stud-game
         Engine/Engine.h
 )
 
-target_link_libraries(stud-game
-            sfml-graphics
-            sfml-audio
-            sfml-window
-            sfml-system
-            nlohmann_json::nlohmann_json
-            pugixml
 
-            stdc++fs
-)
+target_link_libraries(stud-game
+        sfml-graphics
+        sfml-audio
+        sfml-window
+        sfml-system
+        nlohmann_json::nlohmann_json
+        pugixml
+
+        stdc++fs
+        )

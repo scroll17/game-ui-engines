@@ -5,64 +5,70 @@
 #include "TextBox.h"
 
 // PUBLIC SET
+TextBox& TextBox::build() {
+    Button::build();
+
+    this->button_text_to_center();
+
+    return (*this);
+}
+
+
 void TextBox::input(TextBox& text_box, const sf::RenderWindow& window, const sf::Event& event) {
-//    // Установка Фокуса Input
-//    bool select(Vector2i _mouse)
-//    {
-//        if((_mouse.x > x && _mouse.x < x + width) && (_mouse.y > y && _mouse.y < y + height)){ 	//Если нажат клаиша над объектом Input...
-//            focus = true;																	   	// Фокус true
-//            text += "|";																		// В конец строки добаляем | (что бы понимать что input в фокусе)
-//        } else {																				//...Иначе если нажатие произошло не над объектом, то...
-//            if(text.size() > 0){																// проверка последнего символа(иначе вылетает)
-//                if(text[text.size()-1] == 124){													// если символ | ...
-//                    text.erase(text.size()-1);														// ... то удаляем его
-//                }
-//            }
-//            focus = false;																		// устанавливаем фокус false
-//        }
-//        return focus;
-//    }
-
-//    virtual void event ( const sf::Event & event )
-//    {
-//        if (event.type == sf::Event::TextEntered)
-//        {
-//            //Обработка ввода
-//            m_textChanged = true ;
-//            switch ( event.text.unicode )
-//            {
-//                case 0xD: //Return
-//                    m_newText += L'\n' ;
-//                    break ;
-//                case 0x8://Backspace
-//                    if ( !m_newText.isEmpty() )
-//                        m_newText.erase(m_newText.getSize()-1) ;
-//                    break ;
-//                default :
-//                {
-//                    m_newText += static_cast<wchar_t>(event.text.unicode) ;
-//                }
-//            }
-//        }
-//    }
-
     if(event.type == sf::Event::TextEntered) {
-        text_box.m_text_changed = true;
+        if(!text_box.is_focused()) return;
+
+        auto& text = text_box.m_text;
+        const auto& size = text->get_size();
+
+        auto last_pos = (size > 0) ? size - 1 : 0;
+
+        switch (event.text.unicode) {
+            case 0x8:
+                if(text->is_empty()) break;
+
+                if(text_box[last_pos] == '|') {
+                    if(size < 2) break;
+
+                    text->remove_char(last_pos - 1);
+                } else {
+                    text->narrow_text(0, 1);
+                }
+
+                break ;
+            default: {
+                if(size >= text_box.m_max_characters_number) break;
+
+                bool is_char = event.text.unicode >= 65 && event.text.unicode <= 90;
+                bool is_upper_char = event.text.unicode >= 97 && event.text.unicode <= 122;
+
+                if(!is_char && !is_upper_char) break;
+
+                if(text_box[last_pos] == '|') {
+                    text->add_char(static_cast<char>(event.text.unicode), Text::Before, last_pos);
+                } else {
+                    text->add_char(static_cast<char>(event.text.unicode));
+                }
+
+                break;
+            }
+        }
+
+        text_box.button_text_to_center();
     }
 }
 
-TextBox& TextBox::set_focus() {
-    ActionObject::set_focus();
-
-    m_text.add_text("|");
+TextBox& TextBox::set_max_chars_number(uint8_t num) {
+    m_max_characters_number = num;
 
     return (*this);
 }
 
-TextBox& TextBox::delete_focus() {
-    ActionObject::delete_focus();
+// PUBLIC GET
+string TextBox::get_entered_text() const {
+    return m_text->get_value();
+}
 
-    m_text.remove_chars(0, 1);
-
-    return (*this);
+char32_t TextBox::operator[] (const size_t index) {
+    return (*m_text)[index];
 }

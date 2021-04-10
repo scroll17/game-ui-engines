@@ -15,22 +15,19 @@
 
 class TextBox: public Button {
     protected:
-        bool m_text_changed;
-        Text m_text {""};
+        uint8_t m_max_characters_number = 100;
 
     public:
         explicit TextBox(const sf::Vector2f& size, const string& str): Button(size, str) {};
         explicit TextBox(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): Button(size, pos, str) {};
 
-        virtual TextBox& set_focus() override;
-        virtual TextBox& delete_focus() override;
+        virtual TextBox& build() override;
 
-//        virtual TextBox& build() override;
-//        virtual void draw(sf::RenderWindow& window) const override;
-//
-//        void write_text(char ch);
-//        const string& read_text() const;
-//
+        TextBox& set_max_chars_number(uint8_t num);
+
+        string get_entered_text() const;
+        char32_t operator[] (size_t index);
+
         static void input(TextBox& text_box, const sf::RenderWindow& window, const sf::Event& event);
 };
 

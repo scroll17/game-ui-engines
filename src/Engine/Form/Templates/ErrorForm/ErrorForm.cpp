@@ -60,9 +60,9 @@ void ErrorForm::build() {
 
     m_button->on_click(
       [](Element& el) {
-        auto button = dynamic_cast<Button*>(&el);
+        auto button = dynamic_cast<Button&>(el);
 
-        (*button)
+        button
             .set_bg_color(sf::Color::Black)
             .set_text_color(sf::Color::White)
             .set_border_color(sf::Color::Red)
