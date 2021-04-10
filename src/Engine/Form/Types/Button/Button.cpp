@@ -45,14 +45,23 @@ void Button::input(Button& button, const sf::RenderWindow& window, const sf::Eve
     }
 }
 
+// PUBLIC GET
+Text& Button::get_button_text() const {
+    return (*m_text);
+}
+
 // PUBLIC SET
 Button& Button::build() {
     /// TEXT
+    if(m_text->m_build_count == 0) {
+        m_text->correct_position(true);
+    }
+
     m_text->build();
 
+    /// RECTANGLE SHAPE
     if(!m_need_build) return (*this);
 
-    /// RECTANGLE SHAPE
     m_rectangle->setSize(this->get_size());
     m_rectangle->setFillColor(m_bg_color);
 
@@ -62,8 +71,28 @@ Button& Button::build() {
     m_rectangle->setPosition(this->get_position());
     m_rectangle->setOrigin(this->get_origin());
 
-    this->button_text_to_center();
     this->turn_on_building();
+
+    return (*this);
+}
+
+Button& Button::set_window_size(const sf::Vector2u& size, bool correct_pos) {
+    m_text->set_window_size(size);
+
+    Element::set_window_size(size, correct_pos);
+
+    return (*this);
+}
+
+Button& Button::button_text_to_center() {
+    if(m_rectangle == nullptr || m_text == nullptr) {
+        throw std::runtime_error("Required vars no inited");
+    }
+
+    m_text->actualize_size();
+    (*m_text)
+      .to_center(XY)
+      .build();
 
     return (*this);
 }
@@ -83,8 +112,8 @@ Button& Button::add_text(const string& text) {
     return (*this);
 }
 
-Button& Button::remove_chars(size_t start_count, size_t end_count) {
-    m_text->remove_chars(start_count, end_count);
+Button& Button::narrow_text(size_t start_count, size_t end_count) {
+    m_text->narrow_text(start_count, end_count);
 
     return (*this);
 }
@@ -102,24 +131,6 @@ Button& Button::set_bg_color(const sf::Color& color) {
 }
 
 // PROTECTED SET
-void Button::button_text_to_center() {
-    if(m_rectangle == nullptr || m_text == nullptr) {
-        throw std::runtime_error("Required vars no inited");
-    }
-
-    const auto& text_locals = m_text->m_value->getLocalBounds();
-    m_text->m_value->setOrigin({
-        (text_locals.width / 2.f) + text_locals.left,
-        (text_locals.height / 2.f) + text_locals.top
-    });
-
-    const auto& locals = m_rectangle->getGlobalBounds();
-    m_text->m_value->setPosition({
-        (locals.width / 2.f) + locals.left,
-        (locals.height / 2.f) + locals.top
-    });
-}
-
 void Button::handle_mouse_button_pressed_e(Button& button, const sf::RenderWindow& window) {
     bool on_button = Form::mouse_in(button, window);
 

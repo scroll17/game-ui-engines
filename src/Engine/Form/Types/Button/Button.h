@@ -29,8 +29,6 @@ class Button: public ActionElement {
         Text *m_text { nullptr };
         sf::RectangleShape *m_rectangle { nullptr };
 
-        void button_text_to_center();
-
         static void handle_mouse_button_pressed_e(Button& button, const sf::RenderWindow& window);
         static void handle_mouse_button_released_e(Button& button, const sf::RenderWindow& window);
         static void handle_mouse_moved_e(Button& button, const sf::RenderWindow& window, const sf::Vector2i& prev_pos);
@@ -43,14 +41,20 @@ class Button: public ActionElement {
         virtual Button& build() override;
         virtual void draw(sf::RenderWindow& window) const override;
 
+        Button& set_window_size(const sf::Vector2u& size, bool correct_pos = false) override;
+
         Button& add_text(const string& text);
-        Button& remove_chars(size_t start_count, size_t end_count = 0);
+        Button& narrow_text(size_t start_count, size_t end_count = 0);
 
         Button& set_text(const string& text);
         Button& set_text_size(int size);
         Button& set_text_color(const sf::Color& color);
 
         Button& set_bg_color(const sf::Color& color);
+
+        Button& button_text_to_center();
+
+        Text& get_button_text() const;
 
         static void input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos);
 };
