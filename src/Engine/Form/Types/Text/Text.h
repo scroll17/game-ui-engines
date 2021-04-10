@@ -13,7 +13,11 @@
 
 using namespace std;
 
+class Button;
+
 class Text: public Element {
+    friend class Button;
+
     private:
         using Element::set_size;
         using Element::set_width;
@@ -22,7 +26,7 @@ class Text: public Element {
     protected:
         int m_text_size { 18 };
 
-        sf::Font& m_font {Engine::get_game_font() };
+        sf::Font& m_font { Engine::get_game_font() };
         sf::Color m_color { sf::Color::Black };
 
         sf::Text *m_value { nullptr };
@@ -37,6 +41,9 @@ class Text: public Element {
 
         virtual Text& build() override;
         virtual void draw(sf::RenderWindow& window) const override;
+
+        Text& add_text(const string& str);
+        Text& remove_chars(size_t start_count, size_t end_count = 0);
 
         Text& set_text(const string& str);
         Text& set_text_size(int size);

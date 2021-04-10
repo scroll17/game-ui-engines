@@ -44,6 +44,29 @@ Text& Text::build() {
     return (*this);
 }
 
+Text& Text::add_text(const string& str) {
+    m_value->setString(m_value->getString() + sf::String::fromUtf8(str.begin(), str.end()));
+
+    return (*this);
+}
+
+Text &Text::remove_chars(size_t start_count, size_t end_count) {
+    const auto& str = m_value->getString();
+    const auto& size = str.getSize();
+
+    if((start_count + end_count) > size) throw std::runtime_error("invalid argument");
+    if(start_count > size || end_count > size) throw std::runtime_error("invalid argument");
+
+    auto begin(str.begin()), end(str.end());
+
+    if(start_count != 0) begin += start_count;
+    if(end_count != 0) end -= end_count;
+
+    m_value->setString(sf::String::fromUtf8(begin, end));
+
+    return (*this);
+}
+
 Text& Text::set_text(const string& str) {
     m_value->setString(sf::String::fromUtf8(str.begin(), str.end()));
 
