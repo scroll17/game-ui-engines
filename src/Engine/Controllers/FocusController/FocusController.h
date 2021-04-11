@@ -11,10 +11,10 @@
 #include <utility>
 #include "SFML/Graphics.hpp"
 
-#include "../../Form.h"
-#include "../../../DataUtils/MousePosition/MousePosition.h"
+#include "../../Form/Form.h"
+#include "../../DataUtils/MousePosition/MousePosition.h"
 
-#include "../../ExtendedTypes/ActionElement/ActionElement.h"
+#include "../../Form/ExtendedTypes/ActionElement/ActionElement.h"
 
 class FocusController final {
     public:
