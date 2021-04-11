@@ -55,10 +55,12 @@ add_executable(stud-game
         File/FileReader/FileReader.cpp
         File/FileReader/FileReader.h
 
-        utils/string.cpp
-        utils/string.h
-        utils/array.cpp
-        utils/array.h
+        utils/string/string.cpp
+        utils/string/string.h
+        utils/array/array.cpp
+        utils/array/array.h
+        utils/time/time.h
+        utils/time/time.cpp
 
         Time/Time.cpp
         Time/Time.h
@@ -91,8 +93,12 @@ add_executable(stud-game
         Engine/Form/Objects/ActionObject/ActionObject.cpp
         Engine/Form/Objects/ActionObject/ActionObject.h
 
-        Engine/Form/Controllers/FocusController/FocusController.cpp
-        Engine/Form/Controllers/FocusController/FocusController.h
+        Engine/Controllers/FocusController/FocusController.cpp
+        Engine/Controllers/FocusController/FocusController.h
+        Engine/Controllers/CallSchedulerController/CallSchedulerController.cpp
+        Engine/Controllers/CallSchedulerController/CallSchedulerController.h
+        Engine/Controllers/CallSchedulerController/SchedulerPlan/SchedulerPlan.cpp
+        Engine/Controllers/CallSchedulerController/SchedulerPlan/SchedulerPlan.h
 
         Engine/Form/Templates/ErrorForm/ErrorForm.cpp
         Engine/Form/Templates/ErrorForm/ErrorForm.h
@@ -102,7 +108,7 @@ add_executable(stud-game
 
         Engine/Engine.cpp
         Engine/Engine.h
-)
+        )
 
 
 target_link_libraries(stud-game

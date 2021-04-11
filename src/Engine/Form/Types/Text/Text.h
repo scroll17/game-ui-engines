@@ -27,11 +27,6 @@ class Text: public Element {
             After
         };
 
-    private:
-        using Element::set_size;
-        using Element::set_width;
-        using Element::set_height;
-
     protected:
         int m_text_size { 18 };
 
