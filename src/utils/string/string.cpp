@@ -2,7 +2,7 @@
 // Created by user on 11.01.2021.
 //
 
-#include "string.h"
+#include "./string.h"
 
 static int find_stop_symbol_pos(const char *str, const int str_len, int curr_pos, const char sym) {
     for(; curr_pos < str_len; curr_pos++) {

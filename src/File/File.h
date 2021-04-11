@@ -10,7 +10,7 @@
 
 #include "../Constants/Constants.h"
 #include "../Exception/Exception.h"
-#include "../utils/string.h"
+#include "../utils/string/string.h"
 
 using namespace std;
 

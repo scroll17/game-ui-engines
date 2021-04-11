@@ -6,7 +6,7 @@
 #include <iomanip>
 
 #include "../Time/Time.h"
-#include "../utils/string.h"
+#include "../utils/string/string.h"
 
 char str[] = "ZZZ Обратите внимание на разницу между функцией strlen() и оператором sizeof. strlen() выводит количество символов до нуль-т"
              "ерминатора, тогда как оператор sizeof возвращает размер целого массива, независимо от того, что в нем находится. "
