@@ -12,7 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
-#include "../../../Exception/Exception.h"
+#include "../../../DataTypes/Exception/Exception.h"
 
 #include "../../ExtendedTypes/ActionElement/ActionElement.h"
 #include "../../Types/Text/Text.h"

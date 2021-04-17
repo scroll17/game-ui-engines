@@ -7,7 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../File/File.h"
+#include "../DataTypes/File/File.h"
 #include "../Constants/Constants.h"
 
 using namespace std;

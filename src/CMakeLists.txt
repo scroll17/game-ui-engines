@@ -40,20 +40,21 @@ endif()
 add_executable(stud-game
         main.cpp
 
-        Exception/Exception.cpp
-        Exception/Exception.h
-
         Constants/Constants.cpp
         Constants/Constants.h
 
-        File/File.cpp
-        File/File.h
-
-        File/FileWriter/FileWriter.cpp
-        File/FileWriter/FileWriter.h
-
-        File/FileReader/FileReader.cpp
-        File/FileReader/FileReader.h
+        DataTypes/File/File.cpp
+        DataTypes/File/File.h
+        DataTypes/File/FileWriter/FileWriter.cpp
+        DataTypes/File/FileWriter/FileWriter.h
+        DataTypes/File/FileReader/FileReader.cpp
+        DataTypes/File/FileReader/FileReader.h
+        DataTypes/Exception/Exception.cpp
+        DataTypes/Exception/Exception.h
+        DataTypes/Time/Time.cpp
+        DataTypes/Time/Time.h
+        DataTypes/Range/Range.cpp
+        DataTypes/Range/Range.h
 
         utils/string/string.cpp
         utils/string/string.h
@@ -61,9 +62,6 @@ add_executable(stud-game
         utils/array/array.h
         utils/time/time.h
         utils/time/time.cpp
-
-        Time/Time.cpp
-        Time/Time.h
 
         algorithm_tests/find.cpp
 
@@ -108,7 +106,7 @@ add_executable(stud-game
 
         Engine/Engine.cpp
         Engine/Engine.h
-        )
+)
 
 
 target_link_libraries(stud-game
