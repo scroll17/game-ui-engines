@@ -50,13 +50,17 @@ const int WINDOW_W = 600, WINDOW_H = 400;
 float offsetX = 0;
 float offsetY = 0;
 
-const int H = 12;  /// Высота
+const int H = 12 + 3;  /// Высота
 const int W = 40;  /// Длина
-const int BLOCK_SIZE = 42; /// Размер блока;
+const int BLOCK_SIZE = 32; /// Размер блока;
+const int MINI_BLOCK_SIZE = 4;
 
 /// Каждая ячейка это квадрат 32*32
 String TileMap[H] = {
 "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+"B                                B     B",
+"B                                B     B",
+"B                                B     B",
 "B                                B     B",
 "B                                B     B",
 "B                                B     B",
@@ -70,8 +74,12 @@ String TileMap[H] = {
 "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 };
 
-
-// TODO _2 create functions for get blocks with collision by (X, Y) ex: get_blocks_with_collision(bounds)
+enum class Direction {
+        Top,
+        Bottom,
+        Left,
+        Right
+};
 
 Range get_collision_blocks_x(const Vector2f& player_pos, const FloatRect& player_bounds) {
     /**
@@ -100,13 +108,6 @@ Range get_collision_blocks_y(const Vector2f& player_pos, const FloatRect& player
 
     return Range(top_y_block, bottom_y_block);
 }
-
-enum class Direction {
-    Top,
-    Bottom,
-    Left,
-    Right
-};
 
 float get_hitting_in_texture(
   const Direction direction,
@@ -156,35 +157,6 @@ float get_hitting_in_texture(
             return result;
         }
     }
-
-//    switch (direction) {
-//        case Direction::Right: {
-//            float x = player_pos.x + player_bounds.width;  // position with width
-//            float y = x - block_position;                  // hitting the texture
-//
-//            float result = player_pos.x - (player_pos.x - y);
-//            cout << "right 2 = " << -result << endl;
-//
-//            if(result < 0) return 0;
-//
-//            return -result;
-//        }
-//        case Direction::Left: {
-//            float x = player_pos.x;                 // player position (start of sprite)
-//            float y = block_position + BLOCK_SIZE;  // end of contact block
-//
-//            float result = y - x;
-//            if(result < 0) return 0;
-//
-//            return result;
-//        }
-//        case Direction::Top: {
-//            break;
-//        }
-//        case Direction::Bottom: {
-//            break;
-//        }
-//    }
 }
 
 //class GameMap {
@@ -238,7 +210,7 @@ class Player {
             sprite.setTextureRect(dx_rect);
             sprite.setPosition(position);
             sprite.setTexture(texture);
-            sprite.scale(0.8, 0.8);
+            sprite.scale(0.7, 0.7);
 
             dx = dy = 0.0;
 
@@ -255,7 +227,7 @@ class Player {
 //        void get_direction();
 //        bool direction_has_be_changed();
 
-        void collision_x(float prev_x_pos) {
+        void collision(Axis axis, float prev_pos) {
             /**
              *  using "getGlobalBounds" because we use "sprite.scale"
              * */
@@ -270,62 +242,37 @@ class Player {
 
                     if(cell != 'B') continue;;
 
-                    if(dx > 0) position.x = prev_x_pos;
-                    if(dx < 0) position.x = prev_x_pos;
+                    if(axis == Axis::X) {
+                        if(dx > 0) position.x = prev_pos;
+                        if(dx < 0) position.x = prev_pos;
+                    }
+
+                    if(axis == Axis::Y) {
+                        if(dy > 0) position.y = prev_pos;
+                        if(dy < 0) position.y = prev_pos;
+                    }
                 }
             }
         }
 
-        void collision_y(float prev_y_pos) {
+        void hitting_in_texture() {
             /**
-             *  using "getGlobalBounds" because we use "sprite.scale"
+             *    Explanation:
+             *      when we move to the left / right (near the borders)
+             *      and then we start to move forward,
+             *      then we change the height of the player and get into the texture
+             *
+             *    Need execute if the width / height of the sprite changes
              * */
-            const auto& bounds = sprite.getGlobalBounds();
-
-            const auto& collision_blocks_y = get_collision_blocks_y(position, bounds);
-            const auto& collision_blocks_x = get_collision_blocks_x(position, bounds);
-
-            for (size_t i = collision_blocks_y.get_start(); i < collision_blocks_y.get_end(); i++) {
-                for (size_t j = collision_blocks_x.get_start(); j < collision_blocks_x.get_end(); j++) {
-                    char32_t cell = TileMap[i][j];
-
-                    if(cell != 'B') continue;;
-
-                    if(dy > 0) position.y = prev_y_pos;
-                    if(dy < 0) position.y = prev_y_pos;
-                }
-            }
-        }
-
-        /**
-         *      TODO _need realesed
-         *          когда мы перемещаемся в лево/право (в близи границ)
-         *          а после чего начинаем двигаться в перёд то мы изменяем высоту игрока и попадаем в текстуру
-         *
-         *          Как исправить:
-         *              - следить за предыдущим направлением движения и проверять если мы изменили направление
-         *              - если мы попали в текстуру то нас нужно откинуть ровно на столько на сколько мы находимся в текстуре
-         * */
-        void hitting_in_texture(Axis axis) {
-            // TODO - execute if the width / height of the sprite changes
 
             const auto& bounds = sprite.getGlobalBounds();
 
             const auto& collision_blocks_y = get_collision_blocks_y(position, bounds);
             const auto& collision_blocks_x = get_collision_blocks_x(position, bounds);
-
-            cout << "----------------- hitting_in_texture ---------------------" << endl;
 
             for (size_t i = collision_blocks_y.get_start(); i < collision_blocks_y.get_end(); ++i) {
                 for (size_t j = collision_blocks_x.get_start(); j < collision_blocks_x.get_end(); ++j) {
                     char32_t cell = TileMap[i][j];
-//                    char cell2 = cell;
-
-//                    cout << "TileMap["
-//                         << i << ", " << j
-//                         << "] = " << cell2
-//                         << endl;
-
                     if(cell != 'B') continue;
 
                     float x_block_position = j * BLOCK_SIZE;
@@ -343,31 +290,18 @@ class Player {
                     float hitting_x;
                     float hitting_y;
 
-                    cout << "1) is_X = " << is_X << endl;
-                    cout << "2) is_Y = " << is_Y << endl;
-
                     if(is_X) {
-                        cout << "3) is_right = " << is_right << endl;
-                        cout << "4) is_left = " << is_left << endl;
-
                         if(is_right)
                             hitting_x = get_hitting_in_texture(Direction::Right, position, bounds, j);
                         else
                             hitting_x = get_hitting_in_texture(Direction::Left, position, bounds, j);
-
-                        cout << "5) hitting_x = " << hitting_x << endl;
                     }
 
                     if(is_Y) {
-                        cout << "6) is_top = " << is_top << endl;
-                        cout << "7) is_bottom = " << is_bottom << endl;
-
                         if(is_top)
                             hitting_y = get_hitting_in_texture(Direction::Top, position, bounds, i);
                         else
                             hitting_y = get_hitting_in_texture(Direction::Bottom, position, bounds, i);
-
-                        cout << "8) hitting_y = " << hitting_y << endl;
                     }
 
                     if(is_X && is_Y) {
@@ -375,16 +309,14 @@ class Player {
                         if(hitting_x < 0 && hitting_y < 0) {
                             result = std::max(hitting_x, hitting_y);
                         } else {
-                            float min = std::min(fabs(hitting_x), fabs(hitting_y));
+                            float fabs_hitting_x = fabs(hitting_x);
+                            float min = std::min(fabs_hitting_x, fabs(hitting_y));
 
-                            if(min == fabs(hitting_x))
+                            if(min == fabs_hitting_x)
                                 result = hitting_x;
                             else
                                 result = hitting_y;
                         }
-
-
-                        cout << "9) result = " << result << endl;
 
                         if(result == hitting_x)
                             hitting_y = 0;
@@ -393,71 +325,16 @@ class Player {
                     }
 
                     if(hitting_x != 0) {
-                        cout << "10) hitting_x != 0 = " << (hitting_x != 0) << endl;
-                        if(hitting_x > 0) {
-                            cout << "11) (hitting_x + 5) = " << (hitting_x + 5) << endl;
-                            position.x += (hitting_x + 5);
-                        }
-                        else {
-                            cout << "12) (hitting_x - 5) = " << (hitting_x - 5) << endl;
-                            position.x += (hitting_x - 5);
-                        }
-
-                        cout << "13) position.x = " << position.x << endl;
+                        if(hitting_x > 0) position.x += (hitting_x + 5);
+                        else position.x += (hitting_x - 5);
                     }
 
                     if(hitting_y != 0) {
-                        if(hitting_y > 0) {
-                            cout << "14) (hitting_y + 2) = " << (hitting_y + 2) << endl;
-                            position.y += (hitting_y + 2);
-                        }
-                        else {
-                            cout << "15) (hitting_y - 2 = " << (hitting_y - 2) << endl;
-                            position.y += (hitting_y - 2);
-                        }
-
-                        cout << "16) position.y = " << position.y << endl;
+                        if(hitting_y > 0) position.y += (hitting_y + 2);
+                        else position.y += (hitting_y - 2);
                     }
-
-
-////                    if(axis == Axis::X) {
-//                        cout << "x_block_position >= position.x === " << (x_block_position >= position.x) << endl;
-//                        cout << "x_block_position <= position.x === " << (x_block_position <= position.x) << endl;
-//
-//                        if(x_block_position >= position.x) {
-//                            float hitting = get_hitting_in_texture(Direction::Right, position, bounds, j);
-//                            if(hitting != 0) position.x += (hitting - 5);
-//
-//                            cout << "Direction::Right => " << hitting << endl;
-//
-//                        } else if(x_block_position <= position.x) {
-//                            float hitting = get_hitting_in_texture(Direction::Left, position, bounds, j);
-//                            if(hitting != 0) position.x += (hitting + 5);
-//
-//                            cout << "Direction::Left => " << hitting << endl;
-//                        }
-////                    }
-//
-////                    if(axis == Axis::Y) {
-//                        cout << " y_block_position <= position.y === " << (y_block_position <= position.y) << endl;
-//                        cout << " y_block_position >= position.y === " << (y_block_position >= position.y) << endl;
-//
-//                        if(y_block_position >= position.y) {
-//                            float hitting = get_hitting_in_texture(Direction::Bottom, position, bounds, i);
-//                            if(hitting != 0) position.y += (hitting - 2);
-//
-//                            cout << "Direction::Bottom => " << hitting << endl;
-//                        } else if(y_block_position <= position.y) {
-//                            float hitting = get_hitting_in_texture(Direction::Top, position, bounds, i);
-//                            if(hitting != 0) position.y += (hitting + 2);
-//
-//                            cout << "Direction::Top => " << hitting << endl;
-//                        }
-////                    }
                 }
             }
-
-            cout << "----------------- hitting_in_texture ---------------------" << endl;
         };
 
         void update(float time) {
@@ -485,15 +362,12 @@ class Player {
             auto prev_y_pos = position.y;
 
             position.x += dx * time;
-//            cout << "position.x = " << position.x << endl;
-            this->collision_x(prev_x_pos);
+            this->collision(Axis::X, prev_x_pos);
 
             const auto& bounds = sprite.getGlobalBounds();
 
             position.y += dy * time;
-//            cout << "position.y = " << position.y << endl;
-//            cout << "bounds.top = " << bounds.top << endl;
-            this->collision_y(prev_y_pos);
+            this->collision(Axis::Y, prev_y_pos);
 
             /** ANIMATION */
             float S_animation = animation_change_rate * time;
@@ -522,6 +396,7 @@ class Player {
                 }
 
                 sprite.setTextureRect(dx_rect);
+                this->hitting_in_texture();
             } else {
                 dy_rect.left = 20 + (int(dy_current_frame) * 100);
 
@@ -535,15 +410,9 @@ class Player {
                 }
 
                 sprite.setTextureRect(dy_rect);
+                this->hitting_in_texture();
             }
 
-
-            if(prev_axis != axis && prev_axis != Axis::Zero) {
-//                if(prev_axis == Axis::X) this->hitting_in_texture(Axis::Y);
-//                if(prev_axis == Axis::Y) this->hitting_in_texture(Axis::X);
-//                this->hitting_in_texture(Axis::X);
-                this->hitting_in_texture(Axis::Y);
-            }
 
             sprite.setPosition({ position.x - offsetX, position.y - offsetY });
 
@@ -559,8 +428,11 @@ int main() {
     Clock clock;
 
     RectangleShape rectangle(Vector2f(BLOCK_SIZE, BLOCK_SIZE));
+    RectangleShape mini_rectangle(Vector2f(MINI_BLOCK_SIZE, MINI_BLOCK_SIZE));
+
     rectangle.setOutlineColor(Color::Black);
     rectangle.setOutlineThickness(1);
+
 
     while (window.isOpen()) {
         float time = clock.getElapsedTime().asMicroseconds();
@@ -597,8 +469,13 @@ int main() {
 
         window.clear(Color::White);
 
+        auto player_bounds = player.sprite.getGlobalBounds();
+        int player_j = int((player.position.x + (player_bounds.width / 2.f)) / BLOCK_SIZE);
+        int player_i = int((player.position.y + (player_bounds.height / 2.f)) / BLOCK_SIZE);
+
         for(int i = 0; i < H; i++) {
             for(int j = 0; j < W; j++) {
+                // MAIN MAP
                 if(TileMap[i][j] == ' ') rectangle.setFillColor(Color::White);
                 if(TileMap[i][j] == 'B') {
                     rectangle.setFillColor(Color::Black);
@@ -610,6 +487,25 @@ int main() {
                 window.draw(rectangle);
 
                 rectangle.setOutlineColor(Color::Black);
+            }
+        }
+
+        for(int i = 0; i < H; i++) {
+            int offset = 5;
+
+            for(int j = 0; j < W; j++) {
+                // MINI MAP
+                if(TileMap[i][j] == 'B') {
+                    mini_rectangle.setFillColor(Color::Green);
+                    mini_rectangle.setPosition((j * MINI_BLOCK_SIZE) + offset, (i * MINI_BLOCK_SIZE) + offset);
+                }
+
+                if(player_i == i && player_j == j) {
+                    mini_rectangle.setFillColor(Color::Red);
+                    mini_rectangle.setPosition((j * MINI_BLOCK_SIZE) + offset, (i * MINI_BLOCK_SIZE) + offset);
+                }
+
+                window.draw(mini_rectangle);
             }
         }
 
