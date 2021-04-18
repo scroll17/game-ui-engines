@@ -15,13 +15,16 @@ class Range {
         size_t m_start;
         size_t m_end;
 
+        bool m_include_end;
+
     public:
-        Range(size_t start, size_t end);
+        Range(size_t start, size_t end, bool include_end = false);
         ~Range() = default;
 
+        void include_end(bool solution);
         void execute(const t_cb& cb) const;
-        bool in_range(size_t val) const;
 
+        [[nodiscard]] bool in_range(size_t val) const;
         [[nodiscard]] size_t get_start() const;
         [[nodiscard]] size_t get_end() const;
 

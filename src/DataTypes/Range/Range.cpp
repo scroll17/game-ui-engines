@@ -4,19 +4,20 @@
 
 #include "Range.h"
 
-Range::Range(size_t start, size_t end) {
-    if(start >= end) {
-        throw std::runtime_error("start should be more end");
-    }
+Range::Range(size_t start, size_t end, bool include_end) {
+    m_start = std::min(end, start);
+    m_end = std::max(end, start);
 
-    m_start = start;
-    m_end = end;
+    m_include_end = include_end;
 }
 
 // PUBLIC VOID
 void Range::execute(const Range::t_cb& cb) const {
-    for(size_t i = m_start; i <= m_end; i++) {
-        cb(i);
+    size_t pos = m_start;
+    size_t end = m_include_end ? m_end : m_end - 1;
+
+    while (pos <= end) {
+        cb(pos++);
     }
 }
 
@@ -39,4 +40,9 @@ size_t Range::get_end() const {
 
 bool Range::in_range(size_t val) const {
     return (m_start <= val && val <= m_end);
+}
+
+// PUBLIC SET
+void Range::include_end(bool solution) {
+    m_include_end = solution;
 }
