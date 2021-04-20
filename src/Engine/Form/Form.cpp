@@ -4,6 +4,9 @@
 
 #include "Form.h"
 
+using namespace form;
+using namespace form::types;
+
 // PROTECTED SET
 void Form::turn_build_on() {
     m_need_build = false;

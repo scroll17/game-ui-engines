@@ -7,6 +7,12 @@
 
 #include <chrono>
 
-long get_timestamp();
+namespace utils {
+     namespace time {
+
+         long get_timestamp();
+
+     }
+}
 
 #endif //STUD_GAME_TIME_H

@@ -3,7 +3,9 @@
 //
 
 #include "Exception.h"
-#include "../../Engine/Form/Templates/ErrorForm/ErrorForm.h"
+#include "../../Engine/Form/index.h"
+
+using namespace data_types;
 
 static map<Exception::Type, string> EXCEPTION_DETAILS {
   { Exception::Type::FileRead, "Error with read file." },
@@ -29,9 +31,9 @@ const string& Exception::get_error_message() const {
 }
 
 void Exception::draw_error() const {
-    auto form = new ErrorForm { this->get_error_message() };
+    auto form = new form::templates::ErrorForm { this->get_error_message() };
 
-    form->render(120, ErrorForm::empty_frame_cb);
+    form->render(120, form::templates::ErrorForm::empty_frame_cb);
 
     delete form;
 }

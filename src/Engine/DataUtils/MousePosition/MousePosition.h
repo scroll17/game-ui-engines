@@ -8,37 +8,44 @@
 #include "SFML/Graphics.hpp"
 #include <map>
 
-class MousePosition {
-    public:
-        using t_instance = std::pair<const sf::RenderWindow*, MousePosition*>;
-        using t_instances = std::map<const sf::RenderWindow*, MousePosition*>;
+namespace engine {
 
-    protected:
-        static t_instances s_m_instances;
+    namespace data_utils {
 
-        sf::Vector2i m_prev_pos {};
-        sf::Vector2i m_curr_pos {};
+        class MousePosition {
+            public:
+                using t_instance = std::pair<const sf::RenderWindow*, MousePosition*>;
+                using t_instances = std::map<const sf::RenderWindow*, MousePosition*>;
 
-        explicit MousePosition();
-        explicit MousePosition(const sf::RenderWindow& w);
-        ~MousePosition() = default;
+            protected:
+                static t_instances s_m_instances;
 
-    public:
-        MousePosition(MousePosition& other) = delete;
-        void operator=(const MousePosition&) = delete;
+                sf::Vector2i m_prev_pos {};
+                sf::Vector2i m_curr_pos {};
 
-        MousePosition& update_pos(const sf::RenderWindow& w);
+                explicit MousePosition();
+                explicit MousePosition(const sf::RenderWindow& w);
+                ~MousePosition() = default;
 
-        const sf::Vector2i& get_prev_pos() const;
-        const sf::Vector2i& get_curr_pos() const;
+            public:
+                MousePosition(MousePosition& other) = delete;
+                void operator=(const MousePosition&) = delete;
 
-        static void input(MousePosition& mouse_pos, const sf::RenderWindow& w, const sf::Event& event);
+                MousePosition& update_pos(const sf::RenderWindow& w);
 
-        static MousePosition& get_instance(const sf::RenderWindow* window);
-        static bool remove_instance(const sf::RenderWindow* window);
-        static bool remove_instance(const MousePosition* m_p);
-        static void clear_all();
-};
+                const sf::Vector2i& get_prev_pos() const;
+                const sf::Vector2i& get_curr_pos() const;
 
+                static void input(MousePosition& mouse_pos, const sf::RenderWindow& w, const sf::Event& event);
+
+                static MousePosition& get_instance(const sf::RenderWindow* window);
+                static bool remove_instance(const sf::RenderWindow* window);
+                static bool remove_instance(const MousePosition* m_p);
+                static void clear_all();
+        };
+
+    }
+
+}
 
 #endif //STUD_GAME_MOUSEPOSITION_H

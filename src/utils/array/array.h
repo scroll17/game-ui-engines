@@ -10,12 +10,16 @@
 #include <random>   // random_device, mt19937, uniform_int_distribution
 #include <iostream>
 
-int *bubble_sort(int *arr, size_t arr_size, size_t start = 0, size_t stop = 0);
+namespace utils {
+    namespace array {
+        void show_array(int *arr, size_t size);
 
-int *generate_arr(size_t, size_t);
+        int *bubble_sort(int *arr, size_t arr_size, size_t start = 0, size_t stop = 0);
 
-void show_array(int *arr, size_t size);
+        int *generate_arr(size_t, size_t);
 
-int gen_random();
+        int gen_random(size_t start, size_t end);
+    }
+}
 
 #endif //STUD_GAME_ARRAY_H

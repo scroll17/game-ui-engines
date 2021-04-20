@@ -4,6 +4,8 @@
 
 #include "SchedulerPlan.h"
 
+using namespace engine::controllers;
+
 SchedulerPlan::SchedulerPlan(size_t id, size_t every_ms, SchedulerPlan::t_cb&& cb): m_id(id), m_every_ms(every_ms), m_cb(cb) {
 }
 
@@ -30,9 +32,11 @@ size_t SchedulerPlan::get_last_execute_ts() const {
 // PUBLIC SET
 void SchedulerPlan::activate() {
     if(m_count == 0) return;
-    if(m_active != true) this->execute(get_timestamp());
 
-    m_active = true;
+    if(!m_active) {
+        m_active = true;
+        this->execute(utils::time::get_timestamp());
+    }
 }
 
 void SchedulerPlan::disable() {

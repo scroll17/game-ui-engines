@@ -11,14 +11,16 @@
 #include <codecvt>  // codecvt_utf8_utf16
 #include <string>   // wstring
 
-using namespace std;
+namespace utils {
+    namespace string {
+        // 1.5 times slower
+        int find(const char *str, const char *sub_str);
 
-// 1.5 times slower
-int find(const char *str, const char *sub_str);
+        // 400 times faster
+        int rfind(const char *str, const char *sub_str);
 
-// 400 times faster
-int rfind(const char *str, const char *sub_str);
-
-wstring convert_to_ws(const string& str);
+        std::wstring convert_to_ws(const std::string& str);
+    }
+}
 
 #endif //STUD_GAME_STRING_H

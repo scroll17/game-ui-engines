@@ -16,38 +16,47 @@
 
 #include "../../Form/ExtendedTypes/ActionElement/ActionElement.h"
 
-class FocusController final {
-    public:
-        using t_elements = std::set<ActionElement*>;
-        using t_window_elements = std::map<const sf::RenderWindow*, t_elements*>;
+using namespace form::extended_types;
 
-    protected:
-        static FocusController *s_m_instance;
+namespace engine {
 
-        sf::RenderWindow *m_curr_window { nullptr };
+    namespace controllers {
 
-        t_window_elements *m_window_elements { nullptr };
-        t_elements *m_elements { nullptr };
+        class FocusController final {
+            public:
+                using t_elements = std::set<ActionElement*>;
+                using t_window_elements = std::map<const sf::RenderWindow*, t_elements*>;
 
-        FocusController();
-        ~FocusController();
+            protected:
+                static FocusController *s_m_instance;
 
-    public:
-        FocusController(FocusController& other) = delete;
-        void operator=(const FocusController&) = delete;
+                sf::RenderWindow *m_curr_window { nullptr };
 
-        FocusController& register_element(ActionElement *el);
-        FocusController& remove_registration(ActionElement *el);
+                t_window_elements *m_window_elements { nullptr };
+                t_elements *m_elements { nullptr };
 
-        FocusController& set_window(sf::RenderWindow *w);
-        FocusController& input(const sf::Event& event);
+                FocusController();
+                ~FocusController();
 
-        ActionElement *get_focused_el() const;
-        sf::RenderWindow *get_focused_window() const;
+            public:
+                FocusController(FocusController& other) = delete;
+                void operator=(const FocusController&) = delete;
 
-        static FocusController& get_instance();
-        static void remove_instance();
-};
+                FocusController& register_element(ActionElement *el);
+                FocusController& remove_registration(ActionElement *el);
 
+                FocusController& set_window(sf::RenderWindow *w);
+                FocusController& input(const sf::Event& event);
+
+                ActionElement *get_focused_el() const;
+                sf::RenderWindow *get_focused_window() const;
+
+                static FocusController& get_instance();
+                static void remove_instance();
+        };
+
+    }
+
+}
 
 #endif //STUD_GAME_FOCUSCONTROLLER_H

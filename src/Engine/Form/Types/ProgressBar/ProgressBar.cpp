@@ -4,6 +4,8 @@
 
 #include "ProgressBar.h"
 
+using namespace form::types;
+
 ProgressBar::ProgressBar(const sf::Vector2f& size, float step_count):
     Element({ 0, size.y }),
     m_curr_step(0.f),

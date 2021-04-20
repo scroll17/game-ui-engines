@@ -8,28 +8,32 @@
 #include "iostream"
 #include <functional>
 
-class Range {
-    using t_cb = std::function<void(size_t)>;
+namespace data_types {
 
-    private:
-        size_t m_start;
-        size_t m_end;
+    class Range {
+            using t_cb = std::function<void(size_t)>;
 
-        bool m_include_end;
+        private:
+            size_t m_start;
+            size_t m_end;
 
-    public:
-        Range(size_t start, size_t end, bool include_end = false);
-        ~Range() = default;
+            bool m_include_end;
 
-        void include_end(bool solution);
-        void execute(const t_cb& cb) const;
+        public:
+            Range(size_t start, size_t end, bool include_end = false);
+            ~Range() = default;
 
-        [[nodiscard]] bool in_range(size_t val) const;
-        [[nodiscard]] size_t get_start() const;
-        [[nodiscard]] size_t get_end() const;
+            void include_end(bool solution);
+            void execute(const t_cb& cb) const;
 
-        static void for_each(size_t start, size_t end, const t_cb& cb);
-        static void for_each(const Range& range, const t_cb& cb);
-};
+            [[nodiscard]] bool in_range(size_t val) const;
+            [[nodiscard]] size_t get_start() const;
+            [[nodiscard]] size_t get_end() const;
+
+            static void for_each(size_t start, size_t end, const t_cb& cb);
+            static void for_each(const Range& range, const t_cb& cb);
+    };
+
+}
 
 #endif //STUD_GAME_RANGE_H

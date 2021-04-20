@@ -5,17 +5,23 @@
 #ifndef STUD_GAME_FOCUSOBJECT_H
 #define STUD_GAME_FOCUSOBJECT_H
 
-class FocusObject {
-    protected:
-        bool m_focus = false;
+namespace form {
+    namespace objects {
 
-    public:
-        FocusObject() = default;
-        virtual ~FocusObject() = default;
+        class FocusObject {
+            protected:
+                bool m_focus = false;
 
-        virtual void set_focus();
-        virtual void delete_focus();
-        virtual bool is_focused() const;
-};
+            public:
+                FocusObject() = default;
+                virtual ~FocusObject() = default;
+
+                virtual void set_focus();
+                virtual void delete_focus();
+                virtual bool is_focused() const;
+        };
+
+    }
+}
 
 #endif //STUD_GAME_FOCUSOBJECT_H

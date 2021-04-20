@@ -19,41 +19,45 @@
 
 using namespace std;
 
-class Form {
-    private:
-        bool m_need_build { true };
+namespace form {
 
-    protected:
-        float m_fps { 60 };
+    class Form {
+        private:
+            bool m_need_build { true };
 
-        sf::RenderWindow *m_window { nullptr };
-        sf::Clock *m_loop_timer { nullptr };
+        protected:
+            float m_fps { 60 };
 
-        virtual void draw() = 0;
-        virtual void build() = 0;
+            sf::RenderWindow *m_window { nullptr };
+            sf::Clock *m_loop_timer { nullptr };
 
-        virtual void pollEvent(const sf::Event& event) = 0;
+            virtual void draw() = 0;
+            virtual void build() = 0;
 
-        void generate_loop_timer();
-        void correct_fps();
-        void drop_loop_timer();
+            virtual void pollEvent(const sf::Event& event) = 0;
 
-        void turn_build_on();
-        bool is_need_build() const;
+            void generate_loop_timer();
+            void correct_fps();
+            void drop_loop_timer();
 
-    public:
-        using t_frame_cb = const function<bool(sf::RenderWindow&)>;
+            void turn_build_on();
+            bool is_need_build() const;
 
-        Form() = default;
-        virtual ~Form() = default;
+        public:
+            using t_frame_cb = const function<bool(sf::RenderWindow&)>;
 
-        virtual void render(float fps, t_frame_cb& frame_cb);
+            Form() = default;
+            virtual ~Form() = default;
 
-        static bool mouse_in(const Element& el, const sf::RenderWindow& window);
-        static bool mouse_in(const Element& el, const sf::Vector2i& mouse_pos);
+            virtual void render(float fps, t_frame_cb& frame_cb);
 
-        static bool empty_frame_cb(sf::RenderWindow&);
-};
+            static bool mouse_in(const types::Element& el, const sf::RenderWindow& window);
+            static bool mouse_in(const types::Element& el, const sf::Vector2i& mouse_pos);
+
+            static bool empty_frame_cb(sf::RenderWindow&);
+    };
+
+}
 
 
 #endif //STUD_GAME_INTERFACEFORM_H

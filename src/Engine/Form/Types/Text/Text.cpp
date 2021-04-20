@@ -4,6 +4,8 @@
 
 #include "Text.h"
 
+using namespace form::types;
+
 Text::Text(const string& value): Element({ 0, 0 }, { 0, 0 }) {
     this->init(value);
 }
@@ -18,7 +20,7 @@ Text::~Text() {
 
 // PUBLIC VOID
 void Text::draw(sf::RenderWindow& window) const {
-    if(m_need_build) throw Exception(Exception::ElementNotBuild);
+    if(m_need_build) throw data_types::Exception(data_types::Exception::ElementNotBuild);
 
     window.draw(*m_value);
 }

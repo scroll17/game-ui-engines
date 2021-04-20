@@ -4,6 +4,10 @@
 
 #include "ErrorForm.h"
 
+using namespace form::templates;
+using namespace form::types;
+using namespace engine::data_utils;
+
 ErrorForm::ErrorForm(string message): m_message(std::move(message)) {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;

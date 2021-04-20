@@ -4,7 +4,7 @@
 
 #include "array.h"
 
-extern int *bubble_sort(int *arr, size_t arr_size, size_t start, size_t stop) {
+int *utils::array::bubble_sort(int *arr, size_t arr_size, size_t start, size_t stop) {
     if(stop == 0) {
         stop = arr_size;
     }
@@ -29,7 +29,7 @@ extern int *bubble_sort(int *arr, size_t arr_size, size_t start, size_t stop) {
     return arr;
 }
 
-extern void show_array(int *arr, size_t arr_size) {
+void utils::array::show_array(int *arr, size_t arr_size) {
     std::cout << "[";
 
     for(size_t i = 0; i < arr_size; i++) {
@@ -43,8 +43,7 @@ extern void show_array(int *arr, size_t arr_size) {
     std::cout << "]";
 }
 
-
-extern int gen_random(size_t start, size_t end) {
+int utils::array::gen_random(size_t start, size_t end) {
     std::random_device rd;
     std::mt19937 mt(rd());
 
@@ -53,11 +52,11 @@ extern int gen_random(size_t start, size_t end) {
     return distribution(mt);
 }
 
-extern int *generate_arr(size_t size, size_t range) {
+int *utils::array::generate_arr(size_t size, size_t range) {
     int *arr = new int[size];
 
     for(int i = 0; i < size; i++) {
-        int val = gen_random(0, range);
+        int val = utils::array::gen_random(0, range);
 
         arr[i] = val;
     }

@@ -4,6 +4,8 @@
 
 #include "MousePosition.h"
 
+using namespace engine::data_utils;
+
 MousePosition::t_instances MousePosition::s_m_instances = {};
 
 MousePosition::MousePosition(): m_prev_pos(0, 0), m_curr_pos(0, 0) {

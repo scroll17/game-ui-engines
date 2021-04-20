@@ -5,8 +5,8 @@
 #include "iostream"
 #include <iomanip>
 
-#include "../DataTypes/Time/Time.h"
-#include "../utils/string/string.h"
+#include "../DataTypes/index.h"
+#include "../utils/index.h"
 
 char str[] = "ZZZ Обратите внимание на разницу между функцией strlen() и оператором sizeof. strlen() выводит количество символов до нуль-т"
              "ерминатора, тогда как оператор sizeof возвращает размер целого массива, независимо от того, что в нем находится. "
@@ -31,6 +31,8 @@ char str[] = "ZZZ Обратите внимание на разницу межд
              "ерминатора, тогдZZа как оператор sizeof возвращает размер целого маZссива, независимо от того, что в нем находится. "
              "ерминатора, тZогда как оператор sizeof возвращает размер целого массива, независимо от того, что в нем находится. ZZ2ZZ";
 
+using namespace std;
+
 string str_2 = str;
 
 void find_algorithm_test() {
@@ -38,9 +40,9 @@ void find_algorithm_test() {
 
     char sub_str[] = "ZZ2ZZ";
 
-    Timer t1;
+    data_types::Timer t1;
 
-    int result_1 = find(str, sub_str);
+    int result_1 = utils::string::find(str, sub_str);
     t_v_1 = t1.elapsed();
 
     t1.reset();
@@ -57,9 +59,9 @@ void rfind_algorithm_test() {
 
     char sub_str[] = "ZZZ";
 
-    Timer t1;
+    data_types::Timer t1;
 
-    int result_1 = rfind(str, sub_str);
+    int result_1 = utils::string::rfind(str, sub_str);
     t_v_1 = t1.elapsed();
 
     t1.reset();

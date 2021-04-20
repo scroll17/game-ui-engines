@@ -7,19 +7,23 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../DataTypes/File/File.h"
+#include "../DataTypes/index.h"
 #include "../Constants/Constants.h"
 
 using namespace std;
 
-class Engine {
-    private:
-        static sf::Font GameFont;
+namespace engine {
 
-    public:
-        void start();
+    class Engine {
+        private:
+            static sf::Font GameFont;
 
-        static sf::Font& get_game_font();
-};
+        public:
+            void start();
+
+            static sf::Font& get_game_font();
+    };
+
+}
 
 #endif //STUD_GAME_ENGINE_H

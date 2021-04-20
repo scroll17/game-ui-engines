@@ -4,6 +4,8 @@
 
 #include "FocusController.h"
 
+using namespace engine::controllers;
+
 FocusController *FocusController::s_m_instance = nullptr;
 
 FocusController::FocusController() {
@@ -75,7 +77,7 @@ FocusController& FocusController::input(const sf::Event& event) {
         if(!is_left_button) return (*this);
 
         for(auto& el: *m_elements) {
-            bool el_now_focused = Form::mouse_in(*el, *m_curr_window);
+            bool el_now_focused = form::Form::mouse_in(*el, *m_curr_window);
             bool el_status_is_focused = el->is_focused();
 
             if(el_now_focused && !el_status_is_focused) {

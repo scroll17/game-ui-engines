@@ -7,20 +7,24 @@
 
 #include <chrono> // chrono
 
-class Timer {
-    private:
-        using clock_t = std::chrono::high_resolution_clock;
-        using second_t = std::chrono::duration<double, std::ratio<1> >;
+namespace data_types {
 
-        std::chrono::time_point<clock_t> m_beg;
+    class Timer {
+        private:
+            using clock_t = std::chrono::high_resolution_clock;
+            using second_t = std::chrono::duration<double, std::ratio<1> >;
 
-    public:
-        Timer(): m_beg(clock_t::now()) {};
+            std::chrono::time_point<clock_t> m_beg;
 
-        void reset();
+        public:
+            Timer(): m_beg(clock_t::now()) {};
 
-        double elapsed() const;
-};
+            void reset();
+
+            double elapsed() const;
+    };
+
+}
 
 
 #endif //STUD_GAME_TIME_H

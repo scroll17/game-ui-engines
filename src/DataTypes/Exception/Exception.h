@@ -14,30 +14,35 @@ using namespace std;
 
 // TODO >= 10 species
 
-class Exception final: public std::exception {
-    public:
-        enum Type {
-            FileRead,
-            FileOpen,
-            FileNotExist,
-            FileNotOpen,
-            ElementNotBuild,
-            NonExistentPosition
-        };
+namespace data_types {
 
-        explicit Exception(Type type, string message = "");
-        ~Exception() = default;
+    class Exception final: public std::exception {
+        public:
+            enum Type {
+                FileRead,
+                FileOpen,
+                FileNotExist,
+                FileNotOpen,
+                ElementNotBuild,
+                NonExistentPosition
+            };
 
-        const Type& get_error_type() const;
-        const string& get_error_message() const;
+            explicit Exception(Type type, string message = "");
+            ~Exception() = default;
 
-        void draw_error() const;
+            const Type& get_error_type() const;
+            const string& get_error_message() const;
 
-        virtual const char* what() const noexcept override final;
+            void draw_error() const;
 
-    private:
-        Type m_error_type;
-        const string m_custom_error_message;
-};
+            virtual const char* what() const noexcept override final;
+
+        private:
+            Type m_error_type;
+            const string m_custom_error_message;
+    };
+
+}
+
 
 #endif //STUD_GAME_EXCEPTION_H

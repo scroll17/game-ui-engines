@@ -4,7 +4,9 @@
 
 #include "CallSchedulerController.h"
 
-CallSchedulerController *CallSchedulerController::s_m_instance = nullptr;
+using namespace engine::controllers;
+
+CallSchedulerController *CallSchedulerController::s_m_instance = nullptr;;
 
 CallSchedulerController::CallSchedulerController() {
     m_plans = new CallSchedulerController::t_plans {};
@@ -70,7 +72,7 @@ bool CallSchedulerController::remove_scheduled_plan(size_t id) {
 }
 
 void CallSchedulerController::call() {
-    const auto& time_now = get_timestamp();
+    const auto& time_now = utils::time::get_timestamp();
 
     std::for_each(
         std::begin(*m_plans),

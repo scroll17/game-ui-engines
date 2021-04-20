@@ -12,7 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
-#include "../../../DataTypes/Exception/Exception.h"
+#include "../../../DataTypes/index.h"
 
 #include "../../ExtendedTypes/ActionElement/ActionElement.h"
 #include "../../Types/Text/Text.h"
@@ -22,41 +22,47 @@
 
 using namespace std;
 
-class Button: public ActionElement {
-    protected:
-        sf::Color m_bg_color { sf::Color::White };
+namespace form {
+    namespace types {
 
-        Text *m_text { nullptr };
-        sf::RectangleShape *m_rectangle { nullptr };
+        class Button: public extended_types::ActionElement {
+            protected:
+                sf::Color m_bg_color { sf::Color::White };
 
-        static void handle_mouse_button_pressed_e(Button& button, const sf::RenderWindow& window);
-        static void handle_mouse_button_released_e(Button& button, const sf::RenderWindow& window);
-        static void handle_mouse_moved_e(Button& button, const sf::RenderWindow& window, const sf::Vector2i& prev_pos);
+                Text *m_text { nullptr };
+                sf::RectangleShape *m_rectangle { nullptr };
 
-    public:
-        explicit Button(const sf::Vector2f& size, const string& str);
-        explicit Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str);
-        ~Button() override;
+                static void handle_mouse_button_pressed_e(Button& button, const sf::RenderWindow& window);
+                static void handle_mouse_button_released_e(Button& button, const sf::RenderWindow& window);
+                static void handle_mouse_moved_e(Button& button, const sf::RenderWindow& window, const sf::Vector2i& prev_pos);
 
-        virtual Button& build() override;
-        virtual void draw(sf::RenderWindow& window) const override;
+            public:
+                explicit Button(const sf::Vector2f& size, const string& str);
+                explicit Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str);
+                ~Button() override;
 
-        Button& set_window_size(const sf::Vector2u& size, bool correct_pos = false) override;
+                virtual Button& build() override;
+                virtual void draw(sf::RenderWindow& window) const override;
 
-        Button& add_text(const string& text);
-        Button& narrow_text(size_t start_count, size_t end_count = 0);
+                Button& set_window_size(const sf::Vector2u& size, bool correct_pos = false) override;
 
-        Button& set_text(const string& text);
-        Button& set_text_size(int size);
-        Button& set_text_color(const sf::Color& color);
+                Button& add_text(const string& text);
+                Button& narrow_text(size_t start_count, size_t end_count = 0);
 
-        Button& set_bg_color(const sf::Color& color);
+                Button& set_text(const string& text);
+                Button& set_text_size(int size);
+                Button& set_text_color(const sf::Color& color);
 
-        Button& button_text_to_center();
+                Button& set_bg_color(const sf::Color& color);
 
-        Text& get_button_text() const;
+                Button& button_text_to_center();
 
-        static void input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos);
-};
+                Text& get_button_text() const;
+
+                static void input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos);
+        };
+
+    }
+}
 
 #endif //STUD_GAME_BUTTON_H

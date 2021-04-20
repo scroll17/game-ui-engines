@@ -15,27 +15,33 @@
 
 using namespace std;
 
-class ErrorForm final: public Form {
-    private:
-        string m_message;
+namespace form {
+    namespace templates {
 
-        Text *m_text { nullptr };
-        Button *m_button { nullptr };
+        class ErrorForm final: public form::Form {
+            private:
+                string m_message;
 
-        MousePosition *m_mouse_position { nullptr };
+                types::Text *m_text { nullptr };
+                types::Button *m_button { nullptr };
 
-    protected:
-        virtual void build() override;
+                engine::data_utils::MousePosition *m_mouse_position { nullptr };
 
-        virtual void draw() override;
-        virtual void pollEvent(const sf::Event& event) override;
+            protected:
+                virtual void build() override;
 
-    public:
-        ErrorForm(string message);
-        ErrorForm(string message, const sf::ContextSettings& settings);
-        ~ErrorForm() override;
+                virtual void draw() override;
+                virtual void pollEvent(const sf::Event& event) override;
 
-        virtual void render(float fps, t_frame_cb& frame_cb) override;
-};
+            public:
+                ErrorForm(string message);
+                ErrorForm(string message, const sf::ContextSettings& settings);
+                ~ErrorForm() override;
+
+                virtual void render(float fps, t_frame_cb& frame_cb) override;
+        };
+
+    }
+}
 
 #endif //STUD_GAME_ERRORFORM_H

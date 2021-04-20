@@ -13,23 +13,28 @@
 
 #include "../../Objects/FocusObject/FocusObject.h"
 
-class TextBox: public Button {
-    protected:
-        uint8_t m_max_characters_number = 100;
+namespace form {
+    namespace types {
 
-    public:
-        explicit TextBox(const sf::Vector2f& size, const string& str): Button(size, str) {};
-        explicit TextBox(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): Button(size, pos, str) {};
+        class TextBox: public Button {
+            protected:
+                uint8_t m_max_characters_number = 100;
 
-        virtual TextBox& build() override;
+            public:
+                explicit TextBox(const sf::Vector2f& size, const string& str): Button(size, str) {};
+                explicit TextBox(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str): Button(size, pos, str) {};
 
-        TextBox& set_max_chars_number(uint8_t num);
+                virtual TextBox& build() override;
 
-        string get_entered_text() const;
-        char32_t operator[] (size_t index);
+                TextBox& set_max_chars_number(uint8_t num);
 
-        static void input(TextBox& text_box, const sf::RenderWindow& window, const sf::Event& event);
-};
+                string get_entered_text() const;
+                char32_t operator[] (size_t index);
 
+                static void input(TextBox& text_box, const sf::RenderWindow& window, const sf::Event& event);
+        };
+
+    }
+}
 
 #endif //STUD_GAME_TEXTBOX_H

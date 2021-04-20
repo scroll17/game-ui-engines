@@ -4,6 +4,8 @@
 
 #include "FileWriter.h"
 
+using namespace data_types;
+
 FileWriter::~FileWriter() {
     this->close_file();
 }

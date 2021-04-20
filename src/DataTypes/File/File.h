@@ -10,22 +10,26 @@
 
 #include "../../Constants/Constants.h"
 #include "../Exception/Exception.h"
-#include "../../utils/string/string.h"
+#include "../../utils/index.h"
 
 using namespace std;
 
-class File {
-    protected:
-        string m_file_path;
+namespace data_types {
 
-    public:
-        explicit File(const string& file_path);
-        virtual ~File() = default;
+    class File {
+        protected:
+            string m_file_path;
 
-        bool check_file_exists() const;
-        const string& get_file_path() const;
+        public:
+            explicit File(const string& file_path);
+            virtual ~File() = default;
 
-        static string resolve_path(string left, string right);
-};
+            bool check_file_exists() const;
+            const string& get_file_path() const;
+
+            static string resolve_path(string left, string right);
+    };
+
+}
 
 #endif //STUD_GAME_FILE_H

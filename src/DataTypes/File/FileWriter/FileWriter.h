@@ -13,24 +13,28 @@
 using json = nlohmann::json;
 using xml = pugi::xml_document;
 
-class FileWriter {
-    private:
-        File m_file;
-        ofstream m_out;
+namespace data_types {
 
-    public:
-        FileWriter() = delete;
+    class FileWriter {
+        private:
+            File m_file;
+            ofstream m_out;
 
-        explicit FileWriter(const string& file_path): m_file(file_path) {};
-        ~FileWriter();
+        public:
+            FileWriter() = delete;
 
-        FileWriter& open_file();
-        FileWriter& close_file();
+            explicit FileWriter(const string& file_path): m_file(file_path) {};
+            ~FileWriter();
 
-        FileWriter& write(const string& data);
-        FileWriter& from_json(const json& data);
+            FileWriter& open_file();
+            FileWriter& close_file();
 
-        static void save_xml(const File& file, const xml& data);
-};
+            FileWriter& write(const string& data);
+            FileWriter& from_json(const json& data);
+
+            static void save_xml(const File& file, const xml& data);
+    };
+
+}
 
 #endif //STUD_GAME_FILEWRITER_H

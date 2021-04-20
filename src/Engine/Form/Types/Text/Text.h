@@ -13,60 +13,65 @@
 
 using namespace std;
 
-class Button;
-class TextBox;
+namespace form {
+    namespace types {
 
-class Text: public Element {
-    friend class Button;
-    friend class TextBox;
+        class Button;
+        class TextBox;
 
-    public:
-        enum ActionPosition: int8_t {
-            Current,
-            Before,
-            After
+        class Text: public Element {
+            friend class Button;
+            friend class TextBox;
+
+            public:
+                enum ActionPosition: int8_t {
+                    Current,
+                    Before,
+                    After
+                };
+
+            protected:
+                int m_text_size { 18 };
+
+                sf::Font& m_font { engine::Engine::get_game_font() };
+                sf::Color m_color { sf::Color::Black };
+
+                sf::Text *m_value { nullptr };
+
+                void init(const string& value);
+                void actualize_size();
+
+            public:
+                explicit Text(const string& value);
+                explicit Text(const string& value, sf::Font& font, sf::Color& color);
+                ~Text() override;
+
+                virtual Text& build() override;
+                virtual void draw(sf::RenderWindow& window) const override;
+
+                Text& add_char(char ch, const ActionPosition& action = ActionPosition::Current, size_t pos = 0);
+                Text& add_text(const string& str, const ActionPosition& action = ActionPosition::Current, size_t pos = 0);
+
+                Text& remove_char(size_t pos);
+                Text& remove_chars(size_t pos, size_t count);
+
+                Text& narrow_text(size_t start_count, size_t end_count = 0);
+
+                Text& set_text(const string& str);
+                Text& set_text_size(int size);
+
+                Text& set_font(const sf::Font& font);
+                Text& set_color(const sf::Color& color);
+
+                string get_value() const;
+                size_t get_size() const;
+
+                char32_t operator[] (size_t index);
+
+                bool is_empty() const;
         };
 
-    protected:
-        int m_text_size { 18 };
-
-        sf::Font& m_font { Engine::get_game_font() };
-        sf::Color m_color { sf::Color::Black };
-
-        sf::Text *m_value { nullptr };
-
-        void init(const string& value);
-        void actualize_size();
-
-    public:
-        explicit Text(const string& value);
-        explicit Text(const string& value, sf::Font& font, sf::Color& color);
-        ~Text() override;
-
-        virtual Text& build() override;
-        virtual void draw(sf::RenderWindow& window) const override;
-
-        Text& add_char(char ch, const ActionPosition& action = ActionPosition::Current, size_t pos = 0);
-        Text& add_text(const string& str, const ActionPosition& action = ActionPosition::Current, size_t pos = 0);
-
-        Text& remove_char(size_t pos);
-        Text& remove_chars(size_t pos, size_t count);
-
-        Text& narrow_text(size_t start_count, size_t end_count = 0);
-
-        Text& set_text(const string& str);
-        Text& set_text_size(int size);
-
-        Text& set_font(const sf::Font& font);
-        Text& set_color(const sf::Color& color);
-
-        string get_value() const;
-        size_t get_size() const;
-
-        char32_t operator[] (size_t index);
-
-        bool is_empty() const;
-};
-
+    }
+}
 
 #endif //STUD_GAME_TEXT_H

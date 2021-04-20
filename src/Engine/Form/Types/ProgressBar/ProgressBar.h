@@ -10,44 +10,50 @@
 #include "../../../DataTypes/Exception/Exception.h"
 #include "../Element/Element.h"
 
-class ProgressBar: public Element {
-   using t_callback = function<void()>;
+namespace form {
+    namespace types {
 
-    protected:
-        using Element::set_size;
+        class ProgressBar: public Element {
+            using t_callback = function<void()>;
 
-    protected:
-        float m_curr_step;
-        const float m_original_width, m_step_in_pixels, m_step_count;
+            protected:
+                using Element::set_size;
 
-        sf::Color m_color { sf::Color::Blue };
-        sf::RectangleShape *m_rectangle { nullptr };
+            protected:
+                float m_curr_step;
+                const float m_original_width, m_step_in_pixels, m_step_count;
 
-        bool m_callback_was_called { false };
-        t_callback m_callback {};
+                sf::Color m_color { sf::Color::Blue };
+                sf::RectangleShape *m_rectangle { nullptr };
 
-        bool is_end() const;
-        void call_callback();
+                bool m_callback_was_called { false };
+                t_callback m_callback {};
 
-        virtual ProgressBar& build() override;
+                bool is_end() const;
+                void call_callback();
 
-    public:
-        explicit ProgressBar(const sf::Vector2f& size, float step_count);
-        explicit ProgressBar(float height, float start_width, float end_width, float step_count);
-        ~ProgressBar() override;
+                virtual ProgressBar& build() override;
 
-        virtual void draw(sf::RenderWindow& window) const override;
+            public:
+                explicit ProgressBar(const sf::Vector2f& size, float step_count);
+                explicit ProgressBar(float height, float start_width, float end_width, float step_count);
+                ~ProgressBar() override;
 
-        ProgressBar& set_color(const sf::Color& color);
+                virtual void draw(sf::RenderWindow& window) const override;
 
-        bool next();
-        bool next(float step);
+                ProgressBar& set_color(const sf::Color& color);
 
-        void ready();
-        void after_ready(const t_callback& after_cb);
+                bool next();
+                bool next(float step);
+
+                void ready();
+                void after_ready(const t_callback& after_cb);
 
 //        static void auto_progress(ProgressBar& bar, long seconds);
-};
+        };
+
+    }
+}
 
 
 #endif //STUD_GAME_PROGRESSBAR_H

@@ -4,6 +4,8 @@
 
 #include "Time.h"
 
+using namespace data_types;
+
 void Timer::reset() {
     m_beg = clock_t::now();
 }

@@ -4,6 +4,8 @@
 
 #include "TextBox.h"
 
+using namespace form::types;
+
 // PUBLIC SET
 TextBox& TextBox::build() {
     Button::build();

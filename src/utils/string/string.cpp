@@ -43,7 +43,7 @@ static int find_last_eq_pos(const char *str, int pos_str, const char *sub_str, c
     return last_eq;
 }
 
-extern int find(const char *str, const char* sub_str) {
+int utils::string::find(const char *str, const char* sub_str) {
     bool is_empty_strings = (int(str[0]) == 0) || (int(sub_str[0]) == 0);
     if(is_empty_strings) {
         return -1;
@@ -83,7 +83,7 @@ extern int find(const char *str, const char* sub_str) {
     return -1;
 }
 
-extern int rfind(const char *str, const char* sub_str) {
+int utils::string::rfind(const char *str, const char* sub_str) {
     bool is_empty_strings = (int(str[0]) == 0) || (int(sub_str[0]) == 0);
     if(is_empty_strings) {
         return -1;
@@ -122,7 +122,7 @@ extern int rfind(const char *str, const char* sub_str) {
     return -1;
 }
 
-std::wstring convert_to_ws(const string& str) {
+std::wstring utils::string::convert_to_ws(const std::string& str) {
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
     std::wstring wide = converter.from_bytes(str);
 

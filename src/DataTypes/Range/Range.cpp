@@ -4,6 +4,8 @@
 
 #include "Range.h"
 
+using namespace data_types;
+
 Range::Range(size_t start, size_t end, bool include_end) {
     m_start = std::min(end, start);
     m_end = std::max(end, start);

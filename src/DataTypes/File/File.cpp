@@ -4,6 +4,8 @@
 
 #include "File.h"
 
+using namespace data_types;
+
 File::File(const string& file_path) {
     m_file_path = File::resolve_path(Constants::directory_path, file_path);
 }
@@ -38,9 +40,9 @@ string File::resolve_path(string left, string right) {
 
     int pos = 0;
     while (pos != -1) {
-        pos = find(right.c_str(), out_slash_sym);
+        pos = utils::string::find(right.c_str(), out_slash_sym);
         if(pos != -1) {
-            int remove_to = rfind(left.c_str(), slash_sym);
+            int remove_to = utils::string::rfind(left.c_str(), slash_sym);
             if(remove_to != 0) {
                 left = left.substr(0, remove_to);
             }
@@ -50,7 +52,7 @@ string File::resolve_path(string left, string right) {
             continue;
         }
 
-        pos = find(right.c_str(), curr_slash_sym);
+        pos = utils::string::find(right.c_str(), curr_slash_sym);
         if(pos != -1) {
             right = right.substr(pos + 2);
 

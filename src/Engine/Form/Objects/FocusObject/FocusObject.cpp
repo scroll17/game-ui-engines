@@ -4,6 +4,8 @@
 
 #include "FocusObject.h"
 
+using namespace form::objects;
+
 void FocusObject::set_focus() {
     m_focus = true;
 }

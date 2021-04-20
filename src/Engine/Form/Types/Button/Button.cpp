@@ -4,6 +4,8 @@
 
 #include "Button.h"
 
+using namespace form::types;
+
 Button::Button(const sf::Vector2f& size, const string& str): ActionElement(size) {
     m_border_color = sf::Color::Black;
 
@@ -25,7 +27,7 @@ Button::~Button() {
 
 // PUBLIC VOID
 void Button::draw(sf::RenderWindow& window) const {
-    if(m_need_build) throw Exception(Exception::ElementNotBuild);
+    if(m_need_build) throw data_types::Exception(data_types::Exception::ElementNotBuild);
 
     window.draw(*m_rectangle);
     m_text->draw(window);

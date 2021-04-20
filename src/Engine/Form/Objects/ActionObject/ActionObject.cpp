@@ -4,6 +4,8 @@
 
 #include "ActionObject.h"
 
+using namespace form::objects;
+
 // PROTECTED GET
 ActionObject::t_callbacks& ActionObject::get_callbacks_by_action(const Action& action) {
     switch (action) {
@@ -34,7 +36,7 @@ void ActionObject::remove_callback(const Action& action, size_t pos) {
     t_callbacks& callbacks(get_callbacks_by_action(action));
 
     if(pos > (callbacks.size() - 2)) {
-        throw Exception(Exception::NonExistentPosition);
+        throw data_types::Exception(data_types::Exception::NonExistentPosition);
     }
 
     callbacks.erase(callbacks.begin() + pos);               /// on callback

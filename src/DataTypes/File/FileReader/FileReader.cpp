@@ -4,6 +4,8 @@
 
 #include "FileReader.h"
 
+using namespace data_types;
+
 string FileReader::read() const {
     string data;
     string line;

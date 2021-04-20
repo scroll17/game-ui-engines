@@ -13,21 +13,24 @@
 using json = nlohmann::json;
 using xml = pugi::xml_document;
 
-class FileReader {
-    private:
-        File m_file;
+namespace data_types {
 
-    public:
-        FileReader() = delete;
+    class FileReader {
+        private:
+            File m_file;
 
-        explicit FileReader(const string& file_path): m_file(file_path) {};
-        ~FileReader() = default;
+        public:
+            FileReader() = delete;
 
-        [[nodiscard]] string read() const;
-        [[nodiscard]] json to_json() const;
+            explicit FileReader(const string& file_path): m_file(file_path) {};
+            ~FileReader() = default;
 
-        static xml read_xml(const File &file);
-};
+            [[nodiscard]] string read() const;
+            [[nodiscard]] json to_json() const;
 
+            static xml read_xml(const File &file);
+    };
+
+}
 
 #endif //STUD_GAME_FILEREADER_H

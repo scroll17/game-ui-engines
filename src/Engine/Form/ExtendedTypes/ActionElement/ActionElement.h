@@ -8,14 +8,20 @@
 #include "../../Objects/ActionObject/ActionObject.h"
 #include "../../Types/Element/Element.h"
 
-class ActionElement: public Element, public ActionObject  {
-    public:
-        explicit ActionElement(const sf::Vector2f& size): Element(size) {};
-        explicit ActionElement(const sf::Vector2f& size, const sf::Vector2f& position): Element(size, position) {};
-        virtual ~ActionElement() = default;
+namespace form {
+    namespace extended_types {
 
-        void call_callbacks(const Action& action) override;
-        void call_after_callbacks(const Action& action) override;
-};
+        class ActionElement: public types::Element, public objects::ActionObject  {
+            public:
+                explicit ActionElement(const sf::Vector2f& size): Element(size) {};
+                explicit ActionElement(const sf::Vector2f& size, const sf::Vector2f& position): Element(size, position) {};
+                virtual ~ActionElement() = default;
+
+                void call_callbacks(const Action& action) override;
+                void call_after_callbacks(const Action& action) override;
+        };
+
+    }
+}
 
 #endif //STUD_GAME_ACTIONELEMENT_H

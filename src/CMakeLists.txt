@@ -60,16 +60,17 @@ add_executable(stud-game
         utils/string/string.h
         utils/array/array.cpp
         utils/array/array.h
-        utils/time/time.h
         utils/time/time.cpp
+        utils/time/time.h
+        utils/index.h
 
         algorithm_tests/find.cpp
 
         Engine/DataUtils/MousePosition/MousePosition.cpp
         Engine/DataUtils/MousePosition/MousePosition.h
 
-        Engine/User/User.cpp
-        Engine/User/User.h
+        Engine/Player/Player.cpp
+        Engine/Player/Player.h
 
         Engine/Form/Types/Element/Element.cpp
         Engine/Form/Types/Element/Element.h
@@ -91,6 +92,8 @@ add_executable(stud-game
         Engine/Form/Objects/ActionObject/ActionObject.cpp
         Engine/Form/Objects/ActionObject/ActionObject.h
 
+        Engine/Form/index.h
+
         Engine/Controllers/FocusController/FocusController.cpp
         Engine/Controllers/FocusController/FocusController.h
         Engine/Controllers/CallSchedulerController/CallSchedulerController.cpp
@@ -106,7 +109,9 @@ add_executable(stud-game
 
         Engine/Engine.cpp
         Engine/Engine.h
-)
+
+        Engine/index.h
+        DataTypes/index.h)
 
 
 target_link_libraries(stud-game

@@ -4,6 +4,8 @@
 
 #include "ActionElement.h"
 
+using namespace form::extended_types;
+
 void ActionElement::call_callbacks(const Action& action) {
     t_callbacks& callbacks(get_callbacks_by_action(action));
 

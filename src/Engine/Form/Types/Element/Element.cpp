@@ -4,6 +4,8 @@
 
 #include "Element.h"
 
+using namespace form::types;
+
 Element::Element(const sf::Vector2f& size) {
     m_bounds.width = size.x;
     m_bounds.height = size.y;
@@ -25,7 +27,7 @@ Element& Element::set_size(const sf::Vector2f& size) {
     return (*this);
 }
 
-Element& Element::set_width(const float& width) {
+Element& form::types::Element::set_width(const float& width) {
     m_bounds.width = width;
 
     this->turn_off_building();
