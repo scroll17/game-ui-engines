@@ -5,17 +5,18 @@
 #include <cmath>
 #include "pugixml.hpp"
 
-#include "./DataTypes/Range/Range.h"
+#include "./DataTypes/index.h"
+#include "./Engine/index.h"
 
-//#include "./Engine/Form/Types/Button/Button.h"
-//#include "./Engine/Form/Types/TextBox/TextBox.h"
-//
+
 //#include "./Engine/Controllers/FocusController/FocusController.h"
 //#include "./Engine/Controllers/CallSchedulerController/CallSchedulerController.h"
 //
 //#include "./Engine/DataUtils/MousePosition/MousePosition.h"
 //
 //#include "utils/array/array.h"
+
+
 
 
 /**
@@ -50,10 +51,12 @@ const int WINDOW_W = 600, WINDOW_H = 400;
 float offsetX = 0;
 float offsetY = 0;
 
-const int H = 12 + 3;  /// Высота
+const int H = 12 + 4;  /// Высота
 const int W = 40;  /// Длина
 const int BLOCK_SIZE = 32; /// Размер блока;
 const int MINI_BLOCK_SIZE = 4;
+
+int number_of_moves = 0;
 
 /// Каждая ячейка это квадрат 32*32
 String TileMap[H] = {
@@ -62,13 +65,14 @@ String TileMap[H] = {
 "B                                B     B",
 "B                                B     B",
 "B                                B     B",
+"B          ZZZ                   B     B",
 "B                                B     B",
 "B                                B     B",
-"B                                B     B",
-"B         0000                BBBB     B",
+"B                             BBBB     B",
 "BBBB                             B     B",
 "BBBB                             B     B",
 "B              BB                BB    B",
+"B              BB                      B",
 "B              BB                      B",
 "B    B         BB         BB           B",
 "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
@@ -81,7 +85,7 @@ enum class Direction {
         Right
 };
 
-Range get_collision_blocks_x(const Vector2f& player_pos, const FloatRect& player_bounds) {
+data_types::Range get_collision_blocks_x(const Vector2f& player_pos, const FloatRect& player_bounds) {
     /**
      *    left_x_block:
      *      the block on which the player "left" border is located (by axis X);
@@ -93,10 +97,10 @@ Range get_collision_blocks_x(const Vector2f& player_pos, const FloatRect& player
     int left_x_block = floor(player_pos.x / BLOCK_SIZE);
     int right_x_block = ceil((player_pos.x + player_bounds.width) / BLOCK_SIZE);
 
-    return Range(left_x_block, right_x_block);
+    return data_types::Range(left_x_block, right_x_block);
 }
 
-Range get_collision_blocks_y(const Vector2f& player_pos, const FloatRect& player_bounds) {
+data_types::Range get_collision_blocks_y(const Vector2f& player_pos, const FloatRect& player_bounds) {
     /**
      *    top_y_block:
      *      the block on which the player "upper" border is located (by axis Y);
@@ -106,7 +110,7 @@ Range get_collision_blocks_y(const Vector2f& player_pos, const FloatRect& player
     int top_y_block = floor(player_pos.y / BLOCK_SIZE);
     int bottom_y_block = ceil((player_pos.y + player_bounds.height) / BLOCK_SIZE);
 
-    return Range(top_y_block, bottom_y_block);
+    return data_types::Range(top_y_block, bottom_y_block);
 }
 
 float get_hitting_in_texture(
@@ -157,6 +161,8 @@ float get_hitting_in_texture(
             return result;
         }
     }
+
+    return 0.f;
 }
 
 //class GameMap {
@@ -421,8 +427,42 @@ class Player {
         }
 };
 
-int main() {
+int main_2() {
     RenderWindow window( VideoMode(WINDOW_W, WINDOW_H), "Test!");
+
+
+    form::types::Button button { { 150, 80 }, "" };
+    form::types::Text text { std::to_string(number_of_moves + 10000) };
+    form::types::TextBox text_box { {100, 30}, "TEXT" };
+
+    button
+        .set_window_size(window.getSize())
+        .button_text_to_center()
+        .to_center(form::types::Element::XY)
+        .correct_position(true)
+        .border_with_position(true)
+        .set_border_color(sf::Color::Black)
+        .set_border_width(3)
+        .build();
+
+    text
+     .set_window_size(window.getSize())
+     .correct_position(true)
+     .build();
+
+    form::types::Element::to_center(button, text);
+
+    text_box
+        .set_max_chars_number(10)
+        .set_window_size(window.getSize())
+        .to_center(form::types::Element::X)
+        .set_after(form::types::Element::Y, button)
+        .move(form::types::Element::Y, 20)
+        .correct_position(true)
+        .border_with_position(true)
+        .set_border_color(sf::Color::Black)
+        .set_border_width(2)
+        .build();
 
     Player player;
     Clock clock;
@@ -473,43 +513,52 @@ int main() {
         int player_j = int((player.position.x + (player_bounds.width / 2.f)) / BLOCK_SIZE);
         int player_i = int((player.position.y + (player_bounds.height / 2.f)) / BLOCK_SIZE);
 
-        for(int i = 0; i < H; i++) {
-            for(int j = 0; j < W; j++) {
-                // MAIN MAP
-                if(TileMap[i][j] == ' ') rectangle.setFillColor(Color::White);
-                if(TileMap[i][j] == 'B') {
-                    rectangle.setFillColor(Color::Black);
-                    rectangle.setOutlineColor(Color::White);
-                }
-                if(TileMap[i][j] == '0') rectangle.setFillColor(Color::Green);
+//        for(int i = 0; i < H; i++) {
+//            for(int j = 0; j < W; j++) {
+//                // MAIN MAP
+//                if(TileMap[i][j] == ' ') rectangle.setFillColor(Color::White);
+//                if(TileMap[i][j] == 'B') {
+//                    rectangle.setFillColor(Color::Black);
+//                    rectangle.setOutlineColor(Color::White);
+//                }
+//                if(TileMap[i][j] == 'Z') {
+//                    rectangle.setFillColor(Color::Yellow);
+//                }
+//
+//                rectangle.setPosition((j * BLOCK_SIZE) - offsetX, (i * BLOCK_SIZE) - offsetY);
+//                window.draw(rectangle);
+//
+//                rectangle.setOutlineColor(Color::Black);
+//            }
+//        }
+//
+//        for(int i = 0; i < H; i++) {
+//            int offset = 5;
+//
+//            for(int j = 0; j < W; j++) {
+//                // MINI MAP
+//                if(TileMap[i][j] == 'B') {
+//                    mini_rectangle.setFillColor(Color::Green);
+//                }
+//                if(TileMap[i][j] == 'Z') {
+//                    mini_rectangle.setFillColor(Color::Yellow);
+//                }
+//                if(player_i == i && player_j == j) {
+//                    mini_rectangle.setFillColor(Color::Red);
+//                }
+//
+//                mini_rectangle.setPosition((j * MINI_BLOCK_SIZE) + offset, (i * MINI_BLOCK_SIZE) + offset);
+//                window.draw(mini_rectangle);
+//
+//                mini_rectangle.setFillColor(Color::White);
+//            }
+//        }
 
-                rectangle.setPosition((j * BLOCK_SIZE) - offsetX, (i * BLOCK_SIZE) - offsetY);
-                window.draw(rectangle);
+        button.draw(window);
+        text.draw(window);
+        text_box.draw(window);
 
-                rectangle.setOutlineColor(Color::Black);
-            }
-        }
-
-        for(int i = 0; i < H; i++) {
-            int offset = 5;
-
-            for(int j = 0; j < W; j++) {
-                // MINI MAP
-                if(TileMap[i][j] == 'B') {
-                    mini_rectangle.setFillColor(Color::Green);
-                    mini_rectangle.setPosition((j * MINI_BLOCK_SIZE) + offset, (i * MINI_BLOCK_SIZE) + offset);
-                }
-
-                if(player_i == i && player_j == j) {
-                    mini_rectangle.setFillColor(Color::Red);
-                    mini_rectangle.setPosition((j * MINI_BLOCK_SIZE) + offset, (i * MINI_BLOCK_SIZE) + offset);
-                }
-
-                window.draw(mini_rectangle);
-            }
-        }
-
-        window.draw(player.sprite);
+//        window.draw(player.sprite);
 
         window.display();
     }
@@ -555,79 +604,104 @@ int main() {
 //            sprite.setTextureRect(IntRect(20 + (int(dy_current_frame) * 100), 5, 90, 95));
 //        }
 
-int main_form() {
+int main() {
     // Объект, который, собственно, является главным окном приложения
     RenderWindow window(VideoMode(400, 400), "SFML Works!");
 
-//    TextBox input {{100, 30 }, {100, 100 }, "" };
-//    input
-//        .set_max_chars_number(10)
-//        .set_window_size(window.getSize())
-//        .to_center(TextBox::XY)
-//        .correct_position(true)
-//        .border_with_position(false)
-//        .set_border_color(sf::Color::Black)
-//        .set_border_width(2)
-//        .build();
+    using namespace form::types;
+
+    form::types::TextBox input {{100, 30 }, "text" };
+    input
+        .set_max_chars_number(10)
+        .set_window_size(window.getSize())
+        .to_center(form::types::TextBox::XY)
+        .correct_position(true)
+        .border_with_position(true)
+        .set_border_color(sf::Color::Black)
+        .set_border_width(2);
+
+    form::types::Button button {{100, 20 }, "*" };
+    button
+            .set_window_size(window.getSize())
+            .to_center(form::types::TextBox::XY)
+            .correct_position(true)
+            .border_with_position(true)
+            .set_border_color(sf::Color::Black)
+            .set_border_width(2)
+            .set_after(Element::XY, input)
+            .build();
+
+    button.button_text_to_center();
+
+    input.build();
+
+    auto& call_scheduler_controller = engine::controllers::CallSchedulerController::get_instance();
+    auto& plan = call_scheduler_controller.schedule(600,  [&]() {
+        if(!input.is_focused()) return;
+
+        auto& text = input.get_button_text();
+        const auto& size = text.get_size();
+
+        auto last_pos = size > 0 ? size - 1 : 0;
+
+        if(input[last_pos] == '|') {
+            text.narrow_text(0, 1);
+        } else {
+            text.add_char('|');
+        }
+
+        input.build();
+    });
+
+//    input.on_click(
+//      [](form::types::Element& el) {
+//          auto& input = dynamic_cast<form::types::TextBox&>(el);
 //
-//    auto& call_scheduler_controller = CallSchedulerController::get_instance();
-//    auto& plan = call_scheduler_controller.schedule(600,  [&]() {
-//        if(!input.is_focused()) return;
-//
-//        const auto& size = input.get_button_text().get_size();
-//        auto last_pos = size > 0 ? size - 1 : 0;
-//
-//        if(input[last_pos] == '|') {
-//            input.narrow_text(0, 1).build();
-//        } else {
-//            input.get_button_text().add_char('|').build();
-//        }
-//    });
-//
-//    input.on_focus(
-//      [&](Element& el) {
-//          auto& input = dynamic_cast<TextBox&>(el);
-//
-//          auto& bounds = input.get_bounds();
-//
-//          auto height_in_one_percent = bounds.height / 100;
-//          auto width_in_one_percent = bounds.width / 100;
-//
-//          input
-//              .get_button_text()
-//              .set_size({ bounds.width - (width_in_one_percent * 10), bounds.height - (height_in_one_percent * 10) })
-//              .build();
-//
-//          plan.activate();
+//          input.set_border_color(sf::Color::Yellow);
+//          input.build();
 //      },
-//      [&](Element& el) {
-//          plan.disable();
+//      [](form::types::Element& el) {
+//          auto& input = dynamic_cast<form::types::TextBox&>(el);
+//
+//          input.set_border_color(sf::Color::Black);
+//          input.build();
 //      }
 //    );
-//
-//    auto& focus_controller = FocusController::get_instance();
-//    focus_controller
-//        .set_window(&window)
-//        .register_element(&input);
 
+    input.on_focus(
+      [&plan](form::types::Element& el) {
+          el
+              .set_border_color(sf::Color::Red)
+              .build();
 
-    // Создаем переменную текстуры
-    Texture texture1;
-    texture1.loadFromFile("/home/user/Code/stud-game/data/textures/user.png");
+          plan.activate();
+      },
+      [&plan](form::types::Element& el) {
+          auto& input = dynamic_cast<TextBox&>(el);
 
-    Texture texture2;
-    texture2.loadFromFile("/home/user/Code/stud-game/data/textures/user.png");
-    texture2.setSmooth(true);
+          auto& text = input.get_button_text();
+          const auto& size = text.get_size();
 
+          auto last_pos = size > 0 ? size - 1 : 0;
 
-    // Создаем спрайт и устанавливаем ему нашу текстуру
-    Sprite sprite1(texture1, IntRect(112, 34, 96, 96));
-    Sprite sprite2(texture2, IntRect(112, 34, 96, 96));
+          if(input[last_pos] == '|') {
+              text.narrow_text(0, 1);
+          }
 
-    sprite2.move(100, 100);
-    sprite2.setColor(Color::Red);
-    sprite2.scale(1.5f, 1.9f);
+          el
+            .set_border_color(sf::Color::Black)
+            .build();
 
+          plan.disable();
+      }
+    );
+
+    auto& focus_controller = engine::controllers::FocusController::get_instance();
+    focus_controller
+        .set_window(&window)
+        .register_element(&input);
+
+    auto& mouse_position = engine::data_utils::MousePosition::get_instance(&window);
 
     try {
         // Главный цикл приложения: выполняется, пока открыто окно
@@ -637,8 +711,11 @@ int main_form() {
             Event event;
             while (window.pollEvent(event))
             {
-//                focus_controller.input(event);
-//                TextBox::input(input, window, event);
+                focus_controller.input(event);
+                engine::data_utils::MousePosition::input(mouse_position, window, event);
+
+                form::types::TextBox::input(input, window, event);
+                form::types::Button::input(input, window, event, mouse_position.get_prev_pos());
 
                 // Пользователь нажал на «крестик» и хочет закрыть окно?
                 if (event.type == Event::Closed)
@@ -646,16 +723,13 @@ int main_form() {
                     window.close();
             }
 
-//            call_scheduler_controller.call();
+            call_scheduler_controller.call();
 
             // Установка цвета фона - белый
             window.clear(Color::White);
 
-            // Отрисовка спрайта
-            window.draw(sprite1);
-            window.draw(sprite2);
-
-//            input.draw(window);
+            input.draw(window);
+            button.draw(window);
 
             // Отрисовка окна
             window.display();
