@@ -92,9 +92,7 @@ Button& Button::button_text_to_center() {
     }
 
     m_text->actualize_size();
-    (*m_text)
-      .to_center(XY)
-      .build();
+    Element::to_center(*this, *m_text);
 
     return (*this);
 }

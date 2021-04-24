@@ -40,6 +40,8 @@ namespace form {
 
                 void init(const string& value);
                 void actualize_size();
+                void actualize_width();
+                void actualize_height();
 
             public:
                 explicit Text(const string& value);
@@ -49,7 +51,8 @@ namespace form {
                 virtual Text& build() override;
                 virtual void draw(sf::RenderWindow& window) const override;
 
-                Text& add_char(char ch, const ActionPosition& action = ActionPosition::Current, size_t pos = 0);
+                Text& add_char(char32_t ch, const ActionPosition& action = ActionPosition::Current, size_t pos = 0);
+                Text& add_text(const sf::String& str, const ActionPosition& action = ActionPosition::Current, size_t pos = 0);
                 Text& add_text(const string& str, const ActionPosition& action = ActionPosition::Current, size_t pos = 0);
 
                 Text& remove_char(size_t pos);
@@ -58,6 +61,7 @@ namespace form {
                 Text& narrow_text(size_t start_count, size_t end_count = 0);
 
                 Text& set_text(const string& str);
+                Text& set_text(const sf::String& str);
                 Text& set_text_size(int size);
 
                 Text& set_font(const sf::Font& font);
@@ -66,9 +70,9 @@ namespace form {
                 string get_value() const;
                 size_t get_size() const;
 
-                char32_t operator[] (size_t index);
-
                 bool is_empty() const;
+
+                char32_t operator[] (size_t index);
         };
 
     }

@@ -9,6 +9,14 @@
 
 namespace form {
     namespace types {
+        struct Indentation {
+            int left;
+            int right;
+
+            int top;
+            int bottom;
+        };
+
 
         class Element {
             public:
@@ -91,6 +99,8 @@ namespace form {
                 [[nodiscard]] const float& get_y() const;
                 [[nodiscard]] const float& get_width() const;
                 [[nodiscard]] const float& get_height() const;
+
+                static void to_center(Element& current, Element& target, const Indentation *indentation = nullptr);
         };
 
     }

@@ -8,9 +8,10 @@ using namespace form::types;
 
 // PUBLIC SET
 TextBox& TextBox::build() {
-    Button::build();
+    m_text->actualize_height();
 
-    this->button_text_to_center();
+    Button::build();
+    Element::to_center(*this, *m_text);
 
     return (*this);
 }
@@ -41,15 +42,21 @@ void TextBox::input(TextBox& text_box, const sf::RenderWindow& window, const sf:
             default: {
                 if(size >= text_box.m_max_characters_number) break;
 
+                if(event.text.unicode == 13) { // Enter
+                    text_box.delete_focus();
+                    break;
+                }
+
+                bool is_space = event.text.unicode == 32;
                 bool is_char = event.text.unicode >= 65 && event.text.unicode <= 90;
                 bool is_upper_char = event.text.unicode >= 97 && event.text.unicode <= 122;
 
-                if(!is_char && !is_upper_char) break;
+                if(!is_char && !is_upper_char && !is_space) break;
 
                 if(text_box[last_pos] == '|') {
-                    text->add_char(static_cast<char>(event.text.unicode), Text::Before, last_pos);
+                    text->add_char(event.text.unicode, Text::Before, last_pos);
                 } else {
-                    text->add_char(static_cast<char>(event.text.unicode));
+                    text->add_char(event.text.unicode);
                 }
 
                 break;

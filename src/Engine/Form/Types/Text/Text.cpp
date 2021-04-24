@@ -63,20 +63,20 @@ Text& Text::build() {
     return (*this);
 }
 
-Text& Text::add_char(char ch, const ActionPosition& action, size_t pos) {
-    auto curr_str = string(m_value->getString());
+Text& Text::add_char(char32_t ch, const ActionPosition& action, size_t pos) {
+    auto curr_str = m_value->getString();
 
     switch (action) {
         case Current: {
-            curr_str.append(&ch);
+            curr_str.insert(curr_str.getSize(), ch);
             break;
         }
         case Before: {
-            curr_str.insert(pos, &ch);
+            curr_str.insert(pos, ch);
             break;
         }
         case After: {
-            curr_str.insert(pos + 1, &ch);
+            curr_str.insert(pos + 1, ch);
             break;
         }
     }
@@ -86,12 +86,12 @@ Text& Text::add_char(char ch, const ActionPosition& action, size_t pos) {
     return (*this);
 }
 
-Text& Text::add_text(const string& str, const Text::ActionPosition& action, size_t pos) {
-    auto curr_str = string(m_value->getString());
+Text& Text::add_text(const sf::String& str, const Text::ActionPosition& action, size_t pos) {
+    auto curr_str = m_value->getString();
 
     switch (action) {
         case Current: {
-            curr_str.append(str);
+            curr_str.insert(curr_str.getSize(), str);
             break;
         }
         case Before: {
@@ -109,8 +109,14 @@ Text& Text::add_text(const string& str, const Text::ActionPosition& action, size
     return (*this);
 }
 
+Text& Text::add_text(const string& str, const Text::ActionPosition& action, size_t pos) {
+    auto added_line = sf::String::fromUtf8(str.begin(), str.end());
+
+    return this->add_text(added_line, action, pos);
+}
+
 Text& Text::remove_char(size_t pos) {
-    auto curr_str = string(m_value->getString());
+    auto curr_str = m_value->getString();
     curr_str.erase(pos, 1);
 
     m_value->setString(curr_str);
@@ -119,12 +125,9 @@ Text& Text::remove_char(size_t pos) {
 }
 
 Text& Text::remove_chars(size_t pos, size_t count) {
-    auto curr_str = string(m_value->getString());
+    auto curr_str = m_value->getString();
 
-    auto start = curr_str.at(pos);
-    auto end = start + count;
-
-    curr_str.erase(start, end);
+    curr_str.erase(pos, count);
 
     m_value->setString(curr_str);
 
@@ -148,11 +151,16 @@ Text& Text::narrow_text(size_t start_count, size_t end_count) {
     return (*this);
 }
 
-Text& Text::set_text(const string& str) {
-    m_value->setString(sf::String::fromUtf8(str.begin(), str.end()));
+
+Text &Text::set_text(const sf::String& str) {
+    m_value->setString(str);
 
     this->actualize_size();
     return (*this);
+}
+
+Text& Text::set_text(const string& str) {
+    return this->set_text(sf::String::fromUtf8(str.begin(), str.end()));
 }
 
 Text& Text::set_text_size(int size) {
@@ -191,4 +199,14 @@ void Text::init(const string& str) {
 void Text::actualize_size() {
     const auto& bounds = m_value->getLocalBounds();
     this->set_size({ bounds.width, bounds.height });
+}
+
+void Text::actualize_width() {
+    const auto& bounds = m_value->getLocalBounds();
+    this->set_width(bounds.width);
+}
+
+void Text::actualize_height() {
+    const auto& bounds = m_value->getLocalBounds();
+    this->set_height(bounds.height);
 }

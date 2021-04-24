@@ -20,6 +20,30 @@ Element::Element(const sf::Vector2f& size, const sf::Vector2f& position) {
 }
 
 // PUBLIC SET
+void Element::to_center(Element& current, Element& target, const Indentation *indentation) {
+    auto border_shift = current.m_border_with_position ? current.m_border_width : 0;
+
+    auto shift_y = (current.get_height() / 2.f) + (target.get_height() / 2.f) - border_shift; // TODO: is not required: (target.get_height() / 2.f) - border_shift
+    auto shift_x = (current.get_width() / 2.f) + (target.get_width() / 2.f) + border_shift;
+
+    target
+        .set_before(XY, current)
+        .move(Y, shift_y)
+        .move(X, shift_x);
+
+    if(indentation != nullptr) {
+        target
+            .move(X, indentation->left)
+            .move(X, -indentation->right);
+
+        target
+            .move(Y, indentation->top)
+            .move(Y, -indentation->bottom);
+    }
+
+    target.build();
+}
+
 Element& Element::set_size(const sf::Vector2f& size) {
     this->set_width(size.x);
     this->set_height(size.y);
@@ -108,19 +132,21 @@ Element& Element::set_position(const sf::Vector2f& position) {
 }
 
 Element& Element::set_after(const Element::Axis& axis, const Element& el) {
-    auto& bounds = el.get_bounds();
+    const auto& bounds = el.get_bounds();
+    const auto& origin = el.get_origin();
+
     auto border_shift = el.m_border_with_position ? el.m_border_width : 0;
 
     if(axis == X || axis == XY) {
         auto shift = bounds.left + border_shift + (m_bounds.width / 2.f);
-        auto start_pos = el.m_origin.x > 0 ? el.m_origin.x : bounds.width;
+        auto start_pos = origin.x > 0 ? origin.x : bounds.width;
 
         this->change_position(X, start_pos + shift);
     }
 
     if(axis == Y || axis == XY) {
         auto shift = bounds.top + border_shift + (m_bounds.height / 2.f);
-        auto start_pos = el.m_origin.y > 0 ? el.m_origin.y : bounds.height;
+        auto start_pos = origin.y > 0 ? origin.y : bounds.height;
 
         this->change_position(Y, start_pos + shift);
     }
@@ -130,15 +156,16 @@ Element& Element::set_after(const Element::Axis& axis, const Element& el) {
 }
 
 Element& Element::set_before(const Element::Axis& axis, const Element& el) {
-    auto& bounds = el.get_bounds();
+    const auto& bounds = el.get_bounds();
+    const auto& origin = el.get_origin();
 
     auto border_shift = el.m_border_with_position ? el.m_border_width : 0;
-    auto local_border_shift = m_border_with_position ? m_border_width : 0;
+    auto local_border_shift = m_border_with_position ? m_border_width * 2 : 0;
 
     if(axis == X || axis == XY) {
         auto shift = el.m_origin.x == 0
           ? 0
-          : bounds.left - el.m_origin.x - border_shift - (m_bounds.width / 2.f) - (local_border_shift * 2);
+          : bounds.left - origin.x - border_shift - (m_bounds.width / 2.f) - local_border_shift;
 
         this->change_position(X, shift);
     }
@@ -146,7 +173,7 @@ Element& Element::set_before(const Element::Axis& axis, const Element& el) {
     if(axis == Y || axis == XY) {
         auto shift = el.m_origin.y == 0
            ? 0
-           : bounds.top - el.m_origin.y - border_shift - (m_bounds.height / 2.f) - (local_border_shift * 2);
+           : bounds.top - origin.y - border_shift - (m_bounds.height / 2.f) - local_border_shift;
 
         this->change_position(Y, shift);
     }
