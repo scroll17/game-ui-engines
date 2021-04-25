@@ -46,17 +46,105 @@ using json = nlohmann::json;
 using namespace std;
 using namespace sf;
 
-const int WINDOW_W = 600, WINDOW_H = 400;
+
+//struct Var_with_default {
+//    private:
+//        float m_default;
+//
+//    public:
+//        float m_value;
+//
+//        Var_with_default(float def, float val): m_default(def), m_value(val + def) {};
+//
+//        // Перегрузка оператора присваивания
+//        Var_with_default& operator= (float val)
+//        {
+//            m_value = val + m_default;
+//
+//            return *this;
+//        }
+//
+//
+//        // Выполняем float + Var_with_default через дружественную функцию
+//        friend Var_with_default& operator+(Var_with_default &d1, const float &d2) {
+//            d1.m_value += d2;
+//            return d1;
+//        };
+//        friend float operator+(const float &d1, const Var_with_default &d2) {
+//          return d1 + (d2.m_value);
+//        };
+//
+//        friend Var_with_default& operator-(Var_with_default &d1, const float &d2) {
+//            if((d1.m_value - d2) <= d1.m_default) return d1;
+//
+//            d1.m_value -= d2;
+//            return d1;
+//        };
+//        friend float operator-(const float &d1, const Var_with_default &d2) {
+//            return d1 - (d2.m_value - d2.m_default);
+////            return d1 - d2.m_value;
+//        };
+//};
+
+const int H = 12 + 4;  /// Высота
+const int W = 40;  /// Длина
+const int BLOCK_SIZE = 14; /// Размер блока;
+const int MINI_BLOCK_SIZE = 4;
+
+const int MAX_BLOCK_VISING_X = 24;
+
+const int WINDOW_W = 600;
+const int WINDOW_H = 400;
+
+struct Paddings {
+    int left;
+    int top;
+};
+
+int def_offset_x = ((W * BLOCK_SIZE) / 2);
+int def_offset_y = ((H * BLOCK_SIZE) / 2);
+
+Paddings PADDINGS {
+        (WINDOW_W / 2)- def_offset_x,
+        (WINDOW_H / 2) - def_offset_y
+};
+
+// class Map
+using namespace form::types;
+struct Offset {
+    private:
+        float m_val;
+        Element::Axis m_axis;
+        const Paddings& m_padding {};
+
+    public:
+        Offset(float val, Element::Axis axis, const Paddings& pad): m_val(val), m_axis(axis), m_padding(pad) {};
+        ~Offset() = default;
+
+        [[nodiscard]] float get_value() const {
+            if(m_axis == form::types::Element::Axis::X) {
+                return m_val + m_padding.left;
+            } else {
+                return m_val + m_padding.top;
+            }
+        }
+
+        void set_value(float value) {
+            m_val = value;
+        }
+};
+
+//Offset offsetX { 0, Element::Axis::X, PADDINGS };
+//Offset offsetY { 0, Element::Axis::Y, PADDINGS };
 
 float offsetX = 0;
 float offsetY = 0;
 
-const int H = 12 + 4;  /// Высота
-const int W = 40;  /// Длина
-const int BLOCK_SIZE = 32; /// Размер блока;
-const int MINI_BLOCK_SIZE = 4;
+//Var_with_default offsetX { float(def_offset_x), 0 };
+//Var_with_default offsetY { 0, 0 };
 
 int number_of_moves = 0;
+int show_text = false;
 
 /// Каждая ячейка это квадрат 32*32
 String TileMap[H] = {
@@ -84,6 +172,7 @@ enum class Direction {
         Left,
         Right
 };
+
 
 data_types::Range get_collision_blocks_x(const Vector2f& player_pos, const FloatRect& player_bounds) {
     /**
@@ -208,7 +297,7 @@ class Player {
         Player() {
             texture.loadFromFile("/home/user/Code/stud-game/data/textures/user3.png");
 
-            position = Vector2f(WINDOW_W / 2.f, WINDOW_H / 2.f);
+            position = Vector2f(WINDOW_W / 6.f, WINDOW_H / 6.f);
 
             dx_rect = IntRect(16, 225, 85, 65);
             dy_rect = IntRect(20, 5, 90, 95);
@@ -216,7 +305,7 @@ class Player {
             sprite.setTextureRect(dx_rect);
             sprite.setPosition(position);
             sprite.setTexture(texture);
-            sprite.scale(0.7, 0.7);
+            sprite.scale(0.4, 0.4);
 
             dx = dy = 0.0;
 
@@ -234,6 +323,8 @@ class Player {
 //        bool direction_has_be_changed();
 
         void collision(Axis axis, float prev_pos) {
+            show_text = false;
+
             /**
              *  using "getGlobalBounds" because we use "sprite.scale"
              * */
@@ -246,7 +337,7 @@ class Player {
                 for (size_t j = collision_blocks_x.get_start(); j < collision_blocks_x.get_end(); j++) {
                     char32_t cell = TileMap[i][j];
 
-                    if(cell != 'B') continue;;
+                    if(cell != 'B' && cell != 'Z') continue;;
 
                     if(axis == Axis::X) {
                         if(dx > 0) position.x = prev_pos;
@@ -256,6 +347,10 @@ class Player {
                     if(axis == Axis::Y) {
                         if(dy > 0) position.y = prev_pos;
                         if(dy < 0) position.y = prev_pos;
+                    }
+
+                    if(cell == 'Z') {
+                        show_text = true;
                     }
                 }
             }
@@ -367,11 +462,11 @@ class Player {
             auto prev_x_pos = position.x;
             auto prev_y_pos = position.y;
 
+            cout << "dx * time = " << dx * time << endl;
             position.x += dx * time;
             this->collision(Axis::X, prev_x_pos);
 
-            const auto& bounds = sprite.getGlobalBounds();
-
+            cout << "dy * time = " << dy * time << endl;
             position.y += dy * time;
             this->collision(Axis::Y, prev_y_pos);
 
@@ -420,49 +515,55 @@ class Player {
             }
 
 
-            sprite.setPosition({ position.x - offsetX, position.y - offsetY });
+            sprite.setPosition({ position.x - offsetX + PADDINGS.left, position.y - offsetY + PADDINGS.top });
+//            sprite.setPosition({ position.x - offsetX - PADDINGS.left, position.y - offsetY - PADDINGS.top });
+//            sprite.setPosition({ position.x - offsetX.get_value(), position.y - offsetY.get_value() });
 
             prev_axis = axis;
             dx = dy = 0;
         }
 };
 
-int main_2() {
+int main() {
     RenderWindow window( VideoMode(WINDOW_W, WINDOW_H), "Test!");
+    using namespace form::types;
 
 
-    form::types::Button button { { 150, 80 }, "" };
-    form::types::Text text { std::to_string(number_of_moves + 10000) };
-    form::types::TextBox text_box { {100, 30}, "TEXT" };
-
-    button
-        .set_window_size(window.getSize())
-        .button_text_to_center()
-        .to_center(form::types::Element::XY)
-        .correct_position(true)
-        .border_with_position(true)
-        .set_border_color(sf::Color::Black)
-        .set_border_width(3)
-        .build();
+    form::types::Text text { "Click [x] to open door" };
+//    form::types::Button button { { 150, 80 }, "" };
+//    form::types::TextBox text_box { {100, 30}, "TEXT" };
+//
+//    button
+//        .set_window_size(window.getSize())
+//        .button_text_to_center()
+//        .to_center(form::types::Element::XY)
+//        .correct_position(true)
+//        .border_with_position(true)
+//        .set_border_color(sf::Color::Black)
+//        .set_border_width(3)
+//        .build();
 
     text
+     .set_text_size(22)
      .set_window_size(window.getSize())
      .correct_position(true)
+     .to_center(Element::XY)
+     .move(Element::Y, WINDOW_H / 3)
      .build();
 
-    form::types::Element::to_center(button, text);
-
-    text_box
-        .set_max_chars_number(10)
-        .set_window_size(window.getSize())
-        .to_center(form::types::Element::X)
-        .set_after(form::types::Element::Y, button)
-        .move(form::types::Element::Y, 20)
-        .correct_position(true)
-        .border_with_position(true)
-        .set_border_color(sf::Color::Black)
-        .set_border_width(2)
-        .build();
+//    form::types::Element::to_center(button, text);
+//
+//    text_box
+//        .set_max_chars_number(10)
+//        .set_window_size(window.getSize())
+//        .to_center(form::types::Element::X)
+//        .set_after(form::types::Element::Y, button)
+//        .move(form::types::Element::Y, 20)
+//        .correct_position(true)
+//        .border_with_position(true)
+//        .set_border_color(sf::Color::Black)
+//        .set_border_width(2)
+//        .build();
 
     Player player;
     Clock clock;
@@ -490,75 +591,97 @@ int main_2() {
         }
 
 
+        float speed = 0.1;
         if(Keyboard::isKeyPressed(Keyboard::Left)) {
-            player.dx = -0.2;
+            player.dx = -speed;
         } else if(Keyboard::isKeyPressed(Keyboard::Right)) {
-            player.dx = 0.2;
+            player.dx = speed;
         } else if(Keyboard::isKeyPressed(Keyboard::Up)) {
-            player.dy = -0.2;
+            player.dy = -speed;
         } else if(Keyboard::isKeyPressed(Keyboard::Down)) {
-            player.dy = 0.2;
+            player.dy = speed;
         }
 
         player.update(time);
 
-        if(player.position.x > WINDOW_W / 2.f) {
+
+        if(player.position.x >= (W * BLOCK_SIZE) - WINDOW_W / 2.f) {
+            // nothing
+        } else if(player.position.x > WINDOW_W / 2.f) {
+//            offsetX.set_value(player.position.x - WINDOW_W / 2.f);
             offsetX = player.position.x - WINDOW_W / 2.f;
         }
-        offsetY = player.position.y - WINDOW_H / 2.f;
 
-        window.clear(Color::White);
+        if(player.position.y >= (H * BLOCK_SIZE) - WINDOW_H / 2.f) {
+            // nothing
+        } else if(player.position.y > WINDOW_H / 2.f) {
+//            offsetY.set_value(player.position.y - WINDOW_H / 2.f);
+            offsetY = player.position.y - WINDOW_H / 2.f;
+        }
+
+        window.clear(Color::Yellow);
 
         auto player_bounds = player.sprite.getGlobalBounds();
-        int player_j = int((player.position.x + (player_bounds.width / 2.f)) / BLOCK_SIZE);
         int player_i = int((player.position.y + (player_bounds.height / 2.f)) / BLOCK_SIZE);
+        int player_j = int((player.position.x + (player_bounds.width / 2.f)) / BLOCK_SIZE);
 
-//        for(int i = 0; i < H; i++) {
-//            for(int j = 0; j < W; j++) {
-//                // MAIN MAP
-//                if(TileMap[i][j] == ' ') rectangle.setFillColor(Color::White);
-//                if(TileMap[i][j] == 'B') {
-//                    rectangle.setFillColor(Color::Black);
-//                    rectangle.setOutlineColor(Color::White);
-//                }
-//                if(TileMap[i][j] == 'Z') {
-//                    rectangle.setFillColor(Color::Yellow);
-//                }
-//
+        for(int i = 0; i < H; i++) {
+            for(int j = 0; j < W; j++) {
+                // MAIN MAP
+                if(TileMap[i][j] == ' ') rectangle.setFillColor(Color::White);
+                if(TileMap[i][j] == 'B') {
+                    rectangle.setFillColor(Color::Black);
+                    rectangle.setOutlineColor(Color::White);
+                }
+                if(TileMap[i][j] == 'Z') {
+                    rectangle.setFillColor(Color::Yellow);
+                }
+
+//                rectangle.setPosition((j * BLOCK_SIZE) - offsetX.get_value(), (i * BLOCK_SIZE) + offsetY.get_value());
+                rectangle.setPosition((j * BLOCK_SIZE) - offsetX + PADDINGS.left, (i * BLOCK_SIZE) + offsetY + PADDINGS.top);
 //                rectangle.setPosition((j * BLOCK_SIZE) - offsetX, (i * BLOCK_SIZE) - offsetY);
-//                window.draw(rectangle);
-//
-//                rectangle.setOutlineColor(Color::Black);
-//            }
-//        }
-//
-//        for(int i = 0; i < H; i++) {
-//            int offset = 5;
-//
-//            for(int j = 0; j < W; j++) {
-//                // MINI MAP
-//                if(TileMap[i][j] == 'B') {
-//                    mini_rectangle.setFillColor(Color::Green);
-//                }
-//                if(TileMap[i][j] == 'Z') {
-//                    mini_rectangle.setFillColor(Color::Yellow);
-//                }
-//                if(player_i == i && player_j == j) {
-//                    mini_rectangle.setFillColor(Color::Red);
-//                }
-//
-//                mini_rectangle.setPosition((j * MINI_BLOCK_SIZE) + offset, (i * MINI_BLOCK_SIZE) + offset);
-//                window.draw(mini_rectangle);
-//
-//                mini_rectangle.setFillColor(Color::White);
-//            }
-//        }
+                window.draw(rectangle);
 
-        button.draw(window);
-        text.draw(window);
-        text_box.draw(window);
+                rectangle.setOutlineColor(Color::Black);
+            }
+        }
 
-//        window.draw(player.sprite);
+        int start_x, end_x;
+
+        start_x = std::max(0, player_j - MAX_BLOCK_VISING_X / 2);
+        end_x = std::min(W, player_j + MAX_BLOCK_VISING_X / 2);
+
+        for(int i = 0; i < H; i++) {
+            int offset = 5;
+
+            for(int j = start_x; j < end_x; j++) {
+                float offsetX = start_x * MINI_BLOCK_SIZE;
+
+                // MINI MAP
+                if(TileMap[i][j] == 'B') {
+                    mini_rectangle.setFillColor(Color::Green);
+                }
+                if(TileMap[i][j] == 'Z') {
+                    mini_rectangle.setFillColor(Color::Yellow);
+                }
+                if(player_i == i && player_j == j) {
+                    mini_rectangle.setFillColor(Color::Red);
+                }
+
+                mini_rectangle.setPosition((j * MINI_BLOCK_SIZE) + offset - offsetX, (i * MINI_BLOCK_SIZE) + offset);
+                window.draw(mini_rectangle);
+
+                mini_rectangle.setFillColor(Color::White);
+            }
+        }
+
+        if(show_text) {
+            text.draw(window);
+        }
+//        button.draw(window);
+//        text_box.draw(window);
+
+        window.draw(player.sprite);
 
         window.display();
     }
@@ -604,7 +727,7 @@ int main_2() {
 //            sprite.setTextureRect(IntRect(20 + (int(dy_current_frame) * 100), 5, 90, 95));
 //        }
 
-int main() {
+int main_forms() {
     // Объект, который, собственно, является главным окном приложения
     RenderWindow window(VideoMode(400, 400), "SFML Works!");
 
