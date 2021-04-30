@@ -20,6 +20,7 @@ namespace engine {
 
         public:
             void start();
+            void stop();
 
             static sf::Font& get_game_font();
     };

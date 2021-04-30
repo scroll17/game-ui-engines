@@ -6,7 +6,7 @@
 
 using namespace engine::controllers;
 
-FocusController *FocusController::s_m_instance = nullptr;
+FocusController* FocusController::s_m_instance = nullptr;
 
 FocusController::FocusController() {
     m_window_elements = new FocusController::t_window_elements {};
@@ -93,7 +93,7 @@ FocusController& FocusController::input(const sf::Event& event) {
 }
 
 // PUBLIC GET
-ActionElement *FocusController::get_focused_el() const {
+ActionElement* FocusController::get_focused_el() const {
     if(m_curr_window == nullptr) throw std::runtime_error("Need set window before");
 
     auto it = std::begin(*m_elements);
@@ -106,6 +106,6 @@ ActionElement *FocusController::get_focused_el() const {
     return nullptr;
 }
 
-sf::RenderWindow *FocusController::get_focused_window() const {
+sf::RenderWindow* FocusController::get_focused_window() const {
     return m_curr_window;
 }

@@ -38,6 +38,7 @@ endif()
 # </pugixml>
 
 add_executable(stud-game
+#        main_old.cpp
         main.cpp
 
         Constants/Constants.cpp
@@ -55,6 +56,7 @@ add_executable(stud-game
         DataTypes/Time/Time.h
         DataTypes/Range/Range.cpp
         DataTypes/Range/Range.h
+        DataTypes/index.h
 
         utils/string/string.cpp
         utils/string/string.h
@@ -68,9 +70,6 @@ add_executable(stud-game
 
         Engine/DataUtils/MousePosition/MousePosition.cpp
         Engine/DataUtils/MousePosition/MousePosition.h
-
-        Engine/Player/Player.cpp
-        Engine/Player/Player.h
 
         Engine/Form/Types/Element/Element.cpp
         Engine/Form/Types/Element/Element.h
@@ -107,11 +106,16 @@ add_executable(stud-game
         Engine/Form/Form.cpp
         Engine/Form/Form.h
 
+        Engine/GameMap/GameMap.cpp
+        Engine/GameMap/GameMap.h
+
+        Engine/Player/Player.cpp
+        Engine/Player/Player.h
+
         Engine/Engine.cpp
         Engine/Engine.h
-
         Engine/index.h
-        DataTypes/index.h)
+)
 
 
 target_link_libraries(stud-game

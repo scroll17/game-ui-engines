@@ -6,6 +6,8 @@
 #define STUD_GAME_INDEX_ENGINE_H
 
 #include "./Engine.h"
+#include "./GameMap/GameMap.h"
+#include "./Player/Player.h"
 
 #include "./Form/index.h"
 

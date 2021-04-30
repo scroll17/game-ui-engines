@@ -8,7 +8,6 @@
 #include <utility>
 #include <map>
 #include <set>
-#include <utility>
 #include "SFML/Graphics.hpp"
 
 #include "../../Form/Form.h"
