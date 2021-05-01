@@ -84,6 +84,9 @@ class Player1: public Player {
 };
 
 int main() {
+    FileReader f_r("./data/json/level_1.json");
+    cout << "name => " << f_r.to_json()["name"] << endl;
+
     const int BLOCK_SIZE = 14;
     const int MINI_BLOCK_SIZE = 4;
     const int MAX_BLOCK_VISING_X = 24;
@@ -187,31 +190,17 @@ int main() {
 
         player1.update(time);
         player1.around_blocks('Z', [&](auto& block) -> void {
-            cout
-            << "Y = "
-            << map
-                .find_cell_sequence(block, GameMap::Axis::Y)
-                .to_string([](const string& iter, const string& second_val) {
-                    string str {};
+            auto door_key = map
+                    .find_cell_sequence(block, GameMap::Axis::X)
+                    .to_string([](const string& iter, const string& second_val) {
+                        string str {};
 
-                    str.append("[").append(second_val).append(",").append(iter).append("]");
+                        str.append("[").append(iter).append(",").append(second_val).append("]");
 
-                    return str;
-                })
-            << endl;
+                        return str;
+                    });
 
-            cout
-                    << "X = "
-                    << map
-                            .find_cell_sequence(block, GameMap::Axis::X)
-                            .to_string([](const string& iter, const string& second_val) {
-                                string str {};
-
-                                str.append("[").append(iter).append(",").append(second_val).append("]");
-
-                                return str;
-                            })
-                    << endl;
+            cout << "door = " <<  f_r.to_json()["doors"][door_key] << endl;
 
             show_text = true;
         });

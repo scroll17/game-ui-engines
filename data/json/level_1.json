@@ -1,3 +1,22 @@
 {
-  "name": "Корпус 1"
+  "name": "Корпус 1",
+  "tile": [
+    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "B                                B     B",
+    "B                                B     B",
+    "B                                B     B",
+    "B          ZZZ                   B     B",
+    "B                                B     B",
+    "B                             BBBB     B",
+    "BBBB                             B     B",
+    "BBBB                             B     B",
+    "B              BB                BB    B",
+    "B              BB                      B",
+    "B              BB                      B",
+    "B    B         BB         BB           B",
+    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+  ],
+  "doors": {
+    "<[11,4][12,4][13,4]>": 200
+  }
 }
