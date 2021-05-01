@@ -7,6 +7,7 @@
 
 #include "./Time/Time.h"
 #include "./Range/Range.h"
+#include "./ExtendedRange/ExtendedRange.h"
 #include "./File/File.h"
 #include "./File/FileWriter/FileWriter.h"
 #include "./File/FileReader/FileReader.h"

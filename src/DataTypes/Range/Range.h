@@ -13,17 +13,20 @@ namespace data_types {
     class Range {
             using t_cb = std::function<void(size_t)>;
 
-        private:
+        protected:
             size_t m_start;
             size_t m_end;
 
             bool m_include_end;
 
+            size_t get_real_end() const;
+
         public:
             Range(size_t start, size_t end, bool include_end = false);
-            ~Range() = default;
+            Range(const Range&);
+            virtual ~Range() = default;
 
-            void include_end(bool solution);
+            virtual Range& include_end(bool solution);
             void execute(const t_cb& cb) const;
 
             [[nodiscard]] bool in_range(size_t val) const;

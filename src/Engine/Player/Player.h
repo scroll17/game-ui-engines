@@ -15,6 +15,7 @@ namespace engine {
 
     class Player {
         public:
+            using t_around_block_cb = function<void(const pair<size_t, size_t>& block)>;
             using Direction = engine::GameMap::Direction;
 
             enum Axis: int8_t {
@@ -62,7 +63,7 @@ namespace engine {
 
             void collision(Axis axis, float prev_pos);
             void hitting_in_texture();
-            void around_blocks(char cell, const function<void()>& cb);
+            void around_blocks(char cell, const t_around_block_cb& cb);
 
             void update(float elapsed_time);
 

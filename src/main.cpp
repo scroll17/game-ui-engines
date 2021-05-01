@@ -4,8 +4,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <nlohmann/json.hpp>
-#include "iostream"
-#include <map>
 #include <array>
 #include <cmath>
 #include "pugixml.hpp"
@@ -33,8 +31,8 @@ const string TileMap[H] = {
 "B                                B     B",
 "B                                B     B",
 "B          ZZZ                   B     B",
-"B                                B     B",
-"B                             BBBB     B",
+"B          Z                     B     B",
+"B          Z                  BBBB     B",
 "BBBB                             B     B",
 "BBBB                             B     B",
 "B              BB                BB    B",
@@ -188,7 +186,33 @@ int main() {
         Player::move_input(player1);
 
         player1.update(time);
-        player1.around_blocks('Z', [&]() -> void {
+        player1.around_blocks('Z', [&](auto& block) -> void {
+            cout
+            << "Y = "
+            << map
+                .find_cell_sequence(block, GameMap::Axis::Y)
+                .to_string([](const string& iter, const string& second_val) {
+                    string str {};
+
+                    str.append("[").append(second_val).append(",").append(iter).append("]");
+
+                    return str;
+                })
+            << endl;
+
+            cout
+                    << "X = "
+                    << map
+                            .find_cell_sequence(block, GameMap::Axis::X)
+                            .to_string([](const string& iter, const string& second_val) {
+                                string str {};
+
+                                str.append("[").append(iter).append(",").append(second_val).append("]");
+
+                                return str;
+                            })
+                    << endl;
+
             show_text = true;
         });
 

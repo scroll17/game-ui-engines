@@ -134,7 +134,7 @@ void Player::hitting_in_texture() {
     }
 }
 
-void Player::around_blocks(char cell, const function<void()>& cb) {
+void Player::around_blocks(char cell, const t_around_block_cb& cb) {
     /** AFTER PLAYER UPDATE */
 
     const auto& around_blocks = m_game_map.get_around_blocks(m_position, m_sprite.getGlobalBounds());
@@ -156,9 +156,9 @@ void Player::around_blocks(char cell, const function<void()>& cb) {
                 char32_t cell_l = m_game_map.at_tile(y, x_l);
                 char32_t cell_r = m_game_map.at_tile(y, x_r);
 
-                if(cell_c == cell || cell_l == cell || cell_r == cell) {
-                    cb();
-                }
+                if(cell_c == cell) cb(make_pair(x, y));
+                else if(cell_l == cell) cb(make_pair(x_l, y));
+                else if(cell_r == cell) cb(make_pair(x_r, y));
 
                 break;
             }
@@ -173,9 +173,9 @@ void Player::around_blocks(char cell, const function<void()>& cb) {
                 char32_t cell_t = m_game_map.at_tile(y_t, x);
                 char32_t cell_b = m_game_map.at_tile(y_b, x);
 
-                if(cell_c == cell || cell_t == cell || cell_b == cell) {
-                    cb();
-                }
+                if(cell_c == cell) cb(make_pair(x, y));
+                else if(cell_t == cell) cb(make_pair(x, y_t));
+                else if(cell_b == cell) cb(make_pair(x, y_b));
 
                 break;
             }

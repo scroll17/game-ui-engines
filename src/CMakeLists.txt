@@ -56,6 +56,8 @@ add_executable(stud-game
         DataTypes/Time/Time.h
         DataTypes/Range/Range.cpp
         DataTypes/Range/Range.h
+        DataTypes/ExtendedRange/ExtendedRange.cpp
+        DataTypes/ExtendedRange/ExtendedRange.h
         DataTypes/index.h
 
         utils/string/string.cpp
@@ -127,4 +129,4 @@ target_link_libraries(stud-game
         pugixml
 
         stdc++fs
-        )
+)

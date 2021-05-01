@@ -182,6 +182,70 @@ bool GameMap::set_offset_y(float y) {
 }
 
 /// PUBLIC GET
+ExtendedRange GameMap::find_cell_sequence(const pair<size_t, size_t>& start_block, GameMap::Axis axis) const {
+    auto tail_width = this->get_width();
+    auto tail_height = this->get_height();
+
+    if(start_block.first > tail_width || start_block.second > tail_height) {
+        throw std::runtime_error("Invalid start block position");
+    }
+
+    auto start_x = start_block.first;
+    auto start_y = start_block.second;
+
+    auto cell = this->at_tile(start_y, start_x);
+    switch (axis) {
+        case X: {
+            size_t last_x = start_x;
+            size_t first_x = start_x;
+
+            while (true) {
+                if(last_x <= tail_width && cell == this->at_tile(start_y, last_x)) {
+                    last_x++;
+                    continue;
+                } else {
+                    last_x--;
+                }
+
+                if(first_x >= 0 && cell == this->at_tile(start_y, first_x)) {
+                    first_x--;
+                    continue;
+                } else {
+                    first_x++;
+                }
+
+                break;
+            }
+
+            return ExtendedRange(first_x, last_x, start_y).include_end(true);
+        }
+        case Y: {
+            size_t last_y = start_y;
+            size_t first_y = start_y;
+
+            while (true) {
+                if(last_y <= tail_height && cell == this->at_tile(last_y, start_x)) {
+                    last_y++;
+                    continue;
+                } else {
+                    last_y--;
+                }
+
+                if(first_y >= 0 && cell == this->at_tile(first_y, start_x)) {
+                    first_y--;
+                    continue;
+                } else {
+                    first_y++;
+                }
+
+                break;
+            }
+
+            return ExtendedRange(first_y, last_y, start_x).include_end(true);
+        }
+    }
+}
+
 char GameMap::at_tile(size_t y, size_t x) const {
     if(m_tile == nullptr) throw std::runtime_error("before need load tile");
 

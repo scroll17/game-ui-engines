@@ -30,7 +30,12 @@ namespace engine {
         using t_draw_el = pair<sf::RectangleShape*, t_draw_el_cb>;
 
         public:
-            enum Direction {
+            enum Axis: int8_t {
+                X,
+                Y
+            };
+
+            enum Direction: int8_t {
               Top,
               Bottom,
               Left,
@@ -83,6 +88,8 @@ namespace engine {
 
             bool set_offset_x(float x);
             bool set_offset_y(float y);
+
+            [[nodiscard]] ExtendedRange find_cell_sequence(const pair<size_t, size_t>& start_block, Axis axis) const;
 
             [[nodiscard]] char at_tile(size_t y, size_t x) const;
 

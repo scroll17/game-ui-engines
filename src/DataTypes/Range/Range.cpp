@@ -13,10 +13,21 @@ Range::Range(size_t start, size_t end, bool include_end) {
     m_include_end = include_end;
 }
 
-// PUBLIC VOID
+Range::Range(const Range& range) {
+    m_start = range.m_start;
+    m_end = range.m_end;
+    m_include_end = range.m_include_end;
+}
+
+/// PROTECTED GET
+size_t Range::get_real_end() const {
+    return m_include_end ? m_end : m_end - 1;
+}
+
+/// PUBLIC VOID
 void Range::execute(const Range::t_cb& cb) const {
     size_t pos = m_start;
-    size_t end = m_include_end ? m_end : m_end - 1;
+    size_t end = this->get_real_end();
 
     while (pos <= end) {
         cb(pos++);
@@ -31,7 +42,7 @@ void Range::for_each(const Range& range, const Range::t_cb& cb) {
     range.execute(cb);
 }
 
-// PUBLIC GET
+/// PUBLIC GET
 size_t Range::get_start() const {
     return m_start;
 }
@@ -41,10 +52,11 @@ size_t Range::get_end() const {
 }
 
 bool Range::in_range(size_t val) const {
-    return (m_start <= val && val <= m_end);
+    return (m_start >= val && val <= m_end);
 }
 
-// PUBLIC SET
-void Range::include_end(bool solution) {
+/// PUBLIC SET
+Range& Range::include_end(bool solution) {
     m_include_end = solution;
+    return (*this);
 }
