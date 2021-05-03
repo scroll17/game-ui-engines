@@ -16,33 +16,8 @@ using json = nlohmann::json;
 
 using namespace std;
 using namespace sf;
-using namespace form::types;
-
-
-///
-const int H = 14;  /// Высота
-const int W = 40;  /// Длина
-
-
-/////// Каждая ячейка это квадрат 32*32
-const string TileMap[H] = {
-"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-"B                                B     B",
-"B                                B     B",
-"B                                B     B",
-"B          ZZZ                   B     B",
-"B          Z                     B     B",
-"B          Z                  BBBB     B",
-"BBBB                             B     B",
-"BBBB                             B     B",
-"B              BB                BB    B",
-"B              BB                      B",
-"B              BB                      B",
-"B    B         BB         BB           B",
-"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-};
-
 using namespace engine;
+using namespace form::types;
 
 class Player1: public Player {
     public:
@@ -50,7 +25,7 @@ class Player1: public Player {
         ~Player1() = default;
 
         void init() override {
-            m_position = Vector2f(m_game_map.get_block_size() * 3, m_game_map.get_block_size() * 3);
+            m_position = Vector2f(m_game_map.get_block_size() * 27, m_game_map.get_block_size() * 10.5);
 
             m_rect_x = IntRect(16, 225, 85, 85);
             m_rect_y = IntRect(20, 5, 90, 95);
@@ -85,7 +60,14 @@ class Player1: public Player {
 
 int main() {
     FileReader f_r("./data/json/level_1.json");
-    cout << "name => " << f_r.to_json()["name"] << endl;
+    const json level_data = f_r.to_json();
+    const json& level_map = level_data["map"];
+
+    const int max_floor = level_data["floorsCount"];
+    int current_floor = 0;
+
+    json current_map = level_map[current_floor];
+    string* tail_map = utils::string::json_arr_to_string(current_map["tail"], current_map["height"]);
 
     const int BLOCK_SIZE = 14;
     const int MINI_BLOCK_SIZE = 4;
@@ -94,18 +76,24 @@ int main() {
     const int WINDOW_W = 600;
     const int WINDOW_H = 400;
 
-    int def_offset_x = ((W * BLOCK_SIZE) / 2);
-    int def_offset_y = ((H * BLOCK_SIZE) / 2);
-
     Paddings PADDINGS {
       0,
-      (WINDOW_H / 2) - def_offset_y
+      (WINDOW_H / 2) - ((int(current_map["height"]) * BLOCK_SIZE) / 2)
     };
 
     RenderWindow window( VideoMode(WINDOW_W, WINDOW_H), "Test!");
 
-    form::types::Text text { "Click [x] to open door" };
-    text
+    form::types::Text door_text { "Click [x] to open door" };
+    door_text
+      .set_text_size(22)
+      .set_window_size(window.getSize())
+      .correct_position(true)
+      .to_center(Element::XY)
+      .move(Element::Y, WINDOW_H / 3)
+      .build();
+
+    form::types::Text floor_text { "Click [z] to change floor" };
+    floor_text
       .set_text_size(22)
       .set_window_size(window.getSize())
       .correct_position(true)
@@ -115,44 +103,94 @@ int main() {
 
     GameMap map(BLOCK_SIZE);
     map.set_windows_size(window.getSize());
-    map.load_tile(TileMap, W, H);
+    map.load_tile(tail_map, current_map["width"], current_map["height"]);
     map.set_paddings(PADDINGS);
-    map.register_collision_cells("BZ");
+    map.register_collision_cells("BZD");
 
     GameMap mini_map(MINI_BLOCK_SIZE);
     mini_map.set_windows_size(window.getSize());
-    mini_map.load_tile(TileMap, W, H);
+    mini_map.load_tile(tail_map, current_map["width"], current_map["height"]);
     mini_map.set_max_block_vising_x(MAX_BLOCK_VISING_X);
-    mini_map.set_max_block_vising_y(MAX_BLOCK_VISING_X);
     mini_map.set_paddings({ 5, 5 });
 
     Player1 player1(map);
     player1.init();
+
+    const auto& reload_current_map = [&map, &mini_map, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
+        current_floor = new_floor;
+        current_map = level_map[current_floor];
+
+        delete[] tail_map;
+        tail_map = utils::string::json_arr_to_string(current_map["tail"], current_map["height"]);
+
+        map.load_tile(tail_map, current_map["width"], current_map["height"]);
+        mini_map.load_tile(tail_map, current_map["width"], current_map["height"]);
+    };
+
+    const auto& update_player_pos = [&player1, &map](float x, float y) {
+        {
+//        auto begin = floor_key.begin();
+//        auto end = floor_key.end();
+//
+//        string str(begin + 1, end - 1);
+//        int comma_pos = str.find(',');
+//
+//        auto x = str.substr(0, comma_pos);
+//        auto y = str.substr(comma_pos + 1, str.size() - comma_pos);
+//
+//        size_t x_block, y_block;
+//        if(x.find('-' != -1)) {
+//            size_t x_comma_pos = x.find('-');
+//            size_t x_start = std::stoi(x.substr(0, x_comma_pos));
+//            size_t x_end = std::stoi(x.substr(x_comma_pos + 1, x.size() - x_comma_pos));
+//
+//            y_block = std::stoi(y);
+//            x_block = (x_start + x_end) / 2;
+//        } else {
+//            size_t y_comma_pos = x.find('-');
+//            size_t y_start = std::stoi(y.substr(0, y_comma_pos));
+//            size_t y_end = std::stoi(y.substr(y_comma_pos + 1, y.size() - y_comma_pos));
+//
+//            x_block = std::stoi(x);
+//            y_block = (y_start + y_end) / 2;
+//        }
+        }
+
+        player1.set_position(x * map.get_block_size(), y * map.get_block_size());
+        map.calculate_offset(player1.get_position());
+    };
 
     RectangleShape rectangle(Vector2f(BLOCK_SIZE, BLOCK_SIZE));
     rectangle.setFillColor(Color::White);
 
     RectangleShape mini_rectangle(Vector2f(MINI_BLOCK_SIZE, MINI_BLOCK_SIZE));
 
-    mini_map.register_draw_element(' ', mini_rectangle, [](sf::RectangleShape* rect) -> void {
-        rect->setFillColor(sf::Color::White);
-    });
-    mini_map.register_draw_element('B', mini_rectangle, [](sf::RectangleShape* rect) -> void {
-        rect->setFillColor(sf::Color::Green);
-    });
-    mini_map.register_draw_element('Z', mini_rectangle, [](sf::RectangleShape* rect) -> void {
-        rect->setFillColor(sf::Color::Yellow);
-    });
+    {
+        mini_map.register_draw_element(' ', mini_rectangle, [](sf::RectangleShape* rect) -> void {
+            rect->setFillColor(sf::Color::White);
+        });
+        mini_map.register_draw_element('B', mini_rectangle, [](sf::RectangleShape* rect) -> void {
+            rect->setFillColor(sf::Color::Green);
+        });
+        mini_map.register_draw_element('Z', mini_rectangle, [](sf::RectangleShape* rect) -> void {
+            rect->setFillColor(sf::Color::Yellow);
+        });
+    }
 
-    map.register_draw_element(' ', rectangle, [](sf::RectangleShape* rect) -> void {
-        rect->setFillColor(sf::Color::White);
-    });
-    map.register_draw_element('B', rectangle, [](sf::RectangleShape* rect) -> void {
-        rect->setFillColor(sf::Color::Black);
-    });
-    map.register_draw_element('Z', rectangle, [](sf::RectangleShape* rect) -> void {
-        rect->setFillColor(sf::Color::Yellow);
-    });
+    {
+        map.register_draw_element(' ', rectangle, [](sf::RectangleShape* rect) -> void {
+            rect->setFillColor(sf::Color::White);
+        });
+        map.register_draw_element('B', rectangle, [](sf::RectangleShape* rect) -> void {
+            rect->setFillColor(sf::Color::Black);
+        });
+        map.register_draw_element('Z', rectangle, [](sf::RectangleShape* rect) -> void {
+            rect->setFillColor(sf::Color::Yellow);
+        });
+        map.register_draw_element('D', rectangle, [](sf::RectangleShape* rect) -> void {
+            rect->setFillColor(sf::Color::Cyan);
+        });
+    }
 
     mini_map.on_draw(
       [&player1, &mini_rectangle, &map](size_t y, size_t x, char cell, GameMap& mini_map) {
@@ -168,7 +206,10 @@ int main() {
       [](size_t y, size_t x, char cell, GameMap& map) {}
     );
 
-    bool show_text = false;
+    bool can_change_floor = false;
+    bool can_open_door = false;
+
+    auto key_z_pressed = false;
 
     Clock clock;
     while (window.isOpen()) {
@@ -177,11 +218,17 @@ int main() {
 
         time = time / 600;
 
-        show_text = false;
+        can_open_door = false;
+        can_change_floor = false;
+        key_z_pressed = false;
 
-        Event event;
+        Event event {};
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed) window.close();
+
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Z) {
+                key_z_pressed = true;
+            }
 
             player1.run(event.key.shift);
         }
@@ -192,17 +239,25 @@ int main() {
         player1.around_blocks('Z', [&](auto& block) -> void {
             auto door_key = map
                     .find_cell_sequence(block, GameMap::Axis::X)
-                    .to_string([](const string& iter, const string& second_val) {
-                        string str {};
+                    .to_string(0);
 
-                        str.append("[").append(iter).append(",").append(second_val).append("]");
+//            cout << "door_key = " <<  door_key << endl;
+//            cout << "door = " <<  level_data["map"][0]["doors"][door_key] << endl;
 
-                        return str;
-                    });
+            can_open_door = true;
+        });
 
-            cout << "door = " <<  f_r.to_json()["doors"][door_key] << endl;
+        string last_floor_key {};
+        player1.around_blocks('D', [&](auto& block) -> void {
+            auto last_axis = GameMap::Axis::X;
+            auto floor_range = map.find_cell_sequence(block, last_axis);
 
-            show_text = true;
+            if(floor_range.get_start() == floor_range.get_end()) {
+                floor_range = map.find_cell_sequence(block, last_axis = GameMap::Axis::Y);
+            }
+
+            last_floor_key = floor_range.to_string(last_axis);
+            can_change_floor = true;
         });
 
         window.clear(Color::Yellow);
@@ -211,16 +266,34 @@ int main() {
 
         auto player_on_map = map.get_current_block(player1.get_position(), player1.get_bounds());
 
+        if(key_z_pressed && can_change_floor) {
+            const auto& floor = current_map["floors"][last_floor_key];
+
+            if(!floor.is_null()) {
+                int new_floor = floor["val"];
+                json new_player_pos = floor["pos"];
+
+                reload_current_map(new_floor);
+                update_player_pos(new_player_pos[0], new_player_pos[1]);
+            }
+        }
+
         map.draw(window);
         mini_map.draw(window, &player_on_map);
 
-        if(show_text) {
-            text.draw(window);
+        if(can_open_door) {
+            door_text.draw(window);
+        }
+        if(can_change_floor) {
+            floor_text.draw(window);
         }
 
         window.draw(player1.get_sprite());
         window.display();
     }
+
+
+    delete[] tail_map;
 
     return EXIT_SUCCESS;
 }
