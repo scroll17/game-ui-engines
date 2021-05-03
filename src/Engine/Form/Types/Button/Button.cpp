@@ -48,7 +48,7 @@ void Button::input(Button& button, const sf::RenderWindow& window, const sf::Eve
 }
 
 // PUBLIC GET
-Text& Button::get_button_text() const {
+form::types::Text& Button::get_button_text() const {
     return (*m_text);
 }
 

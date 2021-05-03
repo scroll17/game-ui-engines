@@ -128,3 +128,14 @@ std::wstring utils::string::convert_to_ws(const std::string& str) {
 
     return wide;
 }
+
+std::string *utils::string::json_arr_to_string(const nlohmann::basic_json<>& json_arr, int rows) {
+    auto tail_map = new std::string[rows];
+
+    int i = 0;
+    for(const auto& row: json_arr) {
+        tail_map[i++].append(row);
+    }
+
+    return tail_map;
+}

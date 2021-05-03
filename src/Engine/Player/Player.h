@@ -8,7 +8,6 @@
 #include "SFML/Graphics.hpp"
 
 #include <functional>
-#include "../Form/index.h"
 #include "../GameMap/GameMap.h"
 
 namespace engine {
@@ -38,6 +37,8 @@ namespace engine {
             float m_dx_current_frame;
             float m_dy_current_frame;
 
+            float m_steps_count = 0;
+
             bool m_run;
 
             Axis m_prev_axis = Axis::Zero;
@@ -54,12 +55,15 @@ namespace engine {
 
             void calculate_boost(Axis axis, float elapsed_time);
             void calculate_animation(Axis axis, float elapsed_time);
+            void calculate_steps_count(float prev_pos_x, float prev_pos_y);
 
         public:
             explicit Player(const engine::GameMap& game_map);
             virtual ~Player() = default;
 
             virtual void init() = 0;
+
+            void set_position(float x, float y);
 
             void collision(Axis axis, float prev_pos);
             void hitting_in_texture();
@@ -74,6 +78,7 @@ namespace engine {
 
             bool is_run() const;
 
+            float get_steps_count() const;
             sf::FloatRect get_bounds() const;
             const sf::Vector2f& get_position() const;
             const sf::Sprite& get_sprite() const;

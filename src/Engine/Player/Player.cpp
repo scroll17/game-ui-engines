@@ -10,6 +10,16 @@ Player::Player(const GameMap& game_map): m_game_map(game_map) {
 }
 
 /// PUBLIC SET
+void Player::set_position(float x, float y) {
+    m_position = sf::Vector2f(x, y);
+
+    const auto& paddings = m_game_map.get_paddings();
+    m_sprite.setPosition({
+      m_position.x - m_game_map.get_offset_x() + paddings.left,
+      m_position.y - m_game_map.get_offset_y() + paddings.top
+    });
+}
+
 void Player::move_input(Player& player) {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         player.move(GameMap::Direction::Left);
@@ -199,6 +209,7 @@ void Player::update(float elapsed_time) {
     m_position.y += m_dy * elapsed_time;
     this->collision(Axis::Y, prev_y_pos);
 
+    this->calculate_steps_count(prev_x_pos, prev_y_pos);
     this->calculate_animation(current_axis, elapsed_time);
 
     const auto& paddings = m_game_map.get_paddings();
@@ -258,6 +269,10 @@ void Player::stop_all() {
 /// PUBLIC GET
 bool Player::is_run() const {
     return m_run;
+}
+
+float Player::get_steps_count() const {
+    return m_steps_count / m_game_map.get_block_size();
 }
 
 sf::FloatRect Player::get_bounds() const {
@@ -344,4 +359,8 @@ void Player::calculate_animation(Axis axis, float elapsed_time) {
         m_sprite.setTextureRect(m_rect_y);
         this->hitting_in_texture();
     }
+}
+
+void Player::calculate_steps_count(float prev_pos_x, float prev_pos_y) {
+    m_steps_count += std::fabs(m_position.x - prev_pos_x) + std::fabs(m_position.y - prev_pos_y);
 }

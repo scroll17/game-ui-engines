@@ -5,6 +5,8 @@
 #ifndef STUD_GAME_STRING_H
 #define STUD_GAME_STRING_H
 
+#include "nlohmann/json.hpp"
+
 #include <cstring>  // strlen
 
 #include <locale>   // wstring_convert
@@ -20,6 +22,8 @@ namespace utils {
         int rfind(const char *str, const char *sub_str);
 
         std::wstring convert_to_ws(const std::string& str);
+
+        std::string *json_arr_to_string(const nlohmann::basic_json<>& json_arr, int rows);
     }
 }
 

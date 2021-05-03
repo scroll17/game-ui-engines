@@ -57,7 +57,7 @@ namespace form {
 
                 Button& button_text_to_center();
 
-                Text& get_button_text() const;
+                form::types::Text& get_button_text() const;
 
                 static void input(Button& button, const sf::RenderWindow& window, const sf::Event& event, const sf::Vector2i& prev_pos);
         };

@@ -37,3 +37,27 @@ string ExtendedRange::to_string(const t_str_cb& cb) const {
     str.append(">");
     return str;
 }
+
+string ExtendedRange::to_string(bool order) const {
+    std::string str;
+
+    str.append("<");
+    if(order) {
+        str
+         .append(std::to_string(m_second_val))
+         .append(",")
+         .append(std::to_string(m_start))
+         .append("-")
+         .append(std::to_string(this->get_real_end()));
+    } else {
+        str
+         .append(std::to_string(m_start))
+         .append("-")
+         .append(std::to_string(this->get_real_end()))
+         .append(",")
+         .append(std::to_string(m_second_val));
+    }
+    str.append(">");
+
+    return str;
+}

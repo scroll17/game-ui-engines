@@ -29,6 +29,7 @@ namespace data_types {
             ExtendedRange& include_end(bool solution) override;
 
             [[nodiscard]] string to_string(const t_str_cb& cb) const;
+            [[nodiscard]] string to_string(bool order) const;
     };
 
 }
