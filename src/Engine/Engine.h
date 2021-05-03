@@ -13,14 +13,21 @@
 using namespace std;
 
 namespace engine {
-
     class Engine {
         private:
             static sf::Font GameFont;
 
+            sf::RenderWindow& window;
+
+            void input();
+            void update(float elapsed_time);
+            void draw();
+
         public:
+            explicit Engine(sf::RenderWindow& window);
+            ~Engine() = default;
+
             void start();
-            void stop();
 
             static sf::Font& get_game_font();
     };

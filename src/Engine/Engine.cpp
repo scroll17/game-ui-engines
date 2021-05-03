@@ -5,13 +5,14 @@
 #include "Engine.h"
 
 using namespace engine;
-
-void Engine::start() {
-
-}
+using namespace sf;
 
 sf::Font Engine::GameFont = sf::Font();
 
+Engine::Engine(RenderWindow& win): window(win) {
+}
+
+/// PUBLIC GET
 sf::Font& Engine::get_game_font() {
     auto& info = Engine::GameFont.getInfo();
     if(info.family.empty()) {
@@ -24,4 +25,27 @@ sf::Font& Engine::get_game_font() {
     }
 
     return Engine::GameFont;
+}
+
+/// PUBLIC VOID
+void Engine::start() {
+    Clock clock;
+    while (window.isOpen()) {
+        float elapsed_time = clock.getElapsedTime().asMicroseconds();
+        clock.restart();
+
+        elapsed_time = elapsed_time / 600;
+
+//        this->input();
+//        this->update(dtAsSeconds);
+//        this->draw();
+    }
+}
+
+void Engine::input() {
+    Event event {};
+    while (window.pollEvent(event)) {
+        if (event.type == Event::Closed) window.close();
+    }
+
 }
