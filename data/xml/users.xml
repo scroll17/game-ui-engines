@@ -5,5 +5,8 @@
     </user>
     <user id="2">
         <name>user_2</name>
+        <score>
+
+        </score>
     </user>
 </users>

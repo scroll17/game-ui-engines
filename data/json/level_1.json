@@ -1,22 +1,65 @@
 {
   "name": "Корпус 1",
-  "tile": [
-    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-    "B                                B     B",
-    "B                                B     B",
-    "B                                B     B",
-    "B          ZZZ                   B     B",
-    "B                                B     B",
-    "B                             BBBB     B",
-    "BBBB                             B     B",
-    "BBBB                             B     B",
-    "B              BB                BB    B",
-    "B              BB                      B",
-    "B              BB                      B",
-    "B    B         BB         BB           B",
-    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-  ],
-  "doors": {
-    "<[11,4][12,4][13,4]>": 200
-  }
+  "floorsCount": 1,
+  "map": [
+    {
+      "tail": [
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "B                                B     B",
+        "B                                B     B",
+        "B                                B     B",
+        "B          ZZZ                   B     B",
+        "B                                B     B",
+        "B                             BBBB     B",
+        "BBBB                             B     B",
+        "BBBB                             B     B",
+        "B              BB                BB    B",
+        "B              BB                      B",
+        "B              BB                      B",
+        "B    B         BB                      B",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBDDDDDDBBBBBBBBB"
+      ],
+      "width": 40,
+      "height": 14,
+      "doors": {
+        "<11-13,4>": 200
+      },
+      "floors": {
+        "<25-30,13>": {
+          "pos": [27, 10.5],
+          "val": 1
+        }
+      }
+    },
+    {
+      "tail": [
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "B     BBBBBBBBBBBBBBBBBBBBBBBBBBBB     B",
+        "B            BBBBBBBBBBBB        B     B",
+        "B               BBBBBB           B     B",
+        "B                 BB             B     B",
+        "B                                B     B",
+        "B   BBBBD                        B     B",
+        "BBBBBBBBD        ZZZZ            B     B",
+        "BBBBBBBBD                        B     B",
+        "B   BBBBD                              B",
+        "B                                      B",
+        "B                                      B",
+        "B                                      B",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBDDDDDDDBBBBBBBB"
+      ],
+      "width": 40,
+      "height": 14,
+      "floors": {
+        "<25-31,13>": {
+          "pos": [27, 10.5],
+          "val": 0
+        },
+        "<8,6-9>": {
+          "pos": [27, 10.5],
+          "val": 0
+        }
+      }
+    }
+  ]
 }
