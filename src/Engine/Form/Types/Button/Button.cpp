@@ -20,6 +20,13 @@ Button::Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& 
     m_text = new Text(str);
 }
 
+Button::Button(const Button& button): ActionElement(button) {
+    m_bg_color = button.m_bg_color;
+
+    m_rectangle = new sf::RectangleShape(*button.m_rectangle);
+    m_text = new Text(*button.m_text);
+}
+
 Button::~Button() {
     delete m_rectangle;
     delete m_text;

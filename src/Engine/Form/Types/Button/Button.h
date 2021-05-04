@@ -39,6 +39,7 @@ namespace form {
             public:
                 explicit Button(const sf::Vector2f& size, const string& str);
                 explicit Button(const sf::Vector2f& size, const sf::Vector2f& pos, const string& str);
+                explicit Button(const Button& button);
                 ~Button() override;
 
                 virtual Button& build() override;

@@ -44,14 +44,20 @@ void TextBox::input(TextBox& text_box, const sf::RenderWindow& window, const sf:
 
                 if(event.text.unicode == 13) { // Enter
                     text_box.delete_focus();
+
+                    if(text_box[last_pos] == '|') {
+                        text->remove_char(last_pos - 1);
+                    }
+
                     break;
                 }
 
                 bool is_space = event.text.unicode == 32;
+                bool is_digit = event.text.unicode >= 48 && event.text.unicode <= 57;
                 bool is_char = event.text.unicode >= 65 && event.text.unicode <= 90;
                 bool is_upper_char = event.text.unicode >= 97 && event.text.unicode <= 122;
 
-                if(!is_char && !is_upper_char && !is_space) break;
+                if(!is_char && !is_upper_char && !is_digit && !is_space) break;
 
                 if(text_box[last_pos] == '|') {
                     text->add_char(event.text.unicode, Text::Before, last_pos);

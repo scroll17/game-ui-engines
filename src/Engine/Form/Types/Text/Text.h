@@ -46,6 +46,7 @@ namespace form {
             public:
                 explicit Text(const string& value);
                 explicit Text(const string& value, sf::Font& font, sf::Color& color);
+                explicit Text(const Text& text);
                 ~Text() override;
 
                 virtual Text& build() override;

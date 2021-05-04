@@ -14,6 +14,14 @@ Text::Text(const string& value, sf::Font& font, sf::Color& color): Element({ 0, 
     this->init(value);
 }
 
+Text::Text(const Text& text): Element(text), m_font(text.m_font) {
+    m_text_size = text.m_text_size;
+    m_color = text.m_color;
+    m_value = new sf::Text(*text.m_value);
+
+    this->build();
+}
+
 Text::~Text() {
     delete m_value;
 }

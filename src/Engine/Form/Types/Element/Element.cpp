@@ -19,12 +19,26 @@ Element::Element(const sf::Vector2f& size, const sf::Vector2f& position) {
     m_bounds.top = position.y;
 }
 
+Element::Element(const Element& element) {
+    m_build_count = element.m_build_count;
+    m_need_build = element.m_need_build;
+    m_need_correct_pos = element.m_need_correct_pos;
+    m_border_with_position = element.m_border_with_position;
+    m_border_width = element.m_border_width;
+    m_window_size = element.m_window_size;
+    m_origin = element.m_origin;
+    m_bounds = element.m_bounds;
+    m_border_color = element.m_border_color;
+}
+
+
 // PUBLIC SET
 void Element::to_center(Element& current, Element& target, const Indentation *indentation) {
-    auto border_shift = current.m_border_with_position ? current.m_border_width : 0;
+//    auto border_shift = current.m_border_with_position ? current.m_border_width : 0;
+    auto border_shift = current.m_border_width * 2;
 
     auto shift_y = (current.get_height() / 2.f) + (target.get_height() / 2.f) - border_shift; // TODO: is not required: (target.get_height() / 2.f) - border_shift
-    auto shift_x = (current.get_width() / 2.f) + (target.get_width() / 2.f) + border_shift;
+    auto shift_x = (current.get_width() / 2.f) + (target.get_width() / 2.f);
 
     target
         .set_before(XY, current)

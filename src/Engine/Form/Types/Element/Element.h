@@ -61,6 +61,7 @@ namespace form {
             public:
                 explicit Element(const sf::Vector2f& size);
                 explicit Element(const sf::Vector2f& size, const sf::Vector2f& position);
+                explicit Element(const Element& element);
                 virtual ~Element() = default;
 
                 virtual Element& build() = 0;
