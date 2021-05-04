@@ -1,12 +1,74 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<users lastId="1">
-    <user id="1">
-        <name>user_1</name>
-    </user>
-    <user id="2">
-        <name>user_2</name>
-        <score>
-
-        </score>
-    </user>
+<?xml version="1.0"?>
+<users lastId="3">
+	<user id="1">
+		<name>user1</name>
+		<scores>
+			<score tms="1620151443">
+				<level>1</level>
+				<door>202</door>
+				<time>3</time>
+				<steps>4</steps>
+				<victory>0</victory>
+			</score>
+		</scores>
+	</user>
+	<user id="2">
+		<name>user2</name>
+		<scores>
+			<score tms="1620127991">
+				<level>1</level>
+				<door>200</door>
+				<time>1234</time>
+				<steps>220</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1620127993">
+				<level>2</level>
+				<door>201</door>
+				<time>1235</time>
+				<steps>220</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1620127996">
+				<level>3</level>
+				<door>201</door>
+				<time>1235</time>
+				<steps>220</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1620150504">
+				<level>1</level>
+				<door>201</door>
+				<time>6</time>
+				<steps>5</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1620151260">
+				<level>1</level>
+				<door>200</door>
+				<time>10</time>
+				<steps>9</steps>
+				<victory>0</victory>
+			</score>
+		</scores>
+	</user>
+	<user id="3">
+		<name>user2|</name>
+		<scores>
+			<score tms="1620151335">
+				<level>1</level>
+				<door>201</door>
+				<time>11</time>
+				<steps>37</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1620151527">
+				<level>1</level>
+				<door>202</door>
+				<time>7</time>
+				<steps>23</steps>
+				<victory>0</victory>
+			</score>
+		</scores>
+	</user>
 </users>

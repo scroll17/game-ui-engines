@@ -4,25 +4,27 @@
   "map": [
     {
       "tail": [
-        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-        "B                                B     B",
-        "B                                B     B",
-        "B                                B     B",
-        "B          ZZZ                   B     B",
-        "B                                B     B",
-        "B                             BBBB     B",
-        "BBBB                             B     B",
-        "BBBB                             B     B",
-        "B              BB                BB    B",
-        "B              BB                      B",
-        "B              BB                      B",
-        "B    B         BB                      B",
-        "BBBBBBBBBBBBBBBBBBBBBBBBBDDDDDDBBBBBBBBB"
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "B                                          B     B",
+        "B                                          B     B",
+        "B                                          B     B",
+        "B          ZZZ                             B     B",
+        "B                                          B     B",
+        "B                                       BBBB     B",
+        "BBBB                                       B     B",
+        "BBBB                                       B     B",
+        "B              ZB                          BB    B",
+        "B              ZB                                B",
+        "B              ZB                                B",
+        "B    B         BB                                B",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBDDDDDDBBBBBBBBBBBBBBBBBBB"
       ],
-      "width": 40,
+      "width": 50,
       "height": 14,
       "doors": {
-        "<11-13,4>": 200
+        "<11-13,4>": 200,
+        "<11-13,5>": 202,
+        "<11-13,6>": 201
       },
       "floors": {
         "<25-30,13>": {

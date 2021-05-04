@@ -15,5 +15,6 @@
 
 #include "./Controllers/FocusController/FocusController.h"
 #include "./Controllers/CallSchedulerController/CallSchedulerController.h"
+#include "./Controllers/StrategiesController/StrategiesController.h"
 
 #endif //STUD_GAME_INDEX_ENGINE_H

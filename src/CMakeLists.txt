@@ -101,6 +101,8 @@ add_executable(stud-game
         Engine/Controllers/CallSchedulerController/CallSchedulerController.h
         Engine/Controllers/CallSchedulerController/SchedulerPlan/SchedulerPlan.cpp
         Engine/Controllers/CallSchedulerController/SchedulerPlan/SchedulerPlan.h
+        Engine/Controllers/StrategiesController/StrategiesController.cpp
+        Engine/Controllers/StrategiesController/StrategiesController.h
 
         Engine/Form/Templates/ErrorForm/ErrorForm.cpp
         Engine/Form/Templates/ErrorForm/ErrorForm.h
