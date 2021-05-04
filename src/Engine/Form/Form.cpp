@@ -12,27 +12,15 @@ void Form::turn_build_on() {
     m_need_build = false;
 }
 
-void Form::generate_loop_timer() {
-    if(m_loop_timer != nullptr) return;
-
-    m_loop_timer = new sf::Clock();
-}
-
 void Form::correct_fps() {
-    if(m_loop_timer == nullptr) throw std::runtime_error("Loop timer is not created");
-
-    sf::Int32 frame_duration = m_loop_timer->getElapsedTime().asMilliseconds();
+    sf::Int32 frame_duration = m_loop_timer.getElapsedTime().asMilliseconds();
     sf::Int32 time_to_sleep = static_cast<int>(1000.f / m_fps) - frame_duration;
 
     if (time_to_sleep > 0) {
         sf::sleep(sf::milliseconds(time_to_sleep));
     }
 
-    m_loop_timer->restart();
-}
-
-void Form::drop_loop_timer() {
-    delete m_loop_timer;
+    m_loop_timer.restart();
 }
 
 // PROTECTED GET
@@ -50,7 +38,7 @@ void Form::render(float fps, t_frame_cb& frame_cb) {
     if(this->is_need_build()) this->build();
 
     m_fps = fps;
-    this->generate_loop_timer();
+    m_loop_timer.restart();
 
     sf::Event event {};
     while (m_window->isOpen()) {
@@ -69,8 +57,6 @@ void Form::render(float fps, t_frame_cb& frame_cb) {
 
         this->correct_fps();
     }
-
-    this->drop_loop_timer();
 }
 
 // PUBLIC STATIC GET

@@ -60,11 +60,13 @@ void ErrorForm::build() {
         .move(Element::Y, 20)
         .build();
 
+    m_button->button_text_to_center();
+
     auto p_window = m_window;
 
     m_button->on_click(
       [](Element& el) {
-        auto button = dynamic_cast<Button&>(el);
+        auto& button = dynamic_cast<Button&>(el);
 
         button
             .set_bg_color(sf::Color::Black)

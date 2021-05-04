@@ -28,17 +28,15 @@ namespace form {
         protected:
             float m_fps { 60 };
 
+            sf::Clock m_loop_timer;
             sf::RenderWindow *m_window { nullptr };
-            sf::Clock *m_loop_timer { nullptr };
 
             virtual void draw() = 0;
             virtual void build() = 0;
 
             virtual void pollEvent(const sf::Event& event) = 0;
 
-            void generate_loop_timer();
             void correct_fps();
-            void drop_loop_timer();
 
             void turn_build_on();
             bool is_need_build() const;
