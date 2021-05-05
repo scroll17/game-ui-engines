@@ -334,12 +334,12 @@ void Player::calculate_animation(Axis axis, float elapsed_time) {
           * */
 
         if(m_dx > 0) {
-            m_rect_x.left = 18 + ((int)m_dx_current_frame * 100);
-            m_rect_x.width = 85;
+            m_rect_x.left = 11 + ((int)m_dx_current_frame * 100);
+            m_rect_x.width = 95;
         }
         if(m_dx < 0) {
-            m_rect_x.left = 18 + ((int)m_dx_current_frame * 100) + 100;
-            m_rect_x.width = -85;
+            m_rect_x.left = 11 + ((int)m_dx_current_frame * 100) + 100;
+            m_rect_x.width = -95;
         }
 
         m_sprite.setTextureRect(m_rect_x);

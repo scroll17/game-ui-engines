@@ -29,14 +29,14 @@ class Player1: public Player {
         ~Player1() = default;
 
         void init() override {
-            m_position = Vector2f(m_game_map.get_block_size() * 27, m_game_map.get_block_size() * 10.5);
+            m_position = Vector2f(m_game_map.get_block_size() * 2, m_game_map.get_block_size() * 2);
 
-            m_rect_x = IntRect(16, 225, 85, 85);
+            m_rect_x = IntRect(11, 212, 95, 75);
             m_rect_y = IntRect(20, 5, 90, 95);
 
             const auto& paddings = m_game_map.get_paddings();
 
-            m_texture.loadFromFile("/home/user/Code/stud-game/data/textures/user3.png");
+            m_texture.loadFromFile("/home/user/Code/stud-game/data/textures/user.png");
 
             m_sprite.setTexture(m_texture);
             m_sprite.setTextureRect(m_rect_x);
@@ -83,18 +83,18 @@ int main() {
         focus_controller.set_window(&window);
 
         /// GLOBAL VAR
-        int g_selected_level = -1;
-        string g_username {};
-        pugi::xml_node current_user {};
+//        int g_selected_level = -1;
+//        string g_username {};
+//        pugi::xml_node current_user {};
 
         File users_xml("./data/xml/users.xml");
         pugi::xml_document xml_doc = FileReader::read_xml(users_xml);
 
-//        int g_selected_level = 1;
-//        string g_username { "user2" };
-//        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
-//            return node.child_value("name") == g_username;
-//        });
+        int g_selected_level = 1;
+        string g_username { "user2" };
+        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
+            return node.child_value("name") == g_username;
+        });
 
         /// STRATEGIES
 
@@ -962,6 +962,7 @@ int main() {
             const int BLOCK_SIZE = 14;
             const int MINI_BLOCK_SIZE = 4;
             const int MAX_BLOCK_VISING_X = 24;
+            const int MAX_BLOCK_VISING_Y = 20;
 
             const time_t start_game_time = time(0);
 
@@ -1155,6 +1156,7 @@ int main() {
             mini_map.set_windows_size(window.getSize());
             mini_map.load_tile(tail_map, current_map["width"], current_map["height"]);
             mini_map.set_max_block_vising_x(MAX_BLOCK_VISING_X);
+            mini_map.set_max_block_vising_y(MAX_BLOCK_VISING_Y);
             mini_map.set_paddings({ 5, 5 });
 
             Player1 player1(map);
@@ -1475,7 +1477,7 @@ int main() {
             return true;
         });
 
-        strategies.start();
+        strategies.start(5);
 
         xml_doc.save_file("/home/user/Code/stud-game/data/xml/users.xml");
 
