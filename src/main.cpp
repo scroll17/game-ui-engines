@@ -83,18 +83,18 @@ int main() {
         focus_controller.set_window(&window);
 
         /// GLOBAL VAR
-//        int g_selected_level = -1;
-//        string g_username {};
-//        pugi::xml_node current_user {};
+        int g_selected_level = -1;
+        string g_username {};
+        pugi::xml_node current_user {};
 
         File users_xml("./data/xml/users.xml");
         pugi::xml_document xml_doc = FileReader::read_xml(users_xml);
 
-        int g_selected_level = 1;
-        string g_username { "user2" };
-        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
-            return node.child_value("name") == g_username;
-        });
+//        int g_selected_level = 1;
+//        string g_username { "user2" };
+//        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
+//            return node.child_value("name") == g_username;
+//        });
 
         /// STRATEGIES
 
@@ -389,7 +389,7 @@ int main() {
             bool go_start = false;
             bool go_scores = false;
             bool go_exit = false;
-            bool go_help = false; // TODO
+            bool go_help = false;
 
             form::types::Text username_text { "Имя игрока: " };
             username_text
@@ -527,6 +527,10 @@ int main() {
 
                 window.display();
 
+                if(go_help) {
+                    strategies.next(6);
+                    break;
+                }
                 if(go_start) {
                     strategies.next(4);
                     break;
@@ -1477,7 +1481,168 @@ int main() {
             return true;
         });
 
-        strategies.start(5);
+        // 7. help
+        strategies.register_strategy([&]() -> bool {
+            bool go_back = false;
+
+            int rect_w = 500;
+            int rect_h = 250;
+            RectangleShape rectangle(Vector2f(rect_w, rect_h));
+            rectangle.setOutlineThickness(2);
+            rectangle.setOutlineColor(sf::Color::Black);
+            rectangle.setFillColor(sf::Color(192,192,192));
+            rectangle.setPosition({
+                (WINDOW_W / 2.f) - (rect_w / 2.f),
+                (WINDOW_H / 2.f) - (rect_h / 2.f)
+            });
+
+            const auto& rect_bounds = rectangle.getGlobalBounds();
+
+            form::types::Text help_text { "Помощь" };
+            help_text
+              .set_text_size(28)
+              .set_color(sf::Color::Black)
+              .set_window_size(window.getSize())
+              .correct_position(true)
+              .to_center(Element::X)
+              .move(Element::X, -10)
+              .move(Element::Y, 20)
+              .build();
+
+            form::types::Text prompt1_text { "1. Нажмите 'ESC' во время игры что бы поставить игру на паузу." };
+            prompt1_text
+              .set_text_size(16)
+              .set_color(sf::Color::Black)
+              .set_window_size(window.getSize())
+              .correct_position(true)
+              .move(Element::X, rect_bounds.left + 20)
+              .move(Element::Y, rect_bounds.top + 20)
+              .build();
+
+            form::types::Text prompt2_text { prompt1_text };
+            prompt2_text
+              .set_text(string("2.        - это дверь."))
+              .set_after(Element::Y, prompt1_text)
+              .move(Element::Y, 15)
+              .build();
+
+            form::types::Text prompt3_text { prompt2_text };
+            prompt3_text
+              .set_text(string("3.        - это лестница на другой этаж."))
+              .set_after(Element::Y, prompt2_text)
+              .move(Element::Y, 15)
+              .build();
+
+            form::types::Text prompt4_text { prompt3_text };
+            prompt4_text
+              .set_text(string("4. Розработчики: Золотаренко Д. / Мыкал М."))
+              .set_after(Element::Y, prompt3_text)
+              .move(Element::Y, 15)
+              .build();
+
+            RectangleShape door_rect(Vector2f(15, 15));
+            door_rect.setFillColor(sf::Color::Yellow);
+            door_rect.setPosition({
+                rect_bounds.left + 38,
+                rect_bounds.top + 55
+            });
+
+            RectangleShape floor_rect(Vector2f(15, 15));
+            floor_rect.setFillColor(sf::Color::Cyan);
+            floor_rect.setPosition({
+                rect_bounds.left + 38,
+                rect_bounds.top + 85
+            });
+
+            Button back_button {{100, 40 }, "Назад" };
+            back_button
+              .set_text_size(20)
+              .set_bg_color(sf::Color(192,192,192))
+              .set_window_size(window.getSize())
+              .correct_position(true)
+              .set_border_color(sf::Color::Black)
+              .set_border_width(2)
+              .to_center(Element::X)
+              .move(Element::Y, 345)
+              .build();
+
+            back_button.button_text_to_center();
+
+            back_button.on_hover(
+              [](Element& el) {
+                 el
+                  .set_border_width(3)
+                  .build();
+              },
+              [](Element& el) {
+                 el
+                  .set_border_width(2)
+                  .build();
+              }
+            );
+
+            back_button.on_click(
+             [](Element& el) {
+                auto& button = dynamic_cast<Button&>(el);
+
+                button
+                  .set_bg_color(sf::Color::Black)
+                  .set_text_color(sf::Color(192,192,192))
+                  .build();
+                },
+             [&](Element& el) {
+                auto& button = dynamic_cast<Button&>(el);
+
+                 button
+                  .set_bg_color(sf::Color(192,192,192))
+                  .set_text_color(sf::Color::Black)
+                  .build();
+
+                  go_back = true;
+                }
+             );
+
+            while (window.isOpen()) {
+                /// EVENTS
+                Event event {};
+                while (window.pollEvent(event)) {
+                    if (event.type == Event::Closed) {
+                        window.close();
+                        return false;
+                    }
+
+                    data_utils::MousePosition::input(mouse_position, window, event);
+                    Button::input(back_button, window, event, mouse_position.get_prev_pos());
+                }
+
+                /// DRAW
+                window.clear(sf::Color(192, 192, 192));
+
+                window.draw(rectangle);
+
+                prompt1_text.draw(window);
+                prompt2_text.draw(window);
+                prompt3_text.draw(window);
+                prompt4_text.draw(window);
+
+                window.draw(door_rect);
+                window.draw(floor_rect);
+
+                help_text.draw(window);
+                back_button.draw(window);
+
+                window.display();
+
+                if(go_back) {
+                    strategies.next(2);
+                    break;
+                }
+            }
+
+            return true;
+        });
+
+        strategies.start();
 
         xml_doc.save_file("/home/user/Code/stud-game/data/xml/users.xml");
 
