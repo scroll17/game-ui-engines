@@ -8,13 +8,13 @@
 #include <vector>
 #include <cmath>
 #include "pugixml.hpp"
-#include <sstream>
 #include <ctime>
 #include <iomanip> // put_time
+#include <sstream>  // ostringstream
 
 #include "./DataTypes/index.h"
 #include "./Engine/index.h"
-
+#include "./utils/index.h"
 
 using json = nlohmann::json;
 
@@ -84,19 +84,18 @@ int main() {
         focus_controller.set_window(&window);
 
         /// GLOBAL VAR
-//        int g_selected_level = -1;
-        int g_selected_level = 1;
+        int g_selected_level = -1;
+        string g_username {};
+        pugi::xml_node current_user {};
 
-        // TODO
-//        string g_username {};
-        string g_username { "user2" };
         File users_xml("./data/xml/users.xml");
-
         pugi::xml_document xml_doc = FileReader::read_xml(users_xml);
-//        pugi::xml_node current_user {};
-        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
-            return node.child_value("name") == g_username;
-        });
+
+//        int g_selected_level = 1;
+//        string g_username { "user2" };
+//        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
+//            return node.child_value("name") == g_username;
+//        });
 
         /// STRATEGIES
 
@@ -320,6 +319,13 @@ int main() {
 
                     if(event.key.code == 13) {
                         string username = input.get_entered_text();
+
+                        const auto &size = username.size();
+                        auto last_pos = size > 0 ? size - 1 : 0;
+
+                        if (username[last_pos] == '|') {
+                            username.erase(last_pos, 1);
+                        }
 
                         if(username.size() >= 3) {
                             g_username = username;
@@ -964,6 +970,7 @@ int main() {
             bool game_stop = false;
 
             bool room_found = false;
+            bool player_loose = false;
             bool can_change_floor = false;
             bool can_open_door = false;
 
@@ -981,22 +988,28 @@ int main() {
             int current_floor = utils::array::gen_random(0, level_map.size() - 1);
             int player_lives = 3;
 
-            vector<float> all_doors;
-            for(const auto& lvl_map : level_map) {
-                if(lvl_map["doors"].is_object()) {
-                    for(const auto& el: lvl_map["doors"]) {
-                        all_doors.push_back(float(el));
+            string need_find_door {};
+            {
+                vector<string> all_doors;
+                for(const auto& lvl_map : level_map) {
+                    if(lvl_map["doors"].is_object()) {
+                        for(const auto& el: lvl_map["doors"]) {
+                            all_doors.push_back(to_string(el));
+                        }
                     }
                 }
-            }
 
-            int need_find_door = all_doors.at(utils::array::gen_random(0, all_doors.size() - 1));
+                need_find_door = all_doors.at(utils::array::gen_random(0, all_doors.size() - 1));
+                need_find_door.replace(0, 1, "");
+                need_find_door.replace(need_find_door.size() - 1, need_find_door.size(), "");
+            }
 
             json current_map = level_map[current_floor];
             string* tail_map = utils::string::json_arr_to_string(current_map["tail"], current_map["height"]);
 
             form::types::Text door_text { "Нажмите [x] что бы открыть дверь." };
             door_text
+              .set_color(sf::Color::White)
               .set_text_size(22)
               .set_window_size(window.getSize())
               .correct_position(true)
@@ -1013,6 +1026,7 @@ int main() {
             const string map_level_str = "Текущий этаж: ";
             form::types::Text map_level_text { map_level_str + "0" };
             map_level_text
+              .set_color(sf::Color::White)
               .set_text_size(14)
               .set_window_size(window.getSize())
               .correct_position(true)
@@ -1020,9 +1034,10 @@ int main() {
               .move(Element::X, 5)
               .build();
 
-            const string need_door_str = "#" + to_string(need_find_door);
+            const string need_door_str = "Дверь: " + need_find_door;
             form::types::Text need_door_text { need_door_str };
             need_door_text
+              .set_color(sf::Color::White)
               .set_text_size(20)
               .set_window_size(window.getSize())
               .correct_position(true)
@@ -1033,6 +1048,7 @@ int main() {
             const string player_count_steps_str = "Колличество шагов: ";
             form::types::Text player_count_steps_text { player_count_steps_str + "0" };
             player_count_steps_text
+             .set_color(sf::Color::White)
              .set_text_size(14)
              .set_window_size(window.getSize())
              .correct_position(true)
@@ -1047,6 +1063,24 @@ int main() {
               .set_text(player_attempts_str + to_string(player_lives))
               .set_before(Element::Y, player_count_steps_text)
               .move(Element::Y, -5)
+              .build();
+
+            const string victory_game_str = "Вы выиграли";
+            form::types::Text victory_game_text { victory_game_str };
+            victory_game_text
+              .set_color(sf::Color::White)
+              .set_text_size(22)
+              .set_window_size(window.getSize())
+              .correct_position(true)
+              .to_center(Element::XY)
+              .move(Element::Y, -(100 / 2.f) + 20)
+              .move(Element::X, -10)
+              .build();
+
+            const string loose_game_str = "Вы проиграли";
+            form::types::Text loose_game_text { victory_game_text };
+            loose_game_text
+              .set_text(loose_game_str)
               .build();
 
             const string stop_game_str = "СТОП";
@@ -1082,7 +1116,7 @@ int main() {
 
             exit_button.button_text_to_center();
 
-             for(auto& button: vector<Button*> { &continue_button, &exit_button }) {
+            for(auto& button: vector<Button*> { &continue_button, &exit_button }) {
                  button->on_click(
                   [](Element& el) {},
                   [&game_stop, &continue_button, &exit_button, &go_exit](Element& el) {
@@ -1107,7 +1141,7 @@ int main() {
                          .build();
                     }
                 );
-             }
+            }
 
             GameMap map(BLOCK_SIZE);
             map.set_windows_size(window.getSize());
@@ -1143,6 +1177,40 @@ int main() {
                 map.calculate_offset(player1.get_position());
             };
 
+            const auto& check_found_door = [&](const string& door) {
+                if(door == need_find_door) {
+                    room_found = true;
+                    game_stop = true;
+
+                    exit_button
+                      .set_size({ 100, 30 })
+                      .set_border_color(sf::Color::White)
+                      .to_center(Element::X)
+                      .set_after(Element::Y, victory_game_text)
+                      .move(Element::Y, 25)
+                      .to_center(Element::X)
+                      .build();
+
+                    exit_button.button_text_to_center();
+                } else {
+                    player_lives--;
+                    if(player_lives == 0) {
+                        game_stop = true;
+                        player_loose = true;
+
+                        exit_button
+                          .set_size({ 100, 30 })
+                          .set_border_color(sf::Color::White)
+                          .set_after(Element::Y, victory_game_text)
+                          .move(Element::Y, 25)
+                          .to_center(Element::X)
+                          .build();
+
+                        exit_button.button_text_to_center();
+                    }
+                }
+            };
+
             const auto& save_player_result = [&]() -> void {
                 // XML: save level
                 player_score
@@ -1154,7 +1222,7 @@ int main() {
                 player_score
                   .append_child("door")
                   .append_child(pugi::node_pcdata)
-                  .set_value(to_string(need_find_door).c_str());
+                  .set_value(need_find_door.c_str());
 
                 // XML: save time
                 player_score
@@ -1181,6 +1249,15 @@ int main() {
             RectangleShape foreground(Vector2f(WINDOW_W, WINDOW_H));
             foreground.setFillColor(sf::Color(192,192,192, 128));
 
+            float game_result_rect_w = 300;
+            float game_result_rect_h = 100;
+            RectangleShape game_result_rect(Vector2f(game_result_rect_w, game_result_rect_h));
+            game_result_rect.setFillColor(sf::Color::Black);
+            game_result_rect.setPosition(
+               (WINDOW_W / 2.f) - (game_result_rect_w / 2.f),
+               (WINDOW_H / 2.f) - (game_result_rect_h / 2.f)
+            );
+
             RectangleShape rectangle(Vector2f(BLOCK_SIZE, BLOCK_SIZE));
             rectangle.setFillColor(Color::White);
 
@@ -1191,10 +1268,13 @@ int main() {
                     rect->setFillColor(sf::Color::White);
                 });
                 mini_map.register_draw_element('B', mini_rectangle, [](sf::RectangleShape* rect) -> void {
-                    rect->setFillColor(sf::Color::Green);
+                    rect->setFillColor(sf::Color(192, 192, 192));
                 });
                 mini_map.register_draw_element('Z', mini_rectangle, [](sf::RectangleShape* rect) -> void {
                     rect->setFillColor(sf::Color::Yellow);
+                });
+                mini_map.register_draw_element('D', mini_rectangle, [](sf::RectangleShape* rect) -> void {
+                    rect->setFillColor(sf::Color::Cyan);
                 });
             }
 
@@ -1203,7 +1283,7 @@ int main() {
                     rect->setFillColor(sf::Color::White);
                 });
                 map.register_draw_element('B', rectangle, [](sf::RectangleShape* rect) -> void {
-                    rect->setFillColor(sf::Color::Black);
+                    rect->setFillColor(sf::Color(192, 192, 192));
                 });
                 map.register_draw_element('Z', rectangle, [](sf::RectangleShape* rect) -> void {
                     rect->setFillColor(sf::Color::Yellow);
@@ -1254,7 +1334,7 @@ int main() {
 
                     if(event.type == sf::Event::KeyPressed) {
                         if(event.key.code == sf::Keyboard::Escape) {
-                            game_stop = !game_stop;
+                            if(!player_loose && !room_found) game_stop = !game_stop;
                         }
 
                         if(event.key.code == sf::Keyboard::Z) {
@@ -1306,8 +1386,6 @@ int main() {
                     can_change_floor = true;
                 });
 
-                window.clear(Color::Yellow);
-
                 map.calculate_offset(player1.get_position());
 
                 auto player_on_map = map.get_current_block(player1.get_position(), player1.get_bounds());
@@ -1327,16 +1405,7 @@ int main() {
                     const auto& door = current_map["doors"][last_door_key];
 
                     if(!door.is_null()) {
-                        float door_val = door;
-
-                        if(door_val == need_find_door) {
-                            // TODO
-                            cout << "-- OK --" << endl;
-                        } else {
-                            cout << "-- FAIL --" << endl;
-
-                            player_lives--;
-                        }
+                        check_found_door(door);
                     }
                 }
 
@@ -1348,6 +1417,8 @@ int main() {
                 }
 
                 /// DRAW
+                window.clear(Color::Black);
+
                 map.draw(window);
                 mini_map.draw(window, &player_on_map);
 
@@ -1377,7 +1448,19 @@ int main() {
 
                 window.draw(player1.get_sprite());
 
-                if(game_stop) {
+                if(room_found && game_stop) {
+                    window.draw(foreground);
+                    window.draw(game_result_rect);
+
+                    victory_game_text.draw(window);
+                    exit_button.draw(window);
+                } else if(player_loose && game_stop) {
+                    window.draw(foreground);
+                    window.draw(game_result_rect);
+
+                    loose_game_text.draw(window);
+                    exit_button.draw(window);
+                } else if(game_stop) {
                     window.draw(foreground);
                     stop_game_text.draw(window);
 
@@ -1409,331 +1492,6 @@ int main() {
     } catch (...) {
         cout << "Unknown error = " << endl;
     }
-
-    return EXIT_SUCCESS;
-}
-
-int main_2() {
-    FileReader f_r("./data/json/level_1.json");
-    const json level_data = f_r.to_json();
-    const json& level_map = level_data["map"];
-
-    int current_floor = 0;
-    int player_lives = 3;
-
-    vector<float> all_doors;
-    for(size_t i = 0; i < level_map.size(); i++) {
-        if(level_map[i]["doors"].is_object()) {
-            for(const auto& el: level_map[i]["doors"]) {
-                all_doors.push_back(float(el));
-            }
-        }
-    }
-
-    int find_door = all_doors.at(utils::array::gen_random(0, all_doors.size() - 1));
-
-    json current_map = level_map[current_floor];
-    string* tail_map = utils::string::json_arr_to_string(current_map["tail"], current_map["height"]);
-
-    const int BLOCK_SIZE = 14;
-    const int MINI_BLOCK_SIZE = 4;
-    const int MAX_BLOCK_VISING_X = 24;
-
-    const int WINDOW_W = 600;
-    const int WINDOW_H = 400;
-
-    Paddings PADDINGS {
-      0,
-      (WINDOW_H / 2) - ((int(current_map["height"]) * BLOCK_SIZE) / 2)
-    };
-
-    RenderWindow window( VideoMode(WINDOW_W, WINDOW_H), "Test!");
-
-    form::types::Text door_text { "Нажмите [x] что бы открыть дверь." };
-    door_text
-      .set_text_size(22)
-      .set_window_size(window.getSize())
-      .correct_position(true)
-      .to_center(Element::XY)
-      .to(Element::Angle::Down)
-      .move(Element::Y, -20)
-      .build();
-
-    form::types::Text floor_text { door_text };
-    floor_text
-      .set_text(string("Нажмите [z] что бы сменить этаж."))
-      .build();
-
-    const string map_level_str = "Текущий этаж: ";
-    form::types::Text map_level_text { map_level_str + "0" };
-    map_level_text
-      .set_text_size(14)
-      .set_window_size(window.getSize())
-      .correct_position(true)
-      .move(Element::Y, int(current_map["height"]) * MINI_BLOCK_SIZE + 10)
-      .move(Element::X, 5)
-      .build();
-
-    const string player_count_steps_str = "Колличество шагов: ";
-    form::types::Text player_count_steps_text { player_count_steps_str + "0" };
-    player_count_steps_text
-     .set_text_size(14)
-     .set_window_size(window.getSize())
-     .correct_position(true)
-     .to(Element::Angle::Right)
-     .move(Element::X, 25)
-     .move(Element::Y, 20)
-     .build();
-
-    const string player_attempts_str = "Колличество попыток: ";
-    form::types::Text player_attempts_text { player_count_steps_text };
-    player_attempts_text
-      .set_text(player_attempts_str + to_string(player_lives))
-      .set_before(Element::Y, player_count_steps_text)
-      .move(Element::Y, -5)
-      .build();
-
-    GameMap map(BLOCK_SIZE);
-    map.set_windows_size(window.getSize());
-    map.load_tile(tail_map, current_map["width"], current_map["height"]);
-    map.set_paddings(PADDINGS);
-    map.register_collision_cells("BZD");
-
-    GameMap mini_map(MINI_BLOCK_SIZE);
-    mini_map.set_windows_size(window.getSize());
-    mini_map.load_tile(tail_map, current_map["width"], current_map["height"]);
-    mini_map.set_max_block_vising_x(MAX_BLOCK_VISING_X);
-    mini_map.set_paddings({ 5, 5 });
-
-    Player1 player1(map);
-    player1.init();
-
-    const auto& reload_current_map = [&map, &mini_map, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
-        current_floor = new_floor;
-        current_map = level_map[current_floor];
-
-        delete[] tail_map;
-        tail_map = utils::string::json_arr_to_string(current_map["tail"], current_map["height"]);
-
-        map.load_tile(tail_map, current_map["width"], current_map["height"]);
-        mini_map.load_tile(tail_map, current_map["width"], current_map["height"]);
-    };
-
-    const auto& update_player_pos = [&player1, &map](float x, float y) {
-        {
-//        auto begin = floor_key.begin();
-//        auto end = floor_key.end();
-//
-//        string str(begin + 1, end - 1);
-//        int comma_pos = str.find(',');
-//
-//        auto x = str.substr(0, comma_pos);
-//        auto y = str.substr(comma_pos + 1, str.size() - comma_pos);
-//
-//        size_t x_block, y_block;
-//        if(x.find('-' != -1)) {
-//            size_t x_comma_pos = x.find('-');
-//            size_t x_start = std::stoi(x.substr(0, x_comma_pos));
-//            size_t x_end = std::stoi(x.substr(x_comma_pos + 1, x.size() - x_comma_pos));
-//
-//            y_block = std::stoi(y);
-//            x_block = (x_start + x_end) / 2;
-//        } else {
-//            size_t y_comma_pos = x.find('-');
-//            size_t y_start = std::stoi(y.substr(0, y_comma_pos));
-//            size_t y_end = std::stoi(y.substr(y_comma_pos + 1, y.size() - y_comma_pos));
-//
-//            x_block = std::stoi(x);
-//            y_block = (y_start + y_end) / 2;
-//        }
-        }
-
-        player1.set_position(x * map.get_block_size(), y * map.get_block_size());
-        map.calculate_offset(player1.get_position());
-    };
-
-    RectangleShape rectangle(Vector2f(BLOCK_SIZE, BLOCK_SIZE));
-    rectangle.setFillColor(Color::White);
-
-    RectangleShape mini_rectangle(Vector2f(MINI_BLOCK_SIZE, MINI_BLOCK_SIZE));
-
-    {
-        mini_map.register_draw_element(' ', mini_rectangle, [](sf::RectangleShape* rect) -> void {
-            rect->setFillColor(sf::Color::White);
-        });
-        mini_map.register_draw_element('B', mini_rectangle, [](sf::RectangleShape* rect) -> void {
-            rect->setFillColor(sf::Color::Green);
-        });
-        mini_map.register_draw_element('Z', mini_rectangle, [](sf::RectangleShape* rect) -> void {
-            rect->setFillColor(sf::Color::Yellow);
-        });
-    }
-
-    {
-        map.register_draw_element(' ', rectangle, [](sf::RectangleShape* rect) -> void {
-            rect->setFillColor(sf::Color::White);
-        });
-        map.register_draw_element('B', rectangle, [](sf::RectangleShape* rect) -> void {
-            rect->setFillColor(sf::Color::Black);
-        });
-        map.register_draw_element('Z', rectangle, [](sf::RectangleShape* rect) -> void {
-            rect->setFillColor(sf::Color::Yellow);
-        });
-        map.register_draw_element('D', rectangle, [](sf::RectangleShape* rect) -> void {
-            rect->setFillColor(sf::Color::Cyan);
-        });
-    }
-
-    // TODO
-    mini_map.on_draw(
-      [&player1, &mini_rectangle, &map](size_t y, size_t x, char cell, GameMap& mini_map) {
-          auto player_on_map = map.get_current_block(player1.get_position(), player1.get_bounds());
-          int player_x = player_on_map.first;
-          int player_y = player_on_map.second;
-
-
-          if(player_y == y && player_x == x) {
-              mini_rectangle.setFillColor(Color::Red);
-          }
-      },
-      [](size_t y, size_t x, char cell, GameMap& map) {}
-    );
-
-    bool can_change_floor = false;
-    bool can_open_door = false;
-
-    auto key_z_pressed = false;
-    auto key_x_pressed = false;
-
-    Clock clock;
-    while (window.isOpen()) {
-        float time = clock.getElapsedTime().asMicroseconds();
-        clock.restart();
-
-        time = time / 600;
-
-        can_open_door = false;
-        can_change_floor = false;
-
-        key_z_pressed = false;
-        key_x_pressed = false;
-
-        /// EVENTS
-        Event event {};
-        while (window.pollEvent(event)) {
-            if (event.type == Event::Closed) window.close();
-
-            if(event.type == sf::Event::KeyPressed) {
-                if(event.key.code == sf::Keyboard::Z) {
-                    key_z_pressed = true;
-                }
-
-                if(event.key.code == sf::Keyboard::X) {
-                    key_x_pressed = true;
-                }
-            }
-
-            player1.run(event.key.shift);
-        }
-
-        /// GAME
-        Player::move_input(player1);
-
-        player1.update(time);
-
-        string last_door_key {};
-        player1.around_blocks('Z', [&](auto& block) -> void {
-            auto last_axis = GameMap::Axis::X;
-            auto door_range = map.find_cell_sequence(block, GameMap::Axis::X);
-
-            if(door_range.get_start() == door_range.get_end()) {
-                door_range = map.find_cell_sequence(block, last_axis = GameMap::Axis::Y);
-            }
-
-            last_door_key = door_range.to_string(last_axis);
-            can_open_door = true;
-        });
-
-        string last_floor_key {};
-        player1.around_blocks('D', [&](auto& block) -> void {
-            auto last_axis = GameMap::Axis::X;
-            auto floor_range = map.find_cell_sequence(block, last_axis);
-
-            if(floor_range.get_start() == floor_range.get_end()) {
-                floor_range = map.find_cell_sequence(block, last_axis = GameMap::Axis::Y);
-            }
-
-            last_floor_key = floor_range.to_string(last_axis);
-            can_change_floor = true;
-        });
-
-        window.clear(Color::Yellow);
-
-        map.calculate_offset(player1.get_position());
-
-        auto player_on_map = map.get_current_block(player1.get_position(), player1.get_bounds());
-
-        if(key_z_pressed && can_change_floor) {
-            const auto& floor = current_map["floors"][last_floor_key];
-
-            if(!floor.is_null()) {
-                int new_floor = floor["val"];
-                json new_player_pos = floor["pos"];
-
-                reload_current_map(new_floor);
-                update_player_pos(new_player_pos[0], new_player_pos[1]);
-            }
-        }
-
-        if(key_x_pressed && can_open_door) {
-            const auto& door = current_map["doors"][last_door_key];
-
-            if(!door.is_null()) {
-                float door_val = door;
-
-                if(door_val == find_door) {
-                    // TODO
-                    cout << "-- OK --" << endl;
-                } else {
-                    cout << "-- FAIL --" << endl;
-
-                    player_lives--;
-                }
-            }
-        }
-
-        /// DRAW
-        map.draw(window);
-        mini_map.draw(window, &player_on_map);
-
-        if(can_open_door) {
-            door_text.draw(window);
-        }
-        if(can_change_floor) {
-            floor_text.draw(window);
-        }
-
-        map_level_text
-          .set_text(map_level_str + std::to_string(current_floor + 1))
-          .build();
-        map_level_text.draw(window);
-
-        player_count_steps_text
-          .set_text(player_count_steps_str + std::to_string(int(player1.get_steps_count() / 2)))
-          .build();
-        player_count_steps_text.draw(window);
-
-        player_attempts_text
-          .set_text(player_attempts_str + to_string(player_lives))
-          .build();;
-        player_attempts_text.draw(window);
-
-        window.draw(player1.get_sprite());
-        window.display();
-    }
-
-
-    delete[] tail_map;
 
     return EXIT_SUCCESS;
 }

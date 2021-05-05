@@ -243,6 +243,9 @@ ExtendedRange GameMap::find_cell_sequence(const pair<size_t, size_t>& start_bloc
 
             return ExtendedRange(first_y, last_y, start_x).include_end(true);
         }
+        default: {
+            throw std::runtime_error("invalid axis");
+        }
     }
 }
 
