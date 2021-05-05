@@ -1,0 +1,28 @@
+{
+  "name": "Корпус 2",
+  "map": [
+    {
+      "tail": [
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "B     BBBBBBBBBBBBBBBBBBBBBBBBBBBB     B",
+        "B            BBBBBBBBBBBB        B     B",
+        "B               BBBBBB           B     B",
+        "B                 BB             B     B",
+        "B                                B     B",
+        "B   BBBBD                        B     B",
+        "BBBBBBBBD        ZZZZ            B     B",
+        "BBBBBBBBD                        B     B",
+        "B   BBBBD                              B",
+        "B                                      B",
+        "B                                      B",
+        "B                                      B",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBDDDDDDDBBBBBBBB"
+      ],
+      "width": 40,
+      "height": 14,
+      "doors": {
+        "<17-20,7>": "205.1"
+      }
+    }
+  ]
+}
