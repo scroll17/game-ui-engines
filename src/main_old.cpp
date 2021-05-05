@@ -616,14 +616,6 @@ class Player {
         }
 };
 
-class Strategy {
-
-};
-
-class StrategiesController {
-
-};
-
 int main() {
     RenderWindow window( VideoMode(WINDOW_W, WINDOW_H), "Test!");
     using namespace form::types;

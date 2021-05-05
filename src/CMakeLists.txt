@@ -38,7 +38,6 @@ endif()
 # </pugixml>
 
 add_executable(stud-game
-#        main_old.cpp
         main.cpp
 
         Constants/Constants.cpp
