@@ -5,8 +5,8 @@
 #ifndef STUD_GAME_INDEX_UTILS_H
 #define STUD_GAME_INDEX_UTILS_H
 
-#include "./time/time.h"
-#include "./array/array.h"
 #include "./string/string.h"
+#include "./array/array.h"
+#include "./time/time.h"
 
 #endif //STUD_GAME_INDEX_UTILS_H
