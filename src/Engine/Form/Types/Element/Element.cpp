@@ -271,7 +271,7 @@ Element& Element::to(const Element::Angle& angel) {
 
 Element& Element::move(const Element::Axis& axis, const float& pixels) {
     if(axis == XY) {
-        throw std::runtime_error("XY is invalid argument");
+        throw Exception(Exception::InvalidArgument, "XY is invalid argument");
     }
 
     if(axis == X) {
@@ -343,7 +343,7 @@ void Element::calculate_position_with_border(const float& prev_width, const floa
 
 void Element::change_position(const Element::Axis& axis, const float& pixels) {
     if(axis == XY) {
-        throw std::runtime_error("XY is invalid argument");
+        throw Exception(Exception::InvalidArgument, "XY is invalid argument");
     }
 
     this->set_origin_to_center(axis);

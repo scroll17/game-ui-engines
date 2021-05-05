@@ -12,8 +12,6 @@
 
 using namespace std;
 
-// TODO >= 10 species
-
 namespace data_types {
 
     class Exception final: public std::exception {
@@ -24,7 +22,12 @@ namespace data_types {
                 FileNotExist,
                 FileNotOpen,
                 ElementNotBuild,
-                NonExistentPosition
+                NonExistentPosition,
+                RequiredVariableMissing,
+                ActionBeforeRequired,
+                InvalidArgument,
+                UnknownArgument,
+                CannotRender
             };
 
             explicit Exception(Type type, string message = "");

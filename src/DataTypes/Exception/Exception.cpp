@@ -14,6 +14,11 @@ static map<Exception::Type, string> EXCEPTION_DETAILS {
   { Exception::Type::FileNotOpen, "File not open." },
   { Exception::Type::ElementNotBuild, "Element not built yet." },
   { Exception::Type::NonExistentPosition, "Position in the array does not exist." },
+  { Exception::Type::RequiredVariableMissing, "Required variable missing." },
+  { Exception::Type::ActionBeforeRequired, "Action before required." },
+  { Exception::Type::InvalidArgument, "Invalid argument." },
+  { Exception::Type::UnknownArgument, "Unknown argument." },
+  { Exception::Type::CannotRender, "Cannot render." },
 };
 
 Exception::Exception(Exception::Type type, string message): m_error_type(type), m_custom_error_message(std::move(message)) {}

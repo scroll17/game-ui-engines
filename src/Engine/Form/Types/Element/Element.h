@@ -6,6 +6,9 @@
 #define STUD_GAME_ELEMENT_H
 
 #include <SFML/Graphics.hpp>
+#include "../../../DataTypes/Exception/Exception.h"
+
+using namespace data_types;
 
 namespace form {
     namespace types {

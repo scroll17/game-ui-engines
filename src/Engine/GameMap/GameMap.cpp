@@ -108,7 +108,7 @@ size_t GameMap::on_draw(const GameMap::t_draw_cb& cb, const GameMap::t_draw_cb& 
 }
 
 bool GameMap::remove_on_draw(size_t pos) {
-    if(pos % 2 != 0) throw std::runtime_error("Invalid argument");
+    if(pos % 2 != 0) throw Exception(Exception::InvalidArgument);
 
     if(pos > (m_on_draw_callbacks.size() - 2)) {
         throw data_types::Exception(data_types::Exception::NonExistentPosition);
@@ -187,7 +187,7 @@ ExtendedRange GameMap::find_cell_sequence(const pair<size_t, size_t>& start_bloc
     auto tail_height = this->get_height();
 
     if(start_block.first > tail_width || start_block.second > tail_height) {
-        throw std::runtime_error("Invalid start block position");
+        throw Exception(Exception::InvalidArgument, "Invalid start block position");
     }
 
     auto start_x = start_block.first;
@@ -244,19 +244,19 @@ ExtendedRange GameMap::find_cell_sequence(const pair<size_t, size_t>& start_bloc
             return ExtendedRange(first_y, last_y, start_x).include_end(true);
         }
         default: {
-            throw std::runtime_error("invalid axis");
+            throw Exception(Exception::InvalidArgument, "invalid axis");
         }
     }
 }
 
 char GameMap::at_tile(size_t y, size_t x) const {
-    if(m_tile == nullptr) throw std::runtime_error("before need load tile");
+    if(m_tile == nullptr) throw Exception(Exception::ActionBeforeRequired, "before need load tile");
 
     if(y > m_tile_height) {
-        throw std::runtime_error("invalid Y block");
+        throw Exception(Exception::InvalidArgument, "invalid Y block");
     }
     if(x > m_tile_width) {
-        throw std::runtime_error("invalid X block");
+        throw Exception(Exception::InvalidArgument, "invalid X block");
     }
 
     return m_tile[y][x];
@@ -397,7 +397,7 @@ pair<size_t, size_t> GameMap::get_adjacent_block(
             );
         }
         default:
-            throw std::runtime_error("unknown param");
+            throw Exception(Exception::UnknownArgument);
     }
 }
 

@@ -146,8 +146,8 @@ Text& Text::narrow_text(size_t start_count, size_t end_count) {
     const auto& str = m_value->getString();
     const auto& size = str.getSize();
 
-    if((start_count + end_count) > size) throw std::runtime_error("invalid argument");
-    if(start_count > size || end_count > size) throw std::runtime_error("invalid argument");
+    if((start_count + end_count) > size) throw Exception(Exception::InvalidArgument);
+    if(start_count > size || end_count > size) throw Exception(Exception::InvalidArgument);
 
     auto begin(str.begin()), end(str.end());
 

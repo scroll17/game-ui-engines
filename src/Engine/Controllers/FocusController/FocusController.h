@@ -12,10 +12,11 @@
 
 #include "../../Form/Form.h"
 #include "../../DataUtils/MousePosition/MousePosition.h"
-
+#include "../../../DataTypes/Exception/Exception.h"
 #include "../../Form/ExtendedTypes/ActionElement/ActionElement.h"
 
 using namespace form::extended_types;
+using namespace data_types;
 
 namespace engine {
 

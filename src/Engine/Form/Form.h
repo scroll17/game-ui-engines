@@ -14,10 +14,10 @@
 #include "SFML/Graphics.hpp"
 
 #include "./Types/Element/Element.h"
-
-// TODO _need 5 forms of interface
+#include "../../DataTypes/Exception/Exception.h"
 
 using namespace std;
+using namespace data_types;
 
 namespace form {
 

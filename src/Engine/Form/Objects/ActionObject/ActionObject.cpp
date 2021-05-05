@@ -4,6 +4,7 @@
 
 #include "ActionObject.h"
 
+using namespace data_types;
 using namespace form::objects;
 
 // PROTECTED GET
@@ -13,7 +14,7 @@ ActionObject::t_callbacks& ActionObject::get_callbacks_by_action(const Action& a
         case Hover: return m_on_hover_callbacks;
         case Focus: return m_on_focus_callbacks;
         default: {
-            throw std::runtime_error("Invalid argument");
+            throw Exception(Exception::InvalidArgument);
         }
     }
 }
@@ -31,7 +32,7 @@ size_t ActionObject::set_callbacks_by_action(const Action &action, const t_callb
 }
 
 void ActionObject::remove_callback(const Action& action, size_t pos) {
-    if(pos % 2 != 0) throw std::runtime_error("Invalid argument");
+    if(pos % 2 != 0) throw Exception(Exception::InvalidArgument);
 
     t_callbacks& callbacks(get_callbacks_by_action(action));
 

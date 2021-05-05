@@ -11,7 +11,10 @@
 #include "../Element/Element.h"
 #include "../../../Engine.h"
 
+#include "../../../DataTypes/Exception/Exception.h"
+
 using namespace std;
+using namespace data_types;
 
 namespace form {
     namespace types {
