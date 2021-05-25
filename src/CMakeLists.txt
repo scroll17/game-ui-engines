@@ -37,6 +37,39 @@ if(NOT pugixml_POPULATED)
 endif()
 # </pugixml>
 
+## <<< find_algorithm_test >>>
+#add_executable(find_algorithm_test
+#        DataTypes/Time/Time.cpp
+#        DataTypes/Time/Time.h
+#
+#        utils/string/string.cpp
+#        utils/string/string.h
+#
+#        algorithm_tests/find.cpp
+#)
+#
+#target_link_libraries(find_algorithm_test
+#        nlohmann_json::nlohmann_json
+#        stdc++fs
+#)
+
+## <<< bubble_sort_algorithm_test >>>
+#add_executable(bubble_sort_algorithm_test
+#        DataTypes/Time/Time.cpp
+#        DataTypes/Time/Time.h
+#
+#        utils/array/array.cpp
+#        utils/array/array.h
+#
+#        algorithm_tests/bubble_sort.cpp
+#)
+#
+#target_link_libraries(bubble_sort_algorithm_test
+#   nlohmann_json::nlohmann_json
+#   stdc++fs
+#)
+
+# <<< stud-game >>>
 add_executable(stud-game
         main.cpp
 
@@ -66,8 +99,6 @@ add_executable(stud-game
         utils/time/time.cpp
         utils/time/time.h
         utils/index.h
-
-        algorithm_tests/find.cpp
 
         Engine/DataUtils/MousePosition/MousePosition.cpp
         Engine/DataUtils/MousePosition/MousePosition.h
@@ -119,7 +150,6 @@ add_executable(stud-game
         Engine/Engine.h
         Engine/index.h
 )
-
 
 target_link_libraries(stud-game
         sfml-graphics
