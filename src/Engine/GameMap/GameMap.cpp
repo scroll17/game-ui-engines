@@ -127,6 +127,9 @@ void GameMap::draw(sf::RenderWindow& window, pair<size_t, size_t>* player_curren
             }
         }
     }
+
+    m_width = float(end_x - start_x) * block_size;
+    m_height = float(end_y - start_y) * block_size;
 }
 
 size_t GameMap::on_draw(const GameMap::t_draw_cb& cb, const GameMap::t_draw_cb& after_cb) {
@@ -507,6 +510,10 @@ float GameMap::get_offset_x() const {
 
 float GameMap::get_offset_y() const {
     return m_offset_y;
+}
+
+sf::Vector2f GameMap::get_size() const {
+    return sf::Vector2f(m_width, m_height);
 }
 
 const GameMap::t_draw_el* GameMap::get_draw_element(char cell) const {

@@ -51,6 +51,9 @@ namespace engine {
             size_t m_max_block_vising_x = 0;
             size_t m_max_block_vising_y = 0;
 
+            float m_width = 0.f;
+            float m_height = 0.f;
+
             float m_offset_x = 0;
             float m_offset_y = 0;
 
@@ -122,6 +125,8 @@ namespace engine {
 
             [[nodiscard]] float get_offset_x() const;
             [[nodiscard]] float get_offset_y() const;
+
+            [[nodiscard]] sf::Vector2f get_size() const;
 
             [[nodiscard]] const t_draw_el* get_draw_element(char cell) const;
 
