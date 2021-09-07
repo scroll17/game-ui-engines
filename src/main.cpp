@@ -66,6 +66,8 @@ int main() {
     const int WINDOW_W = 600;
     const int WINDOW_H = 400;
 
+    const Color GAME_TEXT_COLOR = sf::Color::Black;
+
     const string DIR_PATH = Constants::directory_path;
     const map<int, string> level_paths {
 //       { 1, File::resolve_path(DIR_PATH, "./data/json/level_1.json") },
@@ -1015,11 +1017,14 @@ int main() {
             }
 
             json current_map = level_map[current_floor];
-            string* tail_map = utils::string::json_arr_to_string(current_map["tail"], current_map["height"]);
+            const int map_height = current_map["height"];
+            const int map_width = current_map["width"];
+
+            string* tail_map = utils::string::json_arr_to_string(current_map["tail"], map_height);
 
             form::types::Text door_text { "Нажмите [x] что бы открыть дверь." };
             door_text
-              .set_color(sf::Color::White)
+              .set_color(GAME_TEXT_COLOR)
               .set_text_size(22)
               .set_window_size(window.getSize())
               .correct_position(true)
@@ -1036,18 +1041,18 @@ int main() {
             const string map_level_str = "Текущий этаж: ";
             form::types::Text map_level_text { map_level_str + "0" };
             map_level_text
-              .set_color(sf::Color::White)
+              .set_color(GAME_TEXT_COLOR)
               .set_text_size(14)
               .set_window_size(window.getSize())
               .correct_position(true)
-              .move(Element::Y, int(current_map["height"]) * MINI_BLOCK_SIZE + 10)
+              .move(Element::Y, MAX_BLOCK_VISING_Y * MINI_BLOCK_SIZE + 10)
               .move(Element::X, 5)
               .build();
 
             const string need_door_str = "Дверь: " + need_find_door;
             form::types::Text need_door_text { need_door_str };
             need_door_text
-              .set_color(sf::Color::White)
+              .set_color(GAME_TEXT_COLOR)
               .set_text_size(20)
               .set_window_size(window.getSize())
               .correct_position(true)
@@ -1058,7 +1063,7 @@ int main() {
             const string player_count_steps_str = "Колличество шагов: ";
             form::types::Text player_count_steps_text { player_count_steps_str + "0" };
             player_count_steps_text
-             .set_color(sf::Color::White)
+             .set_color(GAME_TEXT_COLOR)
              .set_text_size(14)
              .set_window_size(window.getSize())
              .correct_position(true)
@@ -1165,10 +1170,9 @@ int main() {
 
             GameMap map(BLOCK_SIZE);
             map.set_windows_size(window.getSize());
-            map.load_tile(tail_map, current_map["width"], current_map["height"]);
+            map.load_tile(tail_map, map_width, map_height);
             map.register_collision_cells("BZD");
 
-            const int map_height = current_map["height"];
             {
                 if(map_height < WINDOW_H) {
                     map.set_paddings({
@@ -1180,10 +1184,9 @@ int main() {
                 map.set_paddings({ 0, 0 });
             }
 
-
             GameMap mini_map(MINI_BLOCK_SIZE);
             mini_map.set_windows_size(window.getSize());
-            mini_map.load_tile(tail_map, current_map["width"], current_map["height"]);
+            mini_map.load_tile(tail_map, map_width, map_height);
             mini_map.set_max_block_vising_x(MAX_BLOCK_VISING_X);
             mini_map.set_max_block_vising_y(MAX_BLOCK_VISING_Y);
             mini_map.set_paddings({ 10, 5 });
@@ -1200,15 +1203,15 @@ int main() {
                 player1.set_position(x_pos * BLOCK_SIZE, y_pos * BLOCK_SIZE);
             }
 
-            const auto& reload_current_map = [&map, &mini_map, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
+            const auto& reload_current_map = [&map_width, &map_height, &map, &mini_map, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
                 current_floor = new_floor;
                 current_map = level_map[current_floor];
 
                 delete[] tail_map;
-                tail_map = utils::string::json_arr_to_string(current_map["tail"], current_map["height"]);
+                tail_map = utils::string::json_arr_to_string(current_map["tail"], map_height);
 
-                map.load_tile(tail_map, current_map["width"], current_map["height"]);
-                mini_map.load_tile(tail_map, current_map["width"], current_map["height"]);
+                map.load_tile(tail_map, map_width, map_height);
+                mini_map.load_tile(tail_map, map_width, map_height);
             };
 
             const auto& update_player_pos = [&player1, &map](float x, float y) {
