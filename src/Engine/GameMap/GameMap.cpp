@@ -211,7 +211,7 @@ bool GameMap::set_offset_y(float y) {
     return true;
 }
 
-bool GameMap::user_border(size_t width, size_t height, sf::Color color) {
+bool GameMap::use_border(size_t width, size_t height, sf::Color color) {
     m_use_border = true;
 
     m_border_width = width;

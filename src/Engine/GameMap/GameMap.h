@@ -95,7 +95,7 @@ namespace engine {
             bool set_offset_x(float x);
             bool set_offset_y(float y);
 
-            bool user_border(size_t width, size_t height, sf::Color color);
+            bool use_border(size_t width, size_t height, sf::Color color);
 
             [[nodiscard]] ExtendedRange find_cell_sequence(const pair<size_t, size_t>& start_block, Axis axis) const;
 
