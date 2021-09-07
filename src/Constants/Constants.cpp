@@ -5,6 +5,6 @@
 #include "Constants.h"
 
 namespace Constants {
-    extern const string directory_path { "/home/user/Code/stud-game" };
+    extern const string directory_path { "/home/user/Code/game-engine" };
     extern const string game_font_path { "./data/fonts/times_new_roman.ttf" };
 }
