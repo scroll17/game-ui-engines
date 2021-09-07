@@ -47,7 +47,7 @@ class Player1: public Player {
             m_sprite.scale(0.3, 0.3);
 
             m_speed = 0.1;
-            m_boost = 0.01;
+            m_boost = 0.001;
             m_animation_boost = 0.0015;
 
             m_dx = m_dy = 0;
@@ -68,7 +68,8 @@ int main() {
 
     const string DIR_PATH = Constants::directory_path;
     const map<int, string> level_paths {
-       { 1, File::resolve_path(DIR_PATH, "./data/json/level_1.json") },
+//       { 1, File::resolve_path(DIR_PATH, "./data/json/level_1.json") },
+       { 1, File::resolve_path(DIR_PATH, "./data/json/original_level_1.json") },
        { 2, File::resolve_path(DIR_PATH, "./data/json/level_2.json") },
     };
 
@@ -83,18 +84,19 @@ int main() {
         focus_controller.set_window(&window);
 
         /// GLOBAL VAR
-        int g_selected_level = -1;
-        string g_username {};
-        pugi::xml_node current_user {};
+//        int g_selected_level = -1;
+//        string g_username {};
+//        pugi::xml_node current_user {};
 
         File users_xml("./data/xml/users.xml");
         pugi::xml_document xml_doc = FileReader::read_xml(users_xml);
 
-//        int g_selected_level = 1;
-//        string g_username { "user2" };
-//        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
-//            return node.child_value("name") == g_username;
-//        });
+        // TODO _back
+        int g_selected_level = 1;
+        string g_username { "user2" };
+        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
+            return node.child_value("name") == g_username;
+        });
 
         /// STRATEGIES
 
@@ -993,7 +995,7 @@ int main() {
             const json level_data = f_r.to_json();
             const json& level_map = level_data["map"];
 
-            int current_floor = utils::array::gen_random(0, level_map.size() - 1);
+            int current_floor = 0;//utils::array::gen_random(0, level_map.size() - 1); TODO _back
             int player_lives = 3;
 
             string need_find_door {};
@@ -1164,11 +1166,20 @@ int main() {
             GameMap map(BLOCK_SIZE);
             map.set_windows_size(window.getSize());
             map.load_tile(tail_map, current_map["width"], current_map["height"]);
-            map.set_paddings({
-               0,
-               (WINDOW_H / 2) - ((int(current_map["height"]) * BLOCK_SIZE) / 2)
-            });
             map.register_collision_cells("BZD");
+
+            const int map_height = current_map["height"];
+            {
+                if(map_height < WINDOW_H) {
+                    map.set_paddings({
+                       0,
+                       (WINDOW_H / 2) - ((map_height * BLOCK_SIZE) / 2)
+                    });
+                }
+
+                map.set_paddings({ 0, 0 });
+            }
+
 
             GameMap mini_map(MINI_BLOCK_SIZE);
             mini_map.set_windows_size(window.getSize());
@@ -1176,10 +1187,18 @@ int main() {
             mini_map.set_max_block_vising_x(MAX_BLOCK_VISING_X);
             mini_map.set_max_block_vising_y(MAX_BLOCK_VISING_Y);
             mini_map.set_paddings({ 10, 5 });
-            mini_map.user_border(3, 3, sf::Color::Green);
+            mini_map.use_border(3, 3, sf::Color::Green);
 
             Player1 player1(map);
             player1.init();
+
+            json start_player_pos = current_map["startPos"];
+            if(!start_player_pos.is_null()) {
+                const int x_pos = start_player_pos[0];
+                const int y_pos = start_player_pos[1];
+
+                player1.set_position(x_pos * BLOCK_SIZE, y_pos * BLOCK_SIZE);
+            }
 
             const auto& reload_current_map = [&map, &mini_map, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
                 current_floor = new_floor;
