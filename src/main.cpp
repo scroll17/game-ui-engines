@@ -974,6 +974,7 @@ int main() {
             bool game_stop = false;
 
             bool room_found = false;
+            bool wrong_door_is_open = false;
             bool player_loose = false;
             bool can_change_floor = false;
             bool can_open_door = false;
@@ -985,7 +986,10 @@ int main() {
             // XML: save tms
             player_score.append_attribute("tms").set_value(time(0));
 
-            FileReader f_r(level_paths.at(g_selected_level));
+            auto level_path = level_paths.at(g_selected_level);
+            std::cout << "level_path = " << level_path << std::endl;
+
+            FileReader f_r(level_path);
             const json level_data = f_r.to_json();
             const json& level_map = level_data["map"];
 
@@ -1081,6 +1085,13 @@ int main() {
               .move(Element::X, -10)
               .build();
 
+            const string wrong_door_open_str = "Это не та дверь!";
+            form::types::Text wrong_door_open_text { victory_game_text };
+            wrong_door_open_text
+              .set_color(sf::Color::Black)
+              .set_text(wrong_door_open_str)
+              .build();
+
             const string loose_game_str = "Вы проиграли";
             form::types::Text loose_game_text { victory_game_text };
             loose_game_text
@@ -1123,10 +1134,13 @@ int main() {
             for(auto& button: vector<Button*> { &continue_button, &exit_button }) {
                  button->on_click(
                   [](Element& el) {},
-                  [&game_stop, &continue_button, &exit_button, &go_exit](Element& el) {
+                  [&wrong_door_is_open, &game_stop, &continue_button, &exit_button, &go_exit](Element& el) {
                       if(&el == &continue_button) {
-                          game_stop = !game_stop;
+                          if(game_stop) game_stop = false;
+
+                          if(wrong_door_is_open) wrong_door_is_open = false;
                       }
+
                       if(&el == &exit_button) {
                           go_exit = true;
                       }
@@ -1161,7 +1175,8 @@ int main() {
             mini_map.load_tile(tail_map, current_map["width"], current_map["height"]);
             mini_map.set_max_block_vising_x(MAX_BLOCK_VISING_X);
             mini_map.set_max_block_vising_y(MAX_BLOCK_VISING_Y);
-            mini_map.set_paddings({ 5, 5 });
+            mini_map.set_paddings({ 10, 5 });
+            mini_map.user_border(3, 3, sf::Color::Green);
 
             Player1 player1(map);
             player1.init();
@@ -1199,6 +1214,8 @@ int main() {
                     exit_button.button_text_to_center();
                 } else {
                     player_lives--;
+                    wrong_door_is_open = true;
+
                     if(player_lives == 0) {
                         game_stop = true;
                         player_loose = true;
@@ -1473,6 +1490,13 @@ int main() {
                     exit_button.draw(window);
                 }
 
+                if(wrong_door_is_open && !game_stop && !player_loose) {
+                    window.draw(foreground);
+                    wrong_door_open_text.draw(window);
+
+                    continue_button.draw(window);
+                }
+
                 window.display();
             }
 
@@ -1535,7 +1559,7 @@ int main() {
 
             form::types::Text prompt4_text { prompt3_text };
             prompt4_text
-              .set_text(string("4. Розработчики: Золотаренко Д. / Мыкал М."))
+              .set_text(string("4. Розработчики: Золотаренко Д. и Мыкал М. и Пахомов Р."))
               .set_after(Element::Y, prompt3_text)
               .move(Element::Y, 15)
               .build();
@@ -1642,7 +1666,8 @@ int main() {
             return true;
         });
 
-        strategies.start();
+        strategies.next(5); // TODO _back
+        strategies.start(); // TODO _back
 
         xml_doc.save_file("/home/user/Code/stud-game/data/xml/users.xml");
 
