@@ -66,7 +66,7 @@ int main() {
     const int WINDOW_W = 600;
     const int WINDOW_H = 400;
 
-    const Color GAME_TEXT_COLOR = sf::Color::Black;
+    const Color GAME_TEXT_COLOR = sf::Color::Blue;
 
     const string DIR_PATH = Constants::directory_path;
     const map<int, string> level_paths {
@@ -86,19 +86,18 @@ int main() {
         focus_controller.set_window(&window);
 
         /// GLOBAL VAR
-//        int g_selected_level = -1;
-//        string g_username {};
-//        pugi::xml_node current_user {};
+        int g_selected_level = -1;
+        string g_username {};
+        pugi::xml_node current_user {};
 
         File users_xml("./data/xml/users.xml");
         pugi::xml_document xml_doc = FileReader::read_xml(users_xml);
 
-        // TODO _back
-        int g_selected_level = 1;
-        string g_username { "user2" };
-        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
-            return node.child_value("name") == g_username;
-        });
+//        int g_selected_level = 1;
+//        string g_username { "user2" };
+//        pugi::xml_node current_user = xml_doc.child("users").find_child([&g_username](pugi::xml_node& node) -> bool {
+//            return node.child_value("name") == g_username;
+//        });
 
         /// STRATEGIES
 
@@ -997,7 +996,7 @@ int main() {
             const json level_data = f_r.to_json();
             const json& level_map = level_data["map"];
 
-            int current_floor = 0;//utils::array::gen_random(0, level_map.size() - 1); TODO _back
+            int current_floor = utils::array::gen_random(0, level_map.size() - 1);
             int player_lives = 3;
 
             string need_find_door {};
@@ -1174,14 +1173,14 @@ int main() {
             map.register_collision_cells("BZD");
 
             {
-                if(map_height < WINDOW_H) {
+                if((map_height * BLOCK_SIZE) < WINDOW_H) {
                     map.set_paddings({
                        0,
                        (WINDOW_H / 2) - ((map_height * BLOCK_SIZE) / 2)
                     });
+                } else {
+                    map.set_paddings({ 0, 0 });
                 }
-
-                map.set_paddings({ 0, 0 });
             }
 
             GameMap mini_map(MINI_BLOCK_SIZE);
@@ -1343,7 +1342,6 @@ int main() {
                   int player_x = player_on_map.first;
                   int player_y = player_on_map.second;
 
-
                   if(player_y == y && player_x == x) {
                       mini_rectangle.setFillColor(Color::Red);
                   }
@@ -1465,6 +1463,11 @@ int main() {
 
                 map.draw(window);
                 mini_map.draw(window, &player_on_map);
+
+                map_level_text
+                    .set_after_position(Element::Axis::Y, mini_map.get_size())
+                    .move(Element::Axis::Y, 10)
+                    .build();
 
                 if(can_open_door) {
                     door_text.draw(window);
@@ -1688,8 +1691,7 @@ int main() {
             return true;
         });
 
-        strategies.next(5); // TODO _back
-        strategies.start(); // TODO _back
+        strategies.start();
 
         xml_doc.save_file("/home/user/Code/stud-game/data/xml/users.xml");
 
