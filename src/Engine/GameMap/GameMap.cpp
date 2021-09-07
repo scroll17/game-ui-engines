@@ -10,6 +10,10 @@ GameMap::GameMap(size_t block_size): m_block_size(block_size) {
 
 }
 
+GameMap::~GameMap() {
+    delete m_border_rectangle;
+}
+
 /// PUBLIC SET
 void GameMap::calculate_offset(const sf::Vector2f& position) {
     this->calculate_offset_x(position);
@@ -63,6 +67,33 @@ void GameMap::draw(sf::RenderWindow& window, pair<size_t, size_t>* player_curren
 
     for(size_t i = start_y; i < end_y; i++) {
         for(size_t j = start_x; j < end_x; j++) {
+            if(m_use_border) {
+                bool is_top_line = i == start_y;
+                bool is_bottom_line = (i + 1) == end_y;
+
+                bool is_left_line = j == start_x;
+                bool is_right_line = (j + 1) == end_x;
+
+                auto x_correct = j * block_size - vising_offset_x - this->get_offset_x();
+                auto y_correct = i * block_size - vising_offset_y - this->get_offset_y();
+
+                if(is_top_line || is_left_line) {
+                    auto x = (paddings.left - m_border_width) + x_correct;
+                    auto y = (paddings.top - m_border_height) + y_correct;
+
+                    m_border_rectangle->setPosition(x, y);
+                }
+
+                if(is_bottom_line || is_right_line) {
+                    auto x = (paddings.left + m_border_width * 1.5) + x_correct;
+                    auto y = (paddings.top + m_border_height * 1.5) + y_correct;
+
+                    m_border_rectangle->setPosition(x, y);
+                }
+
+                window.draw((*m_border_rectangle));
+            }
+
             auto cell = this->at_tile(i, j);
 
             auto draw_el = this->get_draw_element(cell);
@@ -71,10 +102,10 @@ void GameMap::draw(sf::RenderWindow& window, pair<size_t, size_t>* player_curren
                 const auto& on_draw_el_cb = draw_el->second;
 
                 on_draw_el_cb(el);
-                el->setPosition(
-                  (j * block_size) + paddings.left - vising_offset_x - this->get_offset_x(),
-                  (i * block_size) + paddings.top - vising_offset_y - this->get_offset_y()
-                );
+
+                auto x = (j * block_size) + paddings.left - vising_offset_x - this->get_offset_x();
+                auto y = (i * block_size) + paddings.top - vising_offset_y - this->get_offset_y();
+                el->setPosition(x, y);
 
                 if(!m_on_draw_callbacks.empty()) {
                   const size_t size = m_on_draw_callbacks.size();
@@ -160,7 +191,6 @@ bool GameMap::set_paddings(const Paddings& paddings) {
     return true;
 }
 
-
 bool GameMap::set_max_block_vising_x(int blocks) {
     m_max_block_vising_x = blocks;
     return true;
@@ -178,6 +208,25 @@ bool GameMap::set_offset_x(float x) {
 
 bool GameMap::set_offset_y(float y) {
     m_offset_y = y;
+    return true;
+}
+
+bool GameMap::user_border(size_t width, size_t height, sf::Color color) {
+    m_use_border = true;
+
+    m_border_width = width;
+    m_border_height = height;
+
+    m_border_color = color;
+
+    delete m_border_rectangle;
+
+    m_border_rectangle = new sf::RectangleShape(
+       sf::Vector2f(width, height)
+    );
+
+    m_border_rectangle->setFillColor(color);
+
     return true;
 }
 

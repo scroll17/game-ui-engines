@@ -54,6 +54,12 @@ namespace engine {
             float m_offset_x = 0;
             float m_offset_y = 0;
 
+            bool m_use_border = false;
+            size_t m_border_width = 0;
+            size_t m_border_height = 0;
+            sf::Color m_border_color = sf::Color::Black;
+            sf::RectangleShape* m_border_rectangle = nullptr;
+
             Paddings m_paddings {};
             sf::Vector2u m_window_size {0, 0 };
 
@@ -63,7 +69,7 @@ namespace engine {
 
         public:
             GameMap(size_t block_size);
-            ~GameMap() = default;
+            ~GameMap();
 
             void calculate_offset(const sf::Vector2f& pos);
             void calculate_offset_x(const sf::Vector2f& pos);
@@ -88,6 +94,8 @@ namespace engine {
 
             bool set_offset_x(float x);
             bool set_offset_y(float y);
+
+            bool user_border(size_t width, size_t height, sf::Color color);
 
             [[nodiscard]] ExtendedRange find_cell_sequence(const pair<size_t, size_t>& start_block, Axis axis) const;
 
