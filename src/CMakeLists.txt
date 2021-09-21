@@ -20,8 +20,19 @@ endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake_modules" ${CMAKE_MODULE_PATH})
 
+if(NOT UNIX)
+    set(SFML_ROOT "E:/Projects/game-engine/SFML-2.5.1")
+endif()
+
 # <SFML>
-find_package(SFML 2.4 COMPONENTS graphics audio window system REQUIRED)
+find_package(SFML REQUIRED system window graphics)
+if (SFML_FOUND)
+    include_directories(${SFML_INCLUDE_DIR})
+endif()
+# </SFML>
+
+# <SFML>
+#find_package(SFML 2.4 COMPONENTS graphics audio window system REQUIRED)
 # </SFML>
 
 # <pugixml>
@@ -152,12 +163,15 @@ add_executable(stud-game
 )
 
 target_link_libraries(stud-game
-        sfml-graphics
-        sfml-audio
-        sfml-window
-        sfml-system
+#        sfml-graphics
+#        sfml-audio
+#        sfml-window
+#        sfml-system
+        ${SFML_LIBRARIES}
+        ${SFML_DEPENDENCIES}
+
         nlohmann_json::nlohmann_json
         pugixml
 
-        stdc++fs
+#        stdc++fs
 )

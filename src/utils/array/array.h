@@ -5,7 +5,7 @@
 #ifndef STUD_GAME_ARRAY_H
 #define STUD_GAME_ARRAY_H
 
-#include <glob.h>   // size_t
+//#include <glob.h>   // size_t
 #include <utility>  // swap
 #include <random>   // random_device, mt19937, uniform_int_distribution
 #include <iostream>
