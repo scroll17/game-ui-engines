@@ -119,7 +119,7 @@ int main() {
             const auto& sprite_bounds = s_nuzp.getGlobalBounds();
             float sprite_center_x = sprite_bounds.left + sprite_bounds.width / 2.f;
 
-            form::types::Text load_text { "ЗАГРУЗКА" };
+            form::types::Text load_text { "ЗАВАНТАЖЕННЯ" };
             load_text
               .set_text_size(22)
               .set_color(sf::Color::White)
@@ -138,10 +138,10 @@ int main() {
               .set_after(Element::Y, load_text)
               .move(Element::Y, 20)
               .to_center(Element::X)
-              .move(Element::X, -(140 / 2))
+              .move(Element::X, -(120 / 2))
               .build();
 
-            Button button {{100, 20 }, "Играть" };
+            Button button {{100, 20 }, "Грати" };
             button
              .set_bg_color(sf::Color(192,192,192))
              .set_window_size(window.getSize())
@@ -150,6 +150,7 @@ int main() {
              .set_border_color(sf::Color::Blue)
              .set_border_width(2)
              .to_center(Element::XY)
+             .move(Element::X, 10)
              .set_after(Element::Y, progress_bar)
              .move(Element::Y, 30)
              .build();
@@ -217,7 +218,7 @@ int main() {
             bool button_active = false;
             bool go_next = false;
 
-            form::types::Text main_text { "Введите ваше имя: " };
+            form::types::Text main_text { "Введіть ваше ім'я: " };
             main_text
               .set_text_size(22)
               .set_color(sf::Color::White)
@@ -239,7 +240,7 @@ int main() {
                .set_border_width(2)
                .build();
 
-            Button button {{100, 20 }, "Дальше" };
+            Button button {{100, 20 }, "Далі" };
             button
                .set_bg_color(sf::Color(192,192,192))
                .set_window_size(window.getSize())
@@ -394,7 +395,7 @@ int main() {
             bool go_exit = false;
             bool go_help = false;
 
-            form::types::Text username_text { "Имя игрока: " };
+            form::types::Text username_text { "Ім'я гравця: " };
             username_text
               .set_text_size(16)
               .set_color(sf::Color::Black)
@@ -428,7 +429,7 @@ int main() {
 
             Button score_button { start_button };
             score_button
-              .set_text("Счёт")
+              .set_text("Рахунок")
               .set_after(Element::Y, start_button)
               .move(Element::Y, 30)
               .build();
@@ -437,7 +438,7 @@ int main() {
 
             Button help_button { start_button };
             help_button
-              .set_text("Помощь")
+              .set_text("Допомога")
               .set_after(Element::Y, score_button)
               .move(Element::Y, 30)
               .build();
@@ -446,7 +447,7 @@ int main() {
 
             Button exit_button { start_button };
             exit_button
-              .set_text("Выход")
+              .set_text("Вихід")
               .set_after(Element::Y, help_button)
               .move(Element::Y, 30)
               .build();
@@ -580,7 +581,7 @@ int main() {
                rect_bounds.top + 2
             });
 
-            form::types::Text username_text { "Имя игрока: " };
+            form::types::Text username_text { "Ім'я гравця: " };
             username_text
               .set_text_size(16)
               .set_color(sf::Color::Black)
@@ -598,7 +599,7 @@ int main() {
               .set_after(Element::X, username_text)
               .build();
 
-            form::types::Text result_text { "Результаты: " };
+            form::types::Text result_text { "Результати: " };
             result_text
               .set_text_size(18)
               .set_color(sf::Color::Black)
@@ -728,11 +729,11 @@ int main() {
 
                     std::wstringstream buffer_detail;
                     buffer_detail
-                      << L"Уровень: " << score_node.child_value("level") << endl
-                      << L"Искомая комната: " << score_node.child_value("door") << endl
-                      << L"Потраченое время: " << score_node.child_value("time") << L" сек." << endl
-                      << L"Колличество шагов: " << score_node.child_value("steps") << endl
-                      << L"Победа: " << (victory ? L"Да" : L"Нет") << endl;
+                      << L"Рівень: " << score_node.child_value("level") << endl
+                      << L"Шукана кімната: " << score_node.child_value("door") << endl
+                      << L"Витрачений час: " << score_node.child_value("time") << L" сек." << endl
+                      << L"Кількість кроків: " << score_node.child_value("steps") << endl
+                      << L"Перемога: " << (victory ? L"Так" : L"Ні") << endl;
 
                     score_time_text.setString(String(buffer_time.str()));
                     score_detail_text.setString(String(buffer_detail.str()));
@@ -768,7 +769,7 @@ int main() {
             bool go_game = false;
             bool go_back = false;
 
-            form::types::Text select_level_text { "Выберите уровень" };
+            form::types::Text select_level_text { "Виберіть рівень" };
             select_level_text
               .set_text_size(26)
               .set_color(sf::Color::Black)
@@ -805,12 +806,12 @@ int main() {
             level1_text.setCharacterSize(22);
             level1_text.setFillColor(sf::Color::Black);
             level1_text.setFont(engine::Engine::get_game_font());
-            level1_text.setString(L"Уровень 1");
-            level1_text.setPosition(30, select_level_text.get_y() + 50);
+            level1_text.setString(L"Рівень 1");
+            level1_text.setPosition(40, select_level_text.get_y() + 50);
 
             sf::Text level2_text(level1_text);
-            level2_text.setString(L"Уровень 2");
-            level2_text.setPosition(180, select_level_text.get_y() + 50);
+            level2_text.setString(L"Рівень 2");
+            level2_text.setPosition(190, select_level_text.get_y() + 50);
 
             Sprite s_level1, s_level2;
             s_level1.setTexture(t_level1);
@@ -821,7 +822,7 @@ int main() {
 
             s_level2.setTexture(t_level2);
             s_level2.setPosition(
-               level2_text.getPosition().x + (level1_text.getGlobalBounds().width / 2.f) - (s_level1.getGlobalBounds().width / 2.f),
+               level2_text.getPosition().x + (level1_text.getGlobalBounds().width / 2.f) - (s_level1.getGlobalBounds().width / 2.f) - 5,
                level2_text.getPosition().y + 30
             );
 
@@ -1021,7 +1022,7 @@ int main() {
 
             string* tail_map = utils::string::json_arr_to_string(current_map["tail"], map_height);
 
-            form::types::Text door_text { "Нажмите [x] что бы открыть дверь." };
+            form::types::Text door_text { "Натисніть [x] що б відкрити двері." };
             door_text
               .set_color(GAME_TEXT_COLOR)
               .set_text_size(22)
@@ -1034,10 +1035,10 @@ int main() {
 
             form::types::Text floor_text { door_text };
             floor_text
-              .set_text(string("Нажмите [z] что бы сменить этаж."))
+              .set_text(string("Натисніть [z] що б змінити поверх."))
               .build();
 
-            const string map_level_str = "Текущий этаж: ";
+            const string map_level_str = "Поточний поверх: ";
             form::types::Text map_level_text { map_level_str + "0" };
             map_level_text
               .set_color(GAME_TEXT_COLOR)
@@ -1048,7 +1049,7 @@ int main() {
               .move(Element::X, 5)
               .build();
 
-            const string need_door_str = "Дверь: " + need_find_door;
+            const string need_door_str = "Двері: " + need_find_door;
             form::types::Text need_door_text { need_door_str };
             need_door_text
               .set_color(GAME_TEXT_COLOR)
@@ -1059,7 +1060,7 @@ int main() {
               .move(Element::Y, 5)
               .build();
 
-            const string player_count_steps_str = "Колличество шагов: ";
+            const string player_count_steps_str = "Кількість кроків: ";
             form::types::Text player_count_steps_text { player_count_steps_str + "0" };
             player_count_steps_text
              .set_color(GAME_TEXT_COLOR)
@@ -1071,7 +1072,7 @@ int main() {
              .move(Element::Y, 20)
              .build();
 
-            const string player_attempts_str = "Колличество попыток: ";
+            const string player_attempts_str = "Кількість спроб: ";
             form::types::Text player_attempts_text { player_count_steps_text };
             player_attempts_text
               .set_text(player_attempts_str + to_string(player_lives))
@@ -1079,7 +1080,7 @@ int main() {
               .move(Element::Y, -5)
               .build();
 
-            const string victory_game_str = "Вы выиграли";
+            const string victory_game_str = "Ви виграли";
             form::types::Text victory_game_text { victory_game_str };
             victory_game_text
               .set_color(sf::Color::White)
@@ -1091,14 +1092,14 @@ int main() {
               .move(Element::X, -10)
               .build();
 
-            const string wrong_door_open_str = "Это не та дверь!";
+            const string wrong_door_open_str = "Це не ті двері!";
             form::types::Text wrong_door_open_text { victory_game_text };
             wrong_door_open_text
               .set_color(sf::Color::Black)
               .set_text(wrong_door_open_str)
               .build();
 
-            const string loose_game_str = "Вы проиграли";
+            const string loose_game_str = "Ви програли";
             form::types::Text loose_game_text { victory_game_text };
             loose_game_text
               .set_text(loose_game_str)
@@ -1113,7 +1114,7 @@ int main() {
               .to_center(Element::XY)
               .build();
 
-            Button continue_button { {120, 30}, "Продолжить" };
+            Button continue_button { {120, 30}, "Продовжити" };
             continue_button
              .set_bg_color(sf::Color(192,192,192))
              .set_window_size(window.getSize())
@@ -1130,7 +1131,7 @@ int main() {
 
             Button exit_button { continue_button };
             exit_button
-             .set_text("Выход")
+             .set_text("Вихід")
              .set_after(Element::Y, continue_button)
              .move(Element::Y, 15)
              .build();
@@ -1547,7 +1548,7 @@ int main() {
 
             const auto& rect_bounds = rectangle.getGlobalBounds();
 
-            form::types::Text help_text { "Помощь" };
+            form::types::Text help_text { "Допомога" };
             help_text
               .set_text_size(28)
               .set_color(sf::Color::Black)
@@ -1558,7 +1559,7 @@ int main() {
               .move(Element::Y, 20)
               .build();
 
-            form::types::Text prompt1_text { "1. Нажмите 'ESC' во время игры что бы поставить игру на паузу." };
+            form::types::Text prompt1_text { "1. Натисніть 'ESC' під час гри що б поставити гру на паузу." };
             prompt1_text
               .set_text_size(16)
               .set_color(sf::Color::Black)
@@ -1570,21 +1571,21 @@ int main() {
 
             form::types::Text prompt2_text { prompt1_text };
             prompt2_text
-              .set_text(string("2.        - это дверь."))
+              .set_text(string("2.        - це двері."))
               .set_after(Element::Y, prompt1_text)
               .move(Element::Y, 15)
               .build();
 
             form::types::Text prompt3_text { prompt2_text };
             prompt3_text
-              .set_text(string("3.        - это лестница на другой этаж."))
+              .set_text(string("3.        - це сходи на другий поверх."))
               .set_after(Element::Y, prompt2_text)
               .move(Element::Y, 15)
               .build();
 
             form::types::Text prompt4_text { prompt3_text };
             prompt4_text
-              .set_text(string("4. Розработчики: Золотаренко Д. и Мыкал М. и Пахомов Р."))
+              .set_text(string("4. Розробники: Золотаренко Д. та Мыкал М. та Пахомов Р."))
               .set_after(Element::Y, prompt3_text)
               .move(Element::Y, 15)
               .build();
