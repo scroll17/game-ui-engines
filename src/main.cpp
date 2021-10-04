@@ -36,7 +36,7 @@ class Player1: public Player {
 
             const auto& paddings = m_game_map.get_paddings();
 
-            m_texture.loadFromFile("/home/user/Code/stud-game/data/textures/user.png");
+            m_texture.loadFromFile(File::resolve_path(Constants::directory_path, "./data/textures/user.png"));
 
             m_sprite.setTexture(m_texture);
             m_sprite.setTextureRect(m_rect_x);
@@ -1694,7 +1694,7 @@ int main() {
 
         strategies.start();
 
-        xml_doc.save_file("/home/user/Code/stud-game/data/xml/users.xml");
+        xml_doc.save_file(File::resolve_path(DIR_PATH, "./data/xml/users.xml").c_str());
 
         data_utils::MousePosition::remove_instance(&mouse_position);
 
