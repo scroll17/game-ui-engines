@@ -160,6 +160,9 @@ add_executable(stud-game
         Engine/Engine.cpp
         Engine/Engine.h
         Engine/index.h
+
+        Logger/Logger.cpp
+        Logger/Logger.h
 )
 
 target_link_libraries(stud-game
