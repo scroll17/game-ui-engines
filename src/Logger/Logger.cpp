@@ -5,7 +5,8 @@
 #include "Logger.h"
 
 // PUBLIC GET
-std::ostream& Logger::log() const {
+std::ostream& Logger::log() {
+    last_log_key = "";
     return std::cout << this->get_log_type_str() << ": ";
 }
 

@@ -26,7 +26,7 @@ class Logger {
         Logger(typelog type): log_type(type) {};
         ~Logger() = default;
 
-        std::ostream& log() const;
+        std::ostream& log();
         std::ostream& log_uniq(std::string key, std::string val);
 };
 
