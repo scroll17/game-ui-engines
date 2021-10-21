@@ -207,6 +207,7 @@ int main() {
         focus_controller.set_window(&window);
 
         /// GLOBAL VAR
+		bool view_door_names = false;
         int g_selected_level = -1;
         string g_username {};
         pugi::xml_node current_user {};
@@ -961,18 +962,65 @@ int main() {
 
             back_button.button_text_to_center();
 
-            back_button.on_hover(
-              [](Element& el) {
-                 el
-                  .set_border_width(3)
-                  .build();
-              },
-              [](Element& el) {
-                 el
-                  .set_border_width(2)
-                  .build();
-              }
-            );
+            form::types::Text select_see_door_view_text { "Бачити назву дверей:" };
+			select_see_door_view_text
+              .set_text_size(16)
+              .set_color(sf::Color::Black)
+              .set_window_size(window.getSize())
+              .correct_position(true)
+              .to_center(Element::X)
+              .move(Element::X, -(WINDOW_W / 2 - 90))
+			  .to_center(Element::Y)
+              .move(Element::Y, (WINDOW_H / 2 - 50))
+              .build();
+
+			Button see_door_view_button { {50, 20}, view_door_names ? "Так" : "Ні"};
+			see_door_view_button
+              .set_text_size(16)
+			  .set_text_color(view_door_names ? sf::Color::Green : sf::Color::Red)
+              .set_bg_color(sf::Color(192,192,192))
+              .set_window_size(window.getSize())
+              .correct_position(true)
+              .set_border_color(sf::Color::Black)
+              .set_border_width(2)
+			  .set_after(Element::Y, select_see_door_view_text)
+			  .move(Element::Y, 10)
+			  .set_before(Element::X, select_see_door_view_text)
+			  .move(Element::X, 10)
+              .build();
+
+			see_door_view_button.button_text_to_center();
+
+			for(auto& button: vector<Button*> { &back_button, &see_door_view_button }) {
+				button->on_hover(
+				  [](Element& el) {
+					 el
+					  .set_border_width(3)
+					  .build();
+				  },
+				  [](Element& el) {
+					 el
+					  .set_border_width(2)
+					  .build();
+				  }
+				);
+			}
+
+			see_door_view_button.on_click(
+             [&view_door_names](Element& el) {
+					auto& button = dynamic_cast<Button&>(el);
+
+					view_door_names = !view_door_names;
+
+					button
+					  .set_text(view_door_names ? "Так" : "Ні")
+					  .set_text_color(view_door_names ? sf::Color::Green : sf::Color::Red)
+					  .build();
+
+					button.button_text_to_center();
+                },
+             [](Element& el) {}
+             );
 
             back_button.on_click(
              [](Element& el) {
@@ -1047,6 +1095,7 @@ int main() {
 
                     data_utils::MousePosition::input(mouse_position, window, event);
                     Button::input(back_button, window, event, mouse_position.get_prev_pos());
+                    Button::input(see_door_view_button, window, event, mouse_position.get_prev_pos());
                     Button::input(level1_button, window, event, mouse_position.get_prev_pos());
                     Button::input(level2_button, window, event, mouse_position.get_prev_pos());
                 }
@@ -1065,6 +1114,9 @@ int main() {
 
                 select_level_text.draw(window);
                 back_button.draw(window);
+
+				select_see_door_view_text.draw(window);
+				see_door_view_button.draw(window);
 
                 window.display();
 
@@ -1306,7 +1358,9 @@ int main() {
             }
 
 			DrawDoorNames draw_door_names { map };
-			draw_door_names.parse_doors(level_map.at(current_floor)["doors"]);
+			if(view_door_names) {
+				draw_door_names.parse_doors(level_map.at(current_floor)["doors"]);
+			}
 
             GameMap mini_map(MINI_BLOCK_SIZE);
             mini_map.set_windows_size(window.getSize());
@@ -1327,7 +1381,7 @@ int main() {
                 player1.set_position(x_pos * BLOCK_SIZE, y_pos * BLOCK_SIZE);
             }
 
-            const auto& reload_current_map = [&map_width, &map_height, &map, &mini_map, &draw_door_names, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
+            const auto& reload_current_map = [&map_width, &map_height, &map, &mini_map, &draw_door_names, &view_door_names, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
                 current_floor = new_floor;
                 current_map = level_map[current_floor];
 
@@ -1337,7 +1391,9 @@ int main() {
                 map.load_tile(tail_map, map_width, map_height);
                 mini_map.load_tile(tail_map, map_width, map_height);
 
-				draw_door_names.parse_doors(current_map["doors"]);
+				if(view_door_names) {
+					draw_door_names.parse_doors(current_map["doors"]);
+				}
             };
 
             const auto& update_player_pos = [&player1, &map](float x, float y) {
@@ -1591,7 +1647,9 @@ int main() {
                 map.draw(window);
                 mini_map.draw(window, &player_on_map);
 
-				draw_door_names.draw(window);
+				if(view_door_names) {
+					draw_door_names.draw(window);
+				}
 
                 map_level_text
                     .set_after_position(Element::Axis::Y, mini_map.get_size())
