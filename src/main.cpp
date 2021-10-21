@@ -14,6 +14,7 @@
 
 #include "./DataTypes/index.h"
 #include "./Engine/index.h"
+#include "./utils/index.h"
 
 using json = nlohmann::json;
 
@@ -60,6 +61,126 @@ class Player1: public Player {
             m_animation_change_rate = 0.0035;
             m_run = false;
         }
+};
+
+class DrawDoorNames {
+	enum class Axis: short {
+		X,
+		Y
+	};
+
+	private:
+		const short m_door_block_length { 4 };
+
+		sf::RectangleShape m_rect_x;
+		sf::RectangleShape m_rect_y;
+		sf::Text m_text_x;
+		sf::Text m_text_y;
+
+		std::map<std::pair<int, int>, std::pair<Axis, std::string>> m_doors_by_position;
+
+		GameMap& m_game_map;
+
+		inline sf::Vector2f get_text_position(Axis axis) const {
+			if(axis == Axis::X) {
+				sf::Vector2f pos { m_rect_x.getPosition() };
+				pos.x = pos.x + ((m_rect_x.getGlobalBounds().width / 2) - (m_text_x.getGlobalBounds().width / 2));
+
+				return pos;
+			} else {
+				sf::Vector2f pos { m_rect_y.getPosition() };
+				pos.y = (pos.y - (m_door_block_length * m_game_map.get_block_size())) + ((m_rect_y.getGlobalBounds().height / 2) - (m_text_y.getGlobalBounds().height / 2));
+
+				return pos;
+			}
+		};
+
+	public:
+		explicit DrawDoorNames(GameMap& game_map): m_game_map(game_map) {
+			// rect
+			const auto& block_size = game_map.get_block_size();
+			m_rect_x.setSize({ float(block_size * m_door_block_length), float(block_size) });
+			m_rect_y.setSize({ float(block_size), float(block_size * m_door_block_length) });
+
+			const auto& fill_color = sf::Color::Transparent;
+			m_rect_x.setFillColor(fill_color);
+			m_rect_y.setFillColor(fill_color);
+
+			m_rect_y.rotate(180);
+
+			// text
+			const auto& fill_text_color = sf::Color::Black;
+			m_text_x.setFillColor(fill_text_color);
+			m_text_y.setFillColor(fill_text_color);
+
+			m_text_x.setCharacterSize(13);
+			m_text_y.setCharacterSize(13);
+
+			m_text_x.setFont(Engine::get_game_font());
+			m_text_y.setFont(Engine::get_game_font());
+
+			m_text_y.rotate(90);
+		};
+		~DrawDoorNames() = default;
+
+		void parse_doors(const json& doors) {
+			for(const auto& el: doors.items()) {
+				const string& door_name { el.value() };
+				const string& door_key { el.key() };
+
+				size_t door_pos_comma_pos = utils::string::find(door_key.c_str(), ",");
+				string door_pos_x { door_key.substr(1, door_pos_comma_pos - 1) };
+				string door_pos_y { door_key.substr(door_pos_comma_pos + 1, (door_key.size() - 2) - door_pos_comma_pos) };
+
+				Axis door_axis = utils::string::find(door_pos_x.c_str(), "-") != -1
+						? Axis::X
+						: Axis::Y;
+
+				if(door_axis == Axis::X) {
+					door_pos_x = door_pos_x.substr(0, utils::string::find(door_pos_x.c_str(), "-"));
+				} else {
+					door_pos_y = door_pos_y.substr(0, utils::string::find(door_pos_y.c_str(), "-"));
+				}
+
+				m_doors_by_position[std::make_pair(stoi(door_pos_x), stoi(door_pos_y))] = std::make_pair(door_axis, door_name);
+			}
+		};
+
+		void draw(sf::RenderWindow& window) {
+			const auto& block_size = m_game_map.get_block_size();
+			const auto& paddings = m_game_map.get_paddings();
+
+			const auto& offset_x = m_game_map.get_offset_x();
+			const auto& offset_y = m_game_map.get_offset_y();
+
+			for(const auto& el: m_doors_by_position) {
+				const auto& pos = el.first;
+				const auto& axis = el.second.first;
+				const auto& name = el.second.second;
+
+				if(axis == Axis::X) {
+					float x = (pos.first * block_size + paddings.left) - offset_x;
+					float y = (pos.second * block_size + paddings.top) - offset_y;
+
+					m_rect_x.setPosition(x, y);
+					window.draw(m_rect_x);
+
+					m_text_x.setString(name);
+					m_text_x.setPosition(this->get_text_position(axis));
+					window.draw(m_text_x);
+				} else {
+					float x = (pos.first * block_size + paddings.left + block_size) - offset_x;
+					float y = ((pos.second + m_door_block_length) * block_size + paddings.top) - offset_y;
+
+					m_rect_y.setPosition(x, y);
+					window.draw(m_rect_y);
+
+					m_text_y.setString(name);
+					m_text_y.setPosition(this->get_text_position(axis));
+					window.draw(m_text_y);
+				}
+			}
+		};
 };
 
 int main() {
@@ -1184,6 +1305,9 @@ int main() {
                 }
             }
 
+			DrawDoorNames door_names { map };
+			door_names.parse_doors(level_map.at(current_floor)["doors"]);
+
             GameMap mini_map(MINI_BLOCK_SIZE);
             mini_map.set_windows_size(window.getSize());
             mini_map.load_tile(tail_map, map_width, map_height);
@@ -1464,6 +1588,8 @@ int main() {
 
                 map.draw(window);
                 mini_map.draw(window, &player_on_map);
+
+				door_names.draw(window);
 
                 map_level_text
                     .set_after_position(Element::Axis::Y, mini_map.get_size())
