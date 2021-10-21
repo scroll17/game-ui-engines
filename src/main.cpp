@@ -1305,8 +1305,8 @@ int main() {
                 }
             }
 
-			DrawDoorNames door_names { map };
-			door_names.parse_doors(level_map.at(current_floor)["doors"]);
+			DrawDoorNames draw_door_names { map };
+			draw_door_names.parse_doors(level_map.at(current_floor)["doors"]);
 
             GameMap mini_map(MINI_BLOCK_SIZE);
             mini_map.set_windows_size(window.getSize());
@@ -1327,7 +1327,7 @@ int main() {
                 player1.set_position(x_pos * BLOCK_SIZE, y_pos * BLOCK_SIZE);
             }
 
-            const auto& reload_current_map = [&map_width, &map_height, &map, &mini_map, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
+            const auto& reload_current_map = [&map_width, &map_height, &map, &mini_map, &draw_door_names, &level_map, &current_map, &current_floor, &tail_map](int new_floor) {
                 current_floor = new_floor;
                 current_map = level_map[current_floor];
 
@@ -1336,6 +1336,8 @@ int main() {
 
                 map.load_tile(tail_map, map_width, map_height);
                 mini_map.load_tile(tail_map, map_width, map_height);
+
+				draw_door_names.parse_doors(current_map["doors"]);
             };
 
             const auto& update_player_pos = [&player1, &map](float x, float y) {
@@ -1589,7 +1591,7 @@ int main() {
                 map.draw(window);
                 mini_map.draw(window, &player_on_map);
 
-				door_names.draw(window);
+				draw_door_names.draw(window);
 
                 map_level_text
                     .set_after_position(Element::Axis::Y, mini_map.get_size())
