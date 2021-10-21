@@ -222,16 +222,17 @@
         "B   BBBBD                        B     B",
         "BBBBBBBBD        ZZZZ            B     B",
         "BBBBBBBBD                        B     B",
-        "B   BBBBD                              B",
-        "B                                      B",
-        "B                                      B",
-        "B                                      B",
+        "B   BBBBD                 Z            B",
+        "B                         Z            B",
+        "B                         Z            B",
+        "B                         Z            B",
         "BBBBBBBBBBBBBBBBBBBBBBBBBDDDDDDDBBBBBBBB"
       ],
       "width": 40,
       "height": 14,
       "doors": {
-        "<17-20,7>": "205.1"
+        "<17-20,7>": "205.1",
+        "<26,9-12>": "206"
       },
       "floors": {
         "<25-31,13>": {

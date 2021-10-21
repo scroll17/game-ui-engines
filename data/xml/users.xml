@@ -176,6 +176,97 @@
 				<steps>24</steps>
 				<victory>1</victory>
 			</score>
+			<score tms="1633454440">
+				<level>1</level>
+				<door>185</door>
+				<time>12</time>
+				<steps>2</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1633454454">
+				<level>1</level>
+				<door>192</door>
+				<time>8</time>
+				<steps>1</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1633454823">
+				<level>1</level>
+				<door>186</door>
+				<time>120</time>
+				<steps>406</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1633454950">
+				<level>1</level>
+				<door>192a</door>
+				<time>4</time>
+				<steps>6</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1633454955">
+				<level>2</level>
+				<door>205.1</door>
+				<time>33</time>
+				<steps>38</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1633455628">
+				<level>1</level>
+				<door>186a</door>
+				<time>8</time>
+				<steps>2</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1633457023">
+				<level>1</level>
+				<door>192a</door>
+				<time>20</time>
+				<steps>58</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1633457348">
+				<level>1</level>
+				<door>189</door>
+				<time>15</time>
+				<steps>95</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1633457364">
+				<level>1</level>
+				<door>185</door>
+				<time>14</time>
+				<steps>20</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1633460029">
+				<level>1</level>
+				<door>198a</door>
+				<time>72</time>
+				<steps>170</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1634806787">
+				<level>1</level>
+				<door>185a</door>
+				<time>2</time>
+				<steps>0</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1634806791">
+				<level>1</level>
+				<door>194</door>
+				<time>5</time>
+				<steps>0</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1634806943">
+				<level>1</level>
+				<door>187</door>
+				<time>4</time>
+				<steps>0</steps>
+				<victory>0</victory>
+			</score>
 		</scores>
 	</user>
 	<user id="3">
