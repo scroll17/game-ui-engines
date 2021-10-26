@@ -1195,7 +1195,7 @@ int main() {
 
             string* tail_map = utils::string::json_arr_to_string(current_map["tail"], map_height);
 
-            form::types::Text door_text { "Натисніть [x] що б відкрити двері." };
+            form::types::Text door_text { "Натисніть [x] що б відкрити аудиторію." };
             door_text
               .set_color(GAME_TEXT_COLOR)
               .set_text_size(22)
@@ -1222,7 +1222,7 @@ int main() {
               .move(Element::X, 5)
               .build();
 
-            const string need_door_str = "Двері: " + need_find_door;
+            const string need_door_str = "Аудиторія: " + need_find_door;
             form::types::Text need_door_text { need_door_str };
             need_door_text
               .set_color(GAME_TEXT_COLOR)
@@ -1265,7 +1265,7 @@ int main() {
               .move(Element::X, -10)
               .build();
 
-            const string wrong_door_open_str = "Це не ті двері!";
+            const string wrong_door_open_str = "Це не та аудиторія!";
             form::types::Text wrong_door_open_text { victory_game_text };
             wrong_door_open_text
               .set_color(sf::Color::Black)
@@ -1757,7 +1757,7 @@ int main() {
 
             form::types::Text prompt2_text { prompt1_text };
             prompt2_text
-              .set_text(string("2.        - це двері."))
+              .set_text(string("2.        - це аудиторія."))
               .set_after(Element::Y, prompt1_text)
               .move(Element::Y, 15)
               .build();
