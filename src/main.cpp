@@ -124,6 +124,8 @@ class DrawDoorNames {
 		~DrawDoorNames() = default;
 
 		void parse_doors(const json& doors) {
+			m_doors_by_position.clear();
+
 			for(const auto& el: doors.items()) {
 				const string& door_name { el.value() };
 				const string& door_key { el.key() };
