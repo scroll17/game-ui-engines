@@ -1161,6 +1161,9 @@ int main() {
             // XML: save tms
             player_score.append_attribute("tms").set_value(time(0));
 
+			// TODO: _after added some other levels change it
+			if(g_selected_level != 1) g_selected_level = 1;
+
             auto level_path = level_paths.at(g_selected_level);
             std::cout << "level_path = " << level_path << std::endl;
 
