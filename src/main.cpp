@@ -191,9 +191,7 @@ int main() {
 
     const string DIR_PATH = Constants::directory_path;
     const map<int, string> level_paths {
-//       { 1, File::resolve_path(DIR_PATH, "./data/json/level_1.json") },
-       { 1, File::resolve_path(DIR_PATH, "./data/json/original_level_1.json") },
-       { 2, File::resolve_path(DIR_PATH, "./data/json/level_2.json") },
+       { 1, File::resolve_path(DIR_PATH, "./data/json/original_level_1.json") }
     };
 
     try {
