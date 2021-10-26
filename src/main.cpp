@@ -1771,7 +1771,7 @@ int main() {
 
             form::types::Text prompt4_text { prompt3_text };
             prompt4_text
-              .set_text(string("4. Розробники: Золотаренко Д. та Мыкал М. та Пахомов Р."))
+              .set_text(string("4. Розробники: Золотаренко Д. та Микал М. та Пахомов Р."))
               .set_after(Element::Y, prompt3_text)
               .move(Element::Y, 15)
               .build();
