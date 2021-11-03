@@ -195,6 +195,9 @@ int main() {
     const map<int, string> level_paths {
        { 1, File::resolve_path(DIR_PATH, "./data/json/original_level_1.json") }
     };
+	const map<int, char*> corpus_by_level_names {
+		{1, "4" }
+	};
 
     try {
         RenderWindow window( VideoMode(WINDOW_W, WINDOW_H), "Игра");
@@ -851,7 +854,7 @@ int main() {
 
                     std::wstringstream buffer_detail;
                     buffer_detail
-                      << L"Рівень: " << score_node.child_value("level") << endl
+                      << L"Корпус: " << corpus_by_level_names.at(stoi(score_node.child_value("level"))) << endl
                       << L"Шукана кімната: " << score_node.child_value("door") << endl
                       << L"Витрачений час: " << score_node.child_value("time") << L" сек." << endl
                       << L"Кількість кроків: " << score_node.child_value("steps") << endl
@@ -891,7 +894,7 @@ int main() {
             bool go_game = false;
             bool go_back = false;
 
-            form::types::Text select_level_text { "Виберіть рівень" };
+            form::types::Text select_level_text { "Виберіть корпус" };
             select_level_text
               .set_text_size(26)
               .set_color(sf::Color::Black)
@@ -928,12 +931,12 @@ int main() {
             level1_text.setCharacterSize(22);
             level1_text.setFillColor(sf::Color::Black);
             level1_text.setFont(engine::Engine::get_game_font());
-            level1_text.setString(L"Рівень 1");
-            level1_text.setPosition(40, select_level_text.get_y() + 50);
+            level1_text.setString(L"Корпус 4");
+            level1_text.setPosition(35, select_level_text.get_y() + 45);
 
             sf::Text level2_text(level1_text);
-            level2_text.setString(L"Рівень 2");
-            level2_text.setPosition(190, select_level_text.get_y() + 50);
+            level2_text.setString(L"Корпус 3");
+            level2_text.setPosition(190, select_level_text.get_y() + 45);
 
             Sprite s_level1, s_level2;
             s_level1.setTexture(t_level1);
@@ -1104,13 +1107,12 @@ int main() {
                 window.clear(sf::Color(192, 192, 192));
 
                 level1_button.draw(window);
-                level2_button.draw(window);
+				window.draw(level1_text);
+				window.draw(s_level1);
 
-                window.draw(level1_text);
-                window.draw(level2_text);
-
-                window.draw(s_level1);
-                window.draw(s_level2);
+//                level2_button.draw(window);
+//                window.draw(level2_text);
+//                window.draw(s_level2);
 
                 select_level_text.draw(window);
                 back_button.draw(window);

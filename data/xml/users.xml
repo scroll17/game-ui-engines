@@ -3,117 +3,96 @@
 	<user id="1">
 		<name>user1</name>
 		<scores>
-			<score tms="1620151443">
+			<score tms="1635236030">
 				<level>1</level>
-				<door>202</door>
-				<time>3</time>
-				<steps>4</steps>
-				<victory>0</victory>
-			</score>
-			<score tms="1631042785">
-				<level>2</level>
-				<door>205.1</door>
+				<door>290a</door>
 				<time>15</time>
-				<steps>27</steps>
-				<victory>1</victory>
-			</score>
-			<score tms="1631042801">
-				<level>2</level>
-				<door>205.1</door>
-				<time>10</time>
-				<steps>21</steps>
-				<victory>1</victory>
-			</score>
-			<score tms="1631044240">
-				<level>2</level>
-				<door>205.1</door>
-				<time>57</time>
-				<steps>117</steps>
+				<steps>77</steps>
 				<victory>0</victory>
 			</score>
-			<score tms="1631045593">
-				<level>1</level>
-				<door>190</door>
-				<time>4</time>
-				<steps>8</steps>
-				<victory>0</victory>
-			</score>
-			<score tms="1631045598">
-				<level>2</level>
-				<door>205.1</door>
-				<time>1</time>
-				<steps>0</steps>
-				<victory>0</victory>
-			</score>
-			<score tms="1631045600">
-				<level>1</level>
-				<door>186</door>
-				<time>1</time>
-				<steps>0</steps>
-				<victory>0</victory>
-			</score>
-			<score tms="1631045680">
-				<level>1</level>
-				<door>192a</door>
-				<time>4</time>
-				<steps>0</steps>
-				<victory>0</victory>
-			</score>
-			<score tms="1634807243">
-				<level>1</level>
-				<door>185</door>
-				<time>9</time>
-				<steps>9</steps>
-				<victory>0</victory>
-			</score>
-			<score tms="1634807254">
-				<level>1</level>
-				<door>193</door>
-				<time>28</time>
-				<steps>133</steps>
-				<victory>1</victory>
-			</score>
-			<score tms="1634807513">
-				<level>1</level>
-				<door>196a</door>
-				<time>19</time>
-				<steps>59</steps>
-				<victory>0</victory>
-			</score>
-			<score tms="1634807544">
-				<level>1</level>
-				<door>185a</door>
-				<time>15</time>
-				<steps>44</steps>
-				<victory>1</victory>
-			</score>
-			<score tms="1634807916">
+			<score tms="1635236048">
 				<level>1</level>
 				<door>188</door>
-				<time>7</time>
-				<steps>14</steps>
+				<time>9</time>
+				<steps>17</steps>
 				<victory>1</victory>
 			</score>
-			<score tms="1634807924">
+			<score tms="1635236194">
+				<level>1</level>
+				<door>298б</door>
+				<time>22</time>
+				<steps>97</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1635236383">
+				<level>1</level>
+				<door>196a</door>
+				<time>26</time>
+				<steps>123</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1635236412">
+				<level>1</level>
+				<door>298</door>
+				<time>24</time>
+				<steps>102</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1635236647">
+				<level>1</level>
+				<door>290</door>
+				<time>34</time>
+				<steps>174</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1635236684">
+				<level>1</level>
+				<door>192a</door>
+				<time>20</time>
+				<steps>114</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1635236704">
+				<level>1</level>
+				<door>289</door>
+				<time>14</time>
+				<steps>52</steps>
+				<victory>1</victory>
+			</score>
+			<score tms="1635237495">
 				<level>1</level>
 				<door>187</door>
-				<time>17</time>
-				<steps>35</steps>
+				<time>15</time>
+				<steps>85</steps>
 				<victory>0</victory>
 			</score>
-			<score tms="1634807943">
+			<score tms="1635952825">
 				<level>1</level>
-				<door>205.1</door>
-				<time>12</time>
-				<steps>54</steps>
+				<door>185a</door>
+				<time>14</time>
+				<steps>29</steps>
 				<victory>0</victory>
 			</score>
-			<score tms="1634807956">
+			<score tms="1635952852">
 				<level>1</level>
-				<door>198a</door>
-				<time>20</time>
-				<steps>124</steps>
+				<door>186</door>
+				<time>23</time>
+				<steps>56</steps>
+				<victory>0</victory>
+			</score>
+			<score tms="1635952952">
+				<level>1</level>
+				<door>190</door>
+				<time>32</time>
+				<steps>50</steps>
 				<victory>1</victory>
+			</score>
+			<score tms="1635953999">
+				<level>1</level>
+				<door>292</door>
+				<time>2</time>
+				<steps>0</steps>
+				<victory>0</victory>
 			</score>
 		</scores>
 	</user>
@@ -126,20 +105,6 @@
 				<time>1234</time>
 				<steps>220</steps>
 				<victory>0</victory>
-			</score>
-			<score tms="1620127993">
-				<level>2</level>
-				<door>201</door>
-				<time>1235</time>
-				<steps>220</steps>
-				<victory>1</victory>
-			</score>
-			<score tms="1620127996">
-				<level>3</level>
-				<door>201</door>
-				<time>1235</time>
-				<steps>220</steps>
-				<victory>1</victory>
 			</score>
 			<score tms="1620150504">
 				<level>1</level>
